@@ -1,0 +1,74 @@
+<div class="min-h-screen bg-[hsl(var(--background))] flex items-center justify-center px-4 pt-16">
+  <div class="w-full max-w-md">
+    <div class="text-center mb-10">
+      <a routerLink="/" class="font-serif text-4xl font-bold tracking-tight text-[hsl(var(--foreground))]">S-Mart</a>
+      <p class="text-[hsl(var(--muted-foreground))] mt-2 text-sm">Welcome back to your smart kitchen</p>
+    </div>
+
+    <div class="bg-[hsl(var(--card))] rounded-2xl p-8 warm-shadow-lg border border-[hsl(var(--border))]">
+      <h1 class="font-serif text-2xl font-bold text-[hsl(var(--foreground))] mb-6">Sign In</h1>
+
+      <form class="space-y-5" (ngSubmit)="onSubmit()">
+        <div class="space-y-2">
+          <label
+            class="text-sm font-medium leading-none text-[hsl(var(--foreground))]"
+            for="email"
+          >
+            Email
+          </label>
+          <input
+            type="email"
+            id="email"
+            [(ngModel)]="email"
+            name="email"
+            placeholder="you@example.com"
+            class="flex w-full border px-3 py-2 text-base h-12 rounded-full bg-[hsl(var(--secondary))] border-[hsl(var(--border))] text-[hsl(var(--foreground))] placeholder:text-[hsl(var(--muted-foreground))] focus:outline-none focus:ring-2 focus:ring-[hsl(var(--ring))] focus:ring-offset-2 focus:border-[hsl(var(--primary))]"
+          />
+        </div>
+
+        <div class="space-y-2">
+          <div class="flex items-center justify-between">
+            <label
+              class="text-sm font-medium leading-none text-[hsl(var(--foreground))]"
+              for="password"
+            >
+              Password
+            </label>
+            <button type="button" class="cursor-pointer text-xs text-[hsl(var(--accent))] hover:underline">
+              Forgot password?
+            </button>
+          </div>
+          <input
+            type="password"
+            id="password"
+            [(ngModel)]="password"
+            name="password"
+            placeholder="••••••••"
+            class="flex w-full border px-3 py-2 text-base h-12 rounded-full bg-[hsl(var(--secondary))] border-[hsl(var(--border))] text-[hsl(var(--foreground))] placeholder:text-[hsl(var(--muted-foreground))] focus:outline-none focus:ring-2 focus:ring-[hsl(var(--ring))] focus:ring-offset-2 focus:border-[hsl(var(--primary))]"
+          />
+        </div>
+
+        <button
+          type="submit"
+          class="inline-flex items-center justify-center w-full h-12 rounded-full cursor-pointer bg-[hsl(var(--accent))] hover:bg-[hsl(var(--accent))]/90 text-[hsl(var(--accent-foreground))] font-semibold text-base transition-colors focus:outline-none focus:ring-2 focus:ring-[hsl(var(--ring))] focus:ring-offset-2"
+        >
+          Sign In
+        </button>
+      </form>
+
+      <div class="flex items-center gap-3 my-6">
+        <div class="flex-1 h-px bg-[hsl(var(--border))]"></div>
+
+      </div>
+
+      <p class="text-center mt-6 text-sm text-[hsl(var(--muted-foreground))]">
+        Don't have an account?
+        <a routerLink="/signup" class="text-[hsl(var(--accent))] font-semibold hover:underline">Create one</a>
+      </p>
+    </div>
+
+
+
+
+  </div>
+</div>
