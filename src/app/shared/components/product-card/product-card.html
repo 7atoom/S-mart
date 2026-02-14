@@ -1,0 +1,102 @@
+<div
+  (mouseenter)="isHovered = true"
+  (mouseleave)="isHovered = false"
+  (click)="onProductClick()"
+  class="group rounded-2xl bg-[hsl(var(--card))] overflow-hidden warm-shadow hover:warm-shadow-hover transition-all duration-300 cursor-pointer"
+  [class.transform]="isHovered"
+  [class.-translate-y-1]="isHovered"
+>
+  <div class="aspect-square overflow-hidden bg-[hsl(var(--cream-dark))] relative">
+    <img
+      [src]="product.image"
+      [alt]="product.name"
+      class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+    />
+    @if (product.featured) {
+      <span
+        class="absolute top-3 left-3 px-3 py-1 rounded-full bg-[hsl(var(--accent))] text-[hsl(var(--accent-foreground))] text-xs font-medium"
+      >
+        Popular
+      </span>
+    }
+  </div>
+
+  <div class="p-4 relative">
+    <h3 class="font-sans font-medium text-[hsl(var(--foreground))] text-sm leading-tight">
+      {{ product.name }}
+    </h3>
+    <p class="text-xs text-[hsl(var(--muted-foreground))] mt-1">
+      {{ product.weight }}
+    </p>
+
+    <div class="flex items-center justify-between mt-3">
+      <span class="text-[hsl(var(--primary))] font-semibold">
+        ${{ product.price.toFixed(2) }}
+      </span>
+
+      @if (cartItem) {
+        <div class="flex items-center gap-2 bg-[hsl(var(--secondary))] rounded-full px-2 py-1">
+          <button
+            (click)="onUpdateQuantity($event, cartItem.quantity - 1)"
+            class="w-6 h-6 rounded-full flex items-center justify-center hover:bg-[hsl(var(--muted))] transition-colors"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="12"
+              height="12"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M5 12h14" />
+            </svg>
+          </button>
+          <span class="text-sm font-medium w-5 text-center">{{ cartItem.quantity }}</span>
+          <button
+            (click)="onUpdateQuantity($event, cartItem.quantity + 1)"
+            class="w-6 h-6 rounded-full flex items-center justify-center hover:bg-[hsl(var(--muted))] transition-colors"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="12"
+              height="12"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M5 12h14" />
+              <path d="M12 5v14" />
+            </svg>
+          </button>
+        </div>
+
+      } @else {
+        <button
+          (click)="onAddToCart($event)"
+          class="w-8 h-8 rounded-full bg-[hsl(var(--primary))] text-[hsl(var(--primary-foreground))] flex items-center justify-center hover:bg-[hsl(var(--olive-light))] transition-colors"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M5 12h14" />
+            <path d="M12 5v14" />
+          </svg>
+        </button>
+      }
+    </div>
+  </div>
+</div>

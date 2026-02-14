@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { CartService } from '../../../core/services/cart.service';
 
 @Component({
   selector: 'app-navbar',
@@ -11,6 +12,7 @@ import { CommonModule } from '@angular/common';
 })
 export class Navbar {
   isMobileMenuOpen = false;
+  cartService = inject(CartService);
 
   toggleMobileMenu() {
     this.isMobileMenuOpen = !this.isMobileMenuOpen;
