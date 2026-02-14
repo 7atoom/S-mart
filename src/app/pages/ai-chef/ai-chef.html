@@ -1,1 +1,54 @@
-<p>ai-chef works!</p>
+<div class="pt-20 pb-24 md:pb-12 min-h-[93vh] mybody">
+  <div class="flex flex-col items-center justify-center min-h-[70vh] px-6">
+    <div class="text-center max-w-2xl">
+      <h1 class="font-serif text-4xl md:text-6xl font-bold text-foreground mb-20">
+        What are you craving today?
+      </h1>
+      <div class="relative max-w-xl mx-auto mb-6 my-search-box">
+        <input
+          [formControl]="searchControl"
+          type="text"
+          placeholder="I want to cook..."
+          class="w-full h-16 md:h-[72px] px-6 pr-16 rounded-2xl bg-card border-2 border-gold/30 text-foreground placeholder:text-muted-foreground text-lg font-sans focus:outline-none warm-shadow main-bg-color"
+        />
+
+        <button
+          (click)="cook()"
+          type="submit"
+          class="absolute right-3 top-1/2 -translate-y-1/2 w-12 h-12 rounded-xl bg-gradient-gold flex items-center justify-center hover:scale-110 active:scale-95 ease-linear duration-300 transition-transform cursor-pointer"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="lucide lucide-sparkles w-5 h-5 text-foreground"
+          >
+            <path
+              d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"
+            ></path>
+            <path d="M20 3v4"></path>
+            <path d="M22 5h-4"></path>
+            <path d="M4 17v2"></path>
+            <path d="M5 18H3"></path>
+          </svg>
+        </button>
+      </div>
+      <div class="flex flex-wrap justify-center gap-2">
+        @for (item of suggestedMeals; track $index) {
+          <button
+            (click)="setsearchControl(item)"
+            class="suggested-meal-btn active:scale-95 py-3 px-5 text-sm font-medium font-sans transition-all bg-[hsl(var(--secondary))] text-[hsl(var(--secondary-foreground))] hover:bg-[hsl(var(--muted))] cursor-pointer rounded-full shadow"
+          >
+            {{ item }}
+          </button>
+        }
+      </div>
+    </div>
+  </div>
+</div>

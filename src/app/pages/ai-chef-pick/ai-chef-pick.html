@@ -1,0 +1,107 @@
+<div class="min-h-screen pt-20 pb-24 md:pb-12 bg-page">
+  <div class="max-w-3xl mx-auto px-6">
+    <div class="flex items-center gap-3 mb-10 py-3 px-5 rounded-2xl bg-cream-dark search-pill border warm-shadow">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="lucide lucide-sparkles w-4 h-4 text-muted flex-shrink-0"
+      >
+        <path
+          d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"
+        ></path>
+        <path d="M20 3v4"></path>
+        <path d="M22 5h-4"></path>
+        <path d="M4 17v2"></path>
+        <path d="M5 18H3"></path>
+      </svg>
+      <span class="font-sans font-medium text-main">"{{ searchTerm }}"</span>
+      <button
+        (click)="goBack()"
+        class="ml-auto text-xs text-muted font-sans change-btn"
+      >
+        Change
+      </button>
+    </div>
+
+    <h2 class="font-serif text-2xl md:text-3xl font-bold mb-8 text-main">Pick your recipe</h2>
+
+    <div class="space-y-4">
+      @for (item of recipes; track item.id) {
+        <button
+          (click)="openSelectPeople(item.id)"
+          class="w-full flex items-center gap-5 p-5 rounded-2xl recipe-card warm-shadow transition-all group text-left cursor-pointer"
+        >
+          <div
+            class="w-24 h-24 md:w-32 md:h-32 rounded-xl recipe-card-image flex-shrink-0 flex items-center justify-center"
+          >
+            <span class="text-3xl opacity-60">🍽️</span>
+          </div>
+
+          <div class="flex-1 min-w-0">
+            <h3 class="text-lg md:text-xl font-semibold mb-1 text-main font-sans">
+              {{ item.title }}
+            </h3>
+            <p class="text-sm mb-3 line-clamp-2 text-muted font-sans">
+              {{ item.description }}
+            </p>
+
+            <div class="flex items-center gap-6 font-sans">
+              <div class="flex items-center gap-1.5 text-sm text-muted">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="text-muted"
+                >
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+                <span>{{ item.time }}</span>
+              </div>
+
+              <div class="flex items-center gap-1">
+                @for (i of [1, 2, 3]; track i) {
+                  <div
+                    class="w-2 h-2 rounded-full difficulty-dot"
+                    [class.difficulty-dot--filled]="i <= item.difficultyLevel"
+                    [class.difficulty-dot--empty]="i > item.difficultyLevel"
+                  ></div>
+                }
+                <span class="text-xs text-muted ml-1">{{ item.difficulty }}</span>
+              </div>
+            </div>
+          </div>
+
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="arrow-icon opacity-0 group-hover:opacity-100 transition-opacity text-muted"
+          >
+            <path d="M5 12h14"></path>
+            <path d="m12 5 7 7-7 7"></path>
+          </svg>
+        </button>
+      }
+    </div>
+  </div>
+</div>

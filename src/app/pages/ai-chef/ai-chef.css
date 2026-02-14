@@ -1,0 +1,48 @@
+.mybody {
+  background:
+
+    /* soft bluish tint */
+    radial-gradient(circle at 20% 30%, hsla(210, 40%, 88%, 0.7), transparent 40%),
+
+    /* soft terracotta */
+    radial-gradient(circle at 80% 70%, hsla(18, 55%, 80%, 0.4), transparent 40%),
+
+    /* champagne gold */
+    radial-gradient(circle at 60% 20%, hsla(40, 60%, 88%, 0.4), transparent 40%),
+
+    /* cool cream */
+    radial-gradient(circle at 40% 80%, hsla(210, 20%, 96%, 0.8), transparent 40%);
+
+  background-size: 150% 150%;
+  animation: gradientMove 5s ease-in-out infinite alternate;
+}
+
+@keyframes gradientMove {
+  0% {
+    background-position: 0% 0%, 100% 100%, 50% 0%, 50% 100%;
+
+  }
+
+  100% {
+    background-position: 100% 100%, 0% 0%, 50% 100%, 50% 0%;
+  }
+}
+
+.my-search-box input {
+  outline: none;
+  transition: 0.5s all ease;
+  border: 1px solid hsl(var(--gold-light));
+}
+
+.my-search-box:focus-within input {
+  border-color: transparent;
+  box-shadow: 0 0 250px hsl(var(--gold-light));
+}
+
+.suggested-meal-btn {
+  box-shadow: inset 0 0 0 0px transparent;
+}
+
+.suggested-meal-btn:hover {
+  box-shadow: inset 0 0 0 3px hsl(var(--gold-light)/0.7);
+}
