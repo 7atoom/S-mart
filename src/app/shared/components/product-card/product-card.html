@@ -2,10 +2,12 @@
   (mouseenter)="isHovered = true"
   (mouseleave)="isHovered = false"
   (click)="onProductClick()"
-  class="group rounded-2xl bg-[hsl(var(--card))] overflow-hidden warm-shadow hover:warm-shadow-hover transition-all duration-300 cursor-pointer"
+  class="group rounded-2xl bg-[hsl(var(--card))] overflow-hidden"
+  style="box-shadow: var(--shadow-warm); transition: box-shadow 0.9s;"
+  [ngStyle]="isHovered ? {'box-shadow': 'var(--shadow-warm-hover)'} : {'box-shadow': 'var(--shadow-warm)'}"
   [class.transform]="isHovered"
   [class.-translate-y-1]="isHovered"
->
+> 
   <div class="aspect-square overflow-hidden bg-[hsl(var(--cream-dark))] relative">
     <img
       [src]="product.image"

@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgStyle } from '@angular/common';
 import { Products } from '../../../utils/Product';
 import { CartItem } from '../../../utils/CartItem';
 
@@ -7,7 +7,7 @@ import { CartItem } from '../../../utils/CartItem';
 @Component({
   selector: 'app-product-card',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, NgStyle],
   templateUrl: './product-card.html',
   styles: ``,
 })
