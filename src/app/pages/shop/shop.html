@@ -1,1 +1,80 @@
-<p>shop works!</p>
+<div class="min-h-screen pt-4 pb-24 md:pb-12">
+  <div class="mx-auto px-6">
+    <h1 class="font-serif text-4xl md:text-5xl font-bold text-foreground mb-8">Shop</h1>
+  </div>
+  <div class="px-6 flex gap-2 overflow-x-auto pb-4 scrollbar-hide mb-6">
+    @for (cat of categories; track cat) {
+      <button
+        (click)="setActiveCategory(cat)"
+        class="whitespace-nowrap px-5 py-2.5 rounded-full text-sm font-medium font-sans transition-all"
+        [ngClass]="
+          activeCategory === cat
+            ? 'bg-[hsl(var(--primary))] text-[hsl(var(--primary-foreground))] hover:bg-[hsl(var(--primary))]'
+            : 'bg-[hsl(var(--secondary))] text-[hsl(var(--secondary-foreground))] hover:bg-[hsl(var(--muted))]'
+        "
+      >
+        {{ cat }}
+      </button>
+    }
+  </div>
+
+  <div class="flex items-center gap-3 mb-8 px-6">
+    <div class="flex items-center gap-2 text-sm text-muted-foreground">
+      <i class="fas fa-sort text-muted-foreground"></i>
+      <span class="font-sans">Sort:</span>
+    </div>
+    <select
+      [(ngModel)]="sortBy"
+      class="px-3 py-1.5 rounded-lg bg-[hsl(var(--secondary))] text-sm font-sans text-[hsl(var(--secondary-foreground))] border-none focus:outline-none focus:ring-2 focus:ring-primary/20"
+    >
+      <option (click)="setSortBy('default')" value="default">Recommended</option>
+      <option (click)="setSortBy('price-low')" value="price-low">Price: Low to High</option>
+      <option (click)="setSortBy('price-high')" value="price-high">Price: High to Low</option>
+    </select>
+  </div>
+
+  <div class="px-6">
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
+      @for (product of filteredProducts(); track product.id) {
+        <app-product-card
+          [product]="product"
+          [cartItem]="getCartItem(product.id)"
+          (addToCart)="onAddToCart($event)"
+          (updateQuantity)="onUpdateQuantity($event)"
+        />
+      }
+    </div>
+
+    <div
+      class="col-span-2 md:col-span-3 lg:col-span-4 rounded-2xl bg-cream-dark p-8 flex flex-col md:flex-row items-center justify-between gap-4"
+    >
+      <div class="flex items-center gap-3">
+        <div
+          class="w-10 h-10 rounded-full bg-gradient-gold flex items-center justify-center shrink-0"
+        >
+          <i class="fas fa-robot text-white"></i>
+        </div>
+
+        <p class="font-sans text-[hsl(var(--foreground))] text-sm">
+          <span class="font-medium">Planning dinner tonight?</span>
+          <span class="text-[hsl(var(--muted))]-[hsl(var(--foreground))]"> Let our AI pick your ingredients →</span>
+        </p>
+      </div>
+
+      <a
+        routerLink="/aiChef"
+        class="px-6 py-2.5 rounded-xl bg-[hsl(var(--accent))] text-[hsl(var(--accent-foreground))] font-medium text-sm hover:bg-[hsl(var(--terracotta-light))] transition-colors whitespace-nowrap"
+      >
+        Try AI Chef
+      </a>
+    </div>
+
+    @if (filteredProducts().length === 0) {
+      <div class="text-center py-20">
+        <p class="text-[hsl(var(--muted-foreground))] text-lg font-sans">
+          No products found in this category
+        </p>
+      </div>
+    }
+  </div>
+</div>
