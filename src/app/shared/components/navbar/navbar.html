@@ -8,10 +8,10 @@
     <!-- Desktop nav -->
     <div class="hidden md:flex items-center gap-8">
       <a
-        routerLink="/"
-        routerLinkActive="text-[hsl(var(--foreground))]"
+        routerLink="/home"
+        routerLinkActive="text-[hsl(var(--primary))]"
         [routerLinkActiveOptions]="{ exact: true }"
-        class="flex items-center gap-1.5 text-sm font-medium transition-colors text-muted-foreground hover:text-[hsl(var(--foreground))]"
+        class="flex items-center gap-1.5 text-sm font-medium transition-colors text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]"
       >
         Home
       </a>
@@ -19,15 +19,15 @@
       <a
         routerLink="/shop"
         routerLinkActive="text-[hsl(var(--primary))]"
-        class="flex items-center gap-1.5 text-sm font-medium transition-colors text-muted-foreground hover:text-[hsl(var(--primary))]"
+        class="flex items-center gap-1.5 text-sm font-medium transition-colors text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))]"
       >
         Shop
       </a>
 
       <a
         routerLink="/aiChef"
-        routerLinkActive="text-foreground"
-        class="flex items-center gap-1.5 text-sm font-medium transition-colors text-muted-foreground hover:text-foreground"
+        routerLinkActive="text-[hsl(var(--primary))]"
+        class="flex items-center gap-1.5 text-sm font-medium transition-colors text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))]"
       >
         <i class="fas fa-robot text-[hsl(var(--gold))]"></i>
         AI Chef
