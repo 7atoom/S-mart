@@ -1,0 +1,43 @@
+/* Recipe header gradient using S-Mart tokens */
+.cart-recipe-gradient {
+  background: linear-gradient(
+    to right,
+    hsl(var(--primary) / 0.15),
+    hsl(var(--accent) / 0.1)
+  );
+}
+
+.cart-item {
+  background-color: hsl(var(--primary) / 0.05);
+  border-left-color: hsl(var(--primary));
+  transition: box-shadow 0.2s ease, background-color 0.2s ease, border-left-color 0.2s ease;
+}
+
+.cart-item--unselected {
+  background-color: hsl(var(--muted));
+  border-left-color: hsl(var(--border));
+}
+
+.cart-item:hover {
+  box-shadow: var(--shadow-warm-hover);
+}
+
+.cart-item-icon--selected {
+  background-color: hsl(var(--primary) / 0.1);
+}
+
+.cart-item-icon--unselected {
+  background-color: hsl(var(--muted));
+  opacity: 0.8;
+}
+
+.cart-item-check--selected {
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+}
+
+.cart-item-check--unselected {
+  background-color: transparent;
+  border: 2px solid hsl(var(--border));
+  color: hsl(var(--muted-foreground));
+}

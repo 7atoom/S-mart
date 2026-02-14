@@ -1,0 +1,203 @@
+<div class="min-h-screen pt-20 pb-24 md:pb-12 bg-page">
+  <div class="max-w-3xl mx-auto px-6">
+    <!-- Recipe header card -->
+    <div
+      class="rounded-2xl overflow-hidden mb-8 cart-recipe-gradient p-6 md:p-8 warm-shadow"
+    >
+      <button
+        (click)="backToServings()"
+        class="text-xs text-muted hover:text-main font-sans mb-3 block"
+      >
+        ← Back to servings
+      </button>
+      <h2 class="font-serif text-2xl md:text-3xl font-bold text-main">
+        {{ recipe.title }}
+      </h2>
+      <p class="text-muted font-sans mt-1">{{ recipe.description }}</p>
+      <div class="flex items-center gap-4 mt-3">
+        <div class="flex items-center gap-1.5 text-sm text-muted">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="w-3.5 h-3.5"
+          >
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+          <span class="font-sans">{{ recipe.time }}</span>
+        </div>
+        <div class="flex items-center gap-1">
+          <span class="w-2 h-2 rounded-full bg-accent"></span>
+          <span class="w-2 h-2 rounded-full bg-accent"></span>
+          <span class="w-2 h-2 rounded-full bg-accent"></span>
+          <span class="text-xs text-muted ml-1 font-sans">{{
+            recipe.difficulty
+          }}</span>
+        </div>
+        <div class="flex items-center gap-1.5 text-sm text-muted">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="w-3.5 h-3.5"
+          >
+            <path
+              d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"
+            ></path>
+            <circle cx="9" cy="7" r="4"></circle>
+            <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+          </svg>
+          <span class="font-sans">{{ servings }} people</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Summary line -->
+    <div class="flex items-center justify-between mb-6 px-1">
+      <span class="text-sm font-sans text-muted">
+        <span class="font-medium text-main">{{ itemCount }} items</span>
+        selected
+      </span>
+      <span class="font-sans font-semibold text-main"
+        >Est. ${{ totalPrice | number : '1.2-2' }}</span
+      >
+    </div>
+
+    <!-- Ingredients list -->
+    <div class="space-y-3 mb-40">
+      @for (item of ingredients; track item.name) {
+        <button
+          type="button"
+          (click)="toggleItem(item)"
+          class="w-full flex items-center gap-4 p-4 rounded-2xl border-l-4 cart-item warm-shadow text-left cursor-pointer transition-all"
+          [class.cart-item--selected]="item.selected"
+          [class.cart-item--unselected]="!item.selected"
+        >
+          <div
+            class="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 cart-item-icon"
+            [class.cart-item-icon--selected]="item.selected"
+            [class.cart-item-icon--unselected]="!item.selected"
+          >
+            <span class="text-xl">{{ item.emoji }}</span>
+          </div>
+          <div class="flex-1 min-w-0">
+            <h4 class="font-sans font-medium text-sm"
+              [class.text-main]="item.selected"
+              [class.text-muted]="!item.selected">
+              {{ item.name }}
+            </h4>
+            <p class="text-xs text-muted font-sans">{{ item.quantity }}</p>
+          </div>
+          <span class="font-sans font-medium text-sm"
+            [class.text-main]="item.selected"
+            [class.text-muted]="!item.selected">
+            ${{ item.price | number : '1.2-2' }}
+          </span>
+          <div
+            class="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 cart-item-check"
+            [class.cart-item-check--selected]="item.selected"
+            [class.cart-item-check--unselected]="!item.selected"
+          >
+            @if (item.selected) {
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="w-3.5 h-3.5 text-primary-foreground"
+              >
+                <path d="M20 6 9 17l-5-5"></path>
+              </svg>
+            }
+          </div>
+        </button>
+      }
+    </div>
+  </div>
+
+  <!-- Fixed bottom bar -->
+  <div
+    class="fixed bottom-16 md:bottom-0 left-0 right-0 bg-background/95 backdrop-blur-xl border-t border-border p-4 z-40"
+  >
+    <div class="max-w-3xl mx-auto">
+      <div class="flex items-center justify-between mb-3">
+        <div>
+          <p class="text-sm text-muted font-sans">
+            {{ itemCount }} selected · {{ servings }} people
+          </p>
+          <p class="font-semibold text-lg text-main font-sans">
+            ${{ totalPrice | number : '1.2-2' }}
+          </p>
+        </div>
+      </div>
+      <div class="flex gap-3">
+        <button
+          (click)="weCookIt()"
+          class="flex-1 flex items-center justify-center gap-2 py-3.5 rounded-2xl bg-gradient-gold text-main font-sans font-medium hover:opacity-90 transition-opacity warm-shadow"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="w-4 h-4"
+          >
+            <path
+              d="M17 21a1 1 0 0 0 1-1v-5.35c0-.457.316-.844.727-1.041a4 4 0 0 0-2.134-7.589 5 5 0 0 0-9.186 0 4 4 0 0 0-2.134 7.588c.411.198.727.585.727 1.041V20a1 1 0 0 0 1 1Z"
+            ></path>
+            <path d="M6 17h12"></path>
+          </svg>
+          We Cook It For You
+        </button>
+        <button
+          (click)="addToCart()"
+          class="flex-1 flex items-center justify-center gap-2 py-3.5 rounded-2xl btn-accent font-sans font-medium hover:bg-terracotta-light transition-colors warm-shadow"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="w-4 h-4"
+          >
+            <circle cx="8" cy="21" r="1"></circle>
+            <circle cx="19" cy="21" r="1"></circle>
+            <path
+              d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"
+            ></path>
+          </svg>
+          Add to Cart
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

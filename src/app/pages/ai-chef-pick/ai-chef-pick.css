@@ -1,0 +1,50 @@
+/* ai-chef-pick – warm theme match (cream, olive, terracotta/orange) */
+
+.change-btn:hover {
+  color: hsl(var(--foreground));
+}
+
+/* Search pill: subtle orange accent on border */
+.search-pill {
+  border-color: hsl(var(--terracotta) / 0.35);
+}
+
+/* Recipe card: warm cream with soft olive border, orange on hover */
+.recipe-card {
+  background-color: hsl(var(--cream-dark));
+  border: 2px solid hsl(var(--border));
+}
+
+.recipe-card:hover {
+  box-shadow: var(--shadow-warm-hover);
+  background-color: hsl(var(--secondary));
+  border-color: hsl(var(--terracotta) / 0.4);
+}
+
+.recipe-card .arrow-icon {
+  color: hsl(var(--muted-foreground));
+}
+
+.recipe-card:hover .arrow-icon {
+  color: hsl(var(--terracotta));
+}
+
+/* Image placeholder: warm cream with a touch of orange */
+.recipe-card-image {
+  background: linear-gradient(
+    135deg,
+    hsl(var(--cream-dark)),
+    hsl(var(--primary) / 0.06),
+    hsl(var(--terracotta) / 0.12)
+  );
+  border: 1px solid hsl(var(--border));
+}
+
+/* Difficulty dots: gold + orange (filled), warm grey (empty) */
+.difficulty-dot--filled {
+  background-color: hsl(var(--terracotta));
+}
+
+.difficulty-dot--empty {
+  background-color: hsl(var(--border));
+}

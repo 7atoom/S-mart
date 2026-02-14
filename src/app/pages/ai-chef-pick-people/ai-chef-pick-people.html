@@ -1,0 +1,90 @@
+<div class="min-h-screen pt-20 pb-24 md:pb-12 bg-page">
+  <div class="flex flex-col items-center justify-center min-h-[70vh] px-6">
+    <div class="text-center max-w-lg w-full">
+      <!-- Recipe name -->
+      <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cream-dark mb-8 warm-shadow">
+        <span class="text-lg">🍽️</span>
+        <span class="font-sans text-sm font-medium text-main">
+          {{ currentRecipe.title }}
+        </span>
+      </div>
+
+      <h2 class="font-serif text-3xl md:text-5xl font-bold text-main mb-3">
+        How many are dining?
+      </h2>
+
+      <p class="text-muted font-sans mb-10">We'll adjust ingredient quantities for you</p>
+
+      <!-- Selector -->
+      <div class="flex items-center justify-center gap-6 mb-12">
+        <button
+          (click)="decrease()"
+          class="w-14 h-14 rounded-2xl bg-card border-2 border-border flex items-center justify-center text-main font-sans text-2xl font-medium warm-shadow hover:bg-secondary transition-all"
+        >
+          −
+        </button>
+
+        <div class="flex flex-col items-center">
+          <span class="font-serif text-6xl md:text-7xl font-bold text-main">
+            {{ servings }}
+          </span>
+
+          <span class="text-sm text-muted mt-2 font-sans">
+            {{ servings === 1 ? 'person' : 'people' }}
+          </span>
+        </div>
+
+        <button
+          (click)="increase()"
+          class="w-14 h-14 rounded-2xl bg-card border-2 border-border flex items-center justify-center text-main font-sans text-2xl font-medium warm-shadow hover:bg-secondary transition-all"
+        >
+          +
+        </button>
+      </div>
+
+      <!-- Presets -->
+      <div class="flex flex-wrap justify-center gap-2 mb-10">
+        @for (n of presets; track n) {
+          <button
+            (click)="setServings(n)"
+            class="px-5 py-2.5 rounded-full text-sm font-medium font-sans transition-all hero-pill"
+            [class.bg-primary]="servings === n"
+            [class.text-primary-foreground]="servings === n"
+            [class.bg-secondary]="servings !== n"
+            [class.text-main]="servings !== n"
+          >
+            {{ n }} {{ n === 1 ? 'person' : 'people' }}
+          </button>
+        }
+      </div>
+
+      <!-- Price -->
+      <div class="bg-card rounded-2xl p-5 mb-8 warm-shadow">
+        <div class="flex items-center justify-between font-sans">
+          <span class="text-sm text-muted">
+            {{ currentRecipe.ingredients.length }} ingredients
+          </span>
+
+          <span class="font-semibold text-main"> Est. ${{ totalPrice }} </span>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="flex gap-3">
+        <button
+          (click)="back()"
+          class="flex-1 py-3.5 rounded-2xl border-2 border-border font-sans font-medium text-main bg-card warm-shadow hover:bg-secondary transition-all"
+        >
+          Back
+        </button>
+
+        <button
+          (click)="continue()"
+          class="flex-1 py-3.5 rounded-2xl btn-accent font-sans"
+        >
+          Continue →
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
