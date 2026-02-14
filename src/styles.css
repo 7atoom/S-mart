@@ -169,6 +169,15 @@
     box-shadow: var(--shadow-warm);
   }
 
+  /* Olive primary utilities (override hero-pill when used together) */
+  .bg-primary {
+    background-color: hsl(var(--primary)) !important;
+  }
+
+  .text-primary-foreground {
+    color: hsl(var(--primary-foreground)) !important;
+  }
+
   /* Primary (gold-ish) button */
   .btn-primary {
     background-color: hsl(var(--gold));
