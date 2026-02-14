@@ -33,7 +33,7 @@
  <!-- how-it-works sec -->
 <div class="how-it-works-sec mt-16 py-16 px-6 bg-secondary text-foreground">
     <div class="container mx-auto 2xl:w-[85%] flex flex-col justify-center items-center gap-16">
-        <h2 class="font-sans text-3xl md:text-5xl font-bold">How it works</h2>
+        <h2 class="font-serif text-3xl md:text-5xl font-bold">How it works</h2>
         <div class="steps-container grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16 md:gap-12 items-center">
             <!-- step 1 -->
             <div class="step relative">
@@ -56,3 +56,154 @@
         </div>
     </div>
 </div>
+
+<!-- categories sec -->
+<div class="categories-sec mt-16 py-16 px-6 bg-page text-foreground">
+    <div class="container mx-auto 2xl:w-[85%]">
+        <div class="top-part flex items-center justify-between mb-12">
+            <h2 class="font-serif text-3xl md:text-5xl font-bold">Shop by Category</h2>
+            <a routerLink="/shop" class="text-sm text-[hsl(var(--accent))] font-medium hover:underline">View all &rightarrow;</a>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 auto-rows-[250px] lg:auto-rows-[300px]">
+            <!-- Vegetables & Fruits - tall card -->
+            <a routerLink="/shop" class="lg:row-span-2  group">
+                <div class="relative rounded-3xl overflow-hidden h-full bg-gray-300">
+                    <img src="/images/ramadan-bg.png" alt="Vegetables & Fruits" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 p-6">
+                        <h3 class="text-white text-2xl font-semibold">Vegetables & Fruits</h3>
+                    </div>
+                </div>
+            </a>
+            <!-- Meat & Poultry -->
+            <a routerLink="/shop" class="group lg:row-span-2">
+                <div class="relative rounded-3xl overflow-hidden h-full bg-gray-300">
+                    <img src="/images/ramadan-bg.png" alt="Meat & Poultry" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 p-6">
+                        <h3 class="text-white text-xl font-semibold">Meat & Poultry</h3>
+                    </div>
+                </div>
+            </a>
+            <!-- Dairy & Eggs -->
+            <a routerLink="/shop" class="group">
+                <div class="relative rounded-3xl overflow-hidden h-full bg-gray-300">
+                    <img src="/images/ramadan-bg.png" alt="Dairy & Eggs" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 p-6">
+                        <h3 class="text-white text-xl font-semibold">Dairy & Eggs</h3>
+                    </div>
+                </div>
+            </a>
+            <!-- Bakery -->
+            <a routerLink="/shop" class="group">
+                <div class="relative rounded-3xl overflow-hidden h-full bg-gray-300">
+                    <img src="/images/ramadan-bg.png" alt="Bakery" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 p-6">
+                        <h3 class="text-white text-xl font-semibold">Bakery</h3>
+                    </div>
+                </div>
+            </a>
+            <!-- Spices & Herbs -->
+            <a routerLink="/shop" class="group">
+                <div class="relative rounded-3xl overflow-hidden h-full bg-gray-300">
+                    <img src="/images/ramadan-bg.png" alt="Spices & Herbs" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 p-6">
+                        <h3 class="text-white text-xl font-semibold">Spices & Herbs</h3>
+                    </div>
+                </div>
+            </a>
+            <!-- Pantry Staples -->
+            <a routerLink="/shop" class="group">
+                <div class="relative rounded-3xl overflow-hidden h-full bg-gray-300">
+                    <img src="/images/ramadan-bg.png" alt="Pantry Staples" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 p-6">
+                        <h3 class="text-white text-xl font-semibold">Pantry Staples</h3>
+                    </div>
+                </div>
+            </a>
+            <!-- Beverages -->
+            <a routerLink="/shop" class="group">
+                <div class="relative rounded-3xl overflow-hidden h-full bg-gray-300">
+                    <img src="/images/ramadan-bg.png" alt="Beverages" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 p-6">
+                        <h3 class="text-white text-xl font-semibold">Beverages</h3>
+                    </div>
+                </div>
+            </a>
+            <!-- Snacks -->
+            <a routerLink="/shop" class="group">
+                <div class="relative rounded-3xl overflow-hidden h-full bg-gray-300">
+                    <img src="/images/ramadan-bg.png" alt="Snacks" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 p-6">
+                        <h3 class="text-white text-xl font-semibold">Snacks</h3>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- ai-chef-promo sec -->
+<div class="ai-chef-promo-sec mt-16 py-24 px-6 bg-secondary text-foreground">
+    <div class="container mx-auto 2xl:w-[85%] flex flex-col justify-center items-center gap-8 text-center">
+        <div class="badge w-fit gap-2 px-4 py-2 rounded-full bg-secondary text-sm text-foreground warm-shadow">
+            <span>AI-Powered</span>
+        </div>
+        <h2 class="font-serif text-4xl md:text-5xl lg:text-6xl font-bold">Your AI Sous Chef</h2>
+        <p class="text-muted text-lg md:text-xl max-w-2xl">Describe any dish you're dreaming of — our AI finds the perfect recipe, lists every ingredient, and adds them all to your cart in one click.</p>
+        <a routerLink="/aiChef" class="btn-accent text-lg mt-4">Start Cooking Smarter &RightArrow;</a>
+    </div>
+</div>
+
+<!-- footer sec -->
+<footer class="footer-sec mt-16 py-16 px-6 bg-page text-foreground border-t">
+    <div class="container mx-auto 2xl:w-[85%]">
+        <div class="flex flex-col md:flex-row gap-12 pb-12 border-b border-border">
+            <!-- left side - -->
+            <div class="flex-1 flex flex-col gap-4">
+                <h3 class="font-serif text-2xl font-extrabold text-foreground">S-Mart</h3>
+                <p class="text-muted text-sm leading-relaxed">The smartest way to shop for groceries. AI-powered recipes meet premium ingredients, delivered to your door.</p>
+            </div>
+            <!-- right side  -->
+            <div class="flex-1 grid grid-cols-3 gap-12">
+                <!-- shop column -->
+                <div class="flex flex-col gap-4">
+                    <h4 class="font-sans font-semibold text-lg">Shop</h4>
+                    <ul class="flex flex-col gap-3">
+                        <li><a href="#" class="text-muted hover:text-[hsl(var(--accent))] transition-colors text-sm">Browse</a></li>
+                        <li><a href="#" class="text-muted hover:text-[hsl(var(--accent))] transition-colors text-sm">AI Chef</a></li>
+                        <li><a href="#" class="text-muted hover:text-[hsl(var(--accent))] transition-colors text-sm">Cart</a></li>
+                    </ul>
+                </div>
+                <!-- about column -->
+                <div class="flex flex-col gap-4">
+                    <h4 class="font-sans font-semibold text-lg">About</h4>
+                    <ul class="flex flex-col gap-3">
+                        <li><a href="#" class="text-muted hover:text-[hsl(var(--accent))] transition-colors text-sm">Our Story</a></li>
+                        <li><a href="#" class="text-muted hover:text-[hsl(var(--accent))] transition-colors text-sm">Blog</a></li>
+                        <li><a href="#" class="text-muted hover:text-[hsl(var(--accent))] transition-colors text-sm">Careers</a></li>
+                    </ul>
+                </div>
+                <!-- support column -->
+                <div class="flex flex-col gap-4">
+                    <h4 class="font-sans font-semibold text-lg">Support</h4>
+                    <ul class="flex flex-col gap-3">
+                        <li><a href="#" class="text-muted hover:text-[hsl(var(--accent))] transition-colors text-sm">Help Center</a></li>
+                        <li><a href="#" class="text-muted hover:text-[hsl(var(--accent))] transition-colors text-sm">Contact</a></li>
+                        <li><a href="#" class="text-muted hover:text-[hsl(var(--accent))] transition-colors text-sm">Privacy</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- footer bottom -->
+        <div class="pt-8">
+            <p class="text-muted text-sm">© 2026 S-Mart. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
