@@ -1,36 +1,52 @@
-import { NgClass } from '@angular/common';
-import { Component, computed, inject } from '@angular/core';
+import { CommonModule, NgClass } from '@angular/common';
+import { Component, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { products } from '../../data/products';
 import { categories } from '../../data/products';
 import { ProductCard } from '../../shared/components/product-card/product-card';
 import { CartService } from '../../core/services/cart.service';
 import { Products } from '../../utils/Product';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-shop',
   standalone: true,
-  imports: [NgClass, FormsModule, ProductCard, RouterLink],
+  imports: [NgClass, FormsModule, ProductCard, RouterLink, CommonModule],
   templateUrl: './shop.html',
   styles: ``,
 })
 export class Shop {
+  router = inject(Router);
+  route = inject(ActivatedRoute);
   cartService = inject(CartService);
-  activeCategory: string = 'All';
-  sortBy: string = 'default';
+  activeCategory = signal<string>('All');
+  sortBy = signal<string>('default');
   categories = categories;
   allProducts = products;
+
+  ngOnInit() {
+    this.route.queryParams.subscribe(params => {
+      if (params['category']) {
+        this.setActiveCategory(params['category']);
+      }
+    });
+
+    // scroll to top when navigating to shop
+    this.router.events.subscribe(() => {
+      window.scrollTo(0, 0);
+    });
+  }
 
   filteredProducts = computed(() => {
     let filtered = this.allProducts;
 
-    if (this.activeCategory !== 'All') {
-      filtered = filtered.filter(p => p.category === this.activeCategory);
+    if (this.activeCategory() !== 'All') {
+      filtered = filtered.filter(p => p.category === this.activeCategory());
     }
 
     const sorted = [...filtered];
-    switch (this.sortBy) {
+    switch (this.sortBy()) {
       case 'price-low':
         sorted.sort((a, b) => a.price - b.price);
         break;
@@ -43,16 +59,19 @@ export class Shop {
         break;
     }
 
+    console.log(sorted);
     return sorted;
   });
 
 
   setActiveCategory(cat: string) {
-    this.activeCategory = cat;
+    this.activeCategory.set(cat);
   }
 
+
   setSortBy(sort: string) {
-    this.sortBy = sort;
+    this.sortBy.set(sort);
+    console.log(`Sort by: ${sort}`);
   }
 
   onAddToCart(product: Products) {

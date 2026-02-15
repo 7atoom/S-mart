@@ -24,8 +24,7 @@
             <p class="text-white">Dates, samosas, laban & more - all your Ramadan essentials
             in one place.
             </p>
-            <a routerLink="/" class=" btn-accent text-md self-start ">Shop Ramadan &RightArrow;</a>
-
+            <a (click)="navigateToCategory('Ramadan Essentials')" class=" btn-accent text-md self-start ">Shop Ramadan &RightArrow;</a>
     </div>
  </div>
  </div>
@@ -66,7 +65,7 @@
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 auto-rows-[250px] lg:auto-rows-[300px]">
             <!-- Vegetables & Fruits - tall card -->
-            <a routerLink="/shop" class="lg:row-span-2  group">
+            <a (click)="navigateToCategory('Vegetables & Fruits')" class="lg:row-span-2  group">
                 <div class="relative rounded-3xl overflow-hidden h-full bg-gray-300">
                     <img src="/images/ramadan-bg.png" alt="Vegetables & Fruits" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                     <div class="absolute inset-0 bg-linear-to-t from-black/60 to-transparent"></div>
@@ -76,7 +75,7 @@
                 </div>
             </a>
             <!-- Meat & Poultry -->
-            <a routerLink="/shop" class="group lg:row-span-2">
+            <a (click)="navigateToCategory('Meat & Poultry')" class="group lg:row-span-2">
                 <div class="relative rounded-3xl overflow-hidden h-full bg-gray-300">
                     <img src="/images/ramadan-bg.png" alt="Meat & Poultry" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                     <div class="absolute inset-0 bg-linear-to-t from-black/60 to-transparent"></div>
@@ -86,7 +85,7 @@
                 </div>
             </a>
             <!-- Dairy & Eggs -->
-            <a routerLink="/shop" class="group">
+            <a (click)="navigateToCategory('Dairy & Eggs')" class="group">
                 <div class="relative rounded-3xl overflow-hidden h-full bg-gray-300">
                     <img src="/images/ramadan-bg.png" alt="Dairy & Eggs" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                     <div class="absolute inset-0 bg-linear-to-t from-black/60 to-transparent"></div>
@@ -96,7 +95,7 @@
                 </div>
             </a>
             <!-- Bakery -->
-            <a routerLink="/shop" class="group">
+            <a (click)="navigateToCategory('Bakery')" class="group">
                 <div class="relative rounded-3xl overflow-hidden h-full bg-gray-300">
                     <img src="/images/ramadan-bg.png" alt="Bakery" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                     <div class="absolute inset-0 bg-linear-to-t from-black/60 to-transparent"></div>
@@ -106,7 +105,7 @@
                 </div>
             </a>
             <!-- Spices & Herbs -->
-            <a routerLink="/shop" class="group">
+            <a (click)="navigateToCategory('Spices & Herbs')" class="group">
                 <div class="relative rounded-3xl overflow-hidden h-full bg-gray-300">
                     <img src="/images/ramadan-bg.png" alt="Spices & Herbs" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                     <div class="absolute inset-0 bg-linear-to-t from-black/60 to-transparent"></div>
@@ -116,7 +115,7 @@
                 </div>
             </a>
             <!-- Pantry Staples -->
-            <a routerLink="/shop" class="group">
+            <a (click)="navigateToCategory('Pantry Staples')" class="group">
                 <div class="relative rounded-3xl overflow-hidden h-full bg-gray-300">
                     <img src="/images/ramadan-bg.png" alt="Pantry Staples" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                     <div class="absolute inset-0 bg-linear-to-t from-black/60 to-transparent"></div>
@@ -126,7 +125,7 @@
                 </div>
             </a>
             <!-- Beverages -->
-            <a routerLink="/shop" class="group">
+            <a (click)="navigateToCategory('Beverages')" class="group">
                 <div class="relative rounded-3xl overflow-hidden h-full bg-gray-300">
                     <img src="/images/ramadan-bg.png" alt="Beverages" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                     <div class="absolute inset-0 bg-linear-to-t from-black/60 to-transparent"></div>
@@ -136,7 +135,7 @@
                 </div>
             </a>
             <!-- Snacks -->
-            <a routerLink="/shop" class="group">
+            <a (click)="navigateToCategory('Snacks')" class="group">
                 <div class="relative rounded-3xl overflow-hidden h-full bg-gray-300">
                     <img src="/images/ramadan-bg.png" alt="Snacks" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                     <div class="absolute inset-0 bg-linear-to-t from-black/60 to-transparent"></div>
