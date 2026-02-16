@@ -88,7 +88,7 @@
           [class.cart-item--unselected]="!item.selected"
         >
           <div
-            class="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 cart-item-icon"
+            class="w-12 h-12 rounded-xl flex items-center justify-center shrink-0 cart-item-icon"
             [class.cart-item-icon--selected]="item.selected"
             [class.cart-item-icon--unselected]="!item.selected"
           >
@@ -108,7 +108,7 @@
             ${{ item.price | number : '1.2-2' }}
           </span>
           <div
-            class="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 cart-item-check"
+            class="w-6 h-6 rounded-full flex items-center justify-center shrink-0 cart-item-check"
             [class.cart-item-check--selected]="item.selected"
             [class.cart-item-check--unselected]="!item.selected"
           >

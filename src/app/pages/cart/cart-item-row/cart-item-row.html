@@ -1,0 +1,76 @@
+<div class="flex items-center gap-4 py-4">
+  <div
+    class="w-16 h-16 rounded-xl shrink-0 overflow-hidden"
+    style="background-color: hsl(var(--cream-dark)); box-shadow: var(--shadow-warm);"
+  >
+    <img
+      [src]="cartItem?.image"
+      [alt]="cartItem?.name"
+      class="w-full h-full object-cover"
+    />
+  </div>
+
+  <div class="flex-1 min-w-0">
+    <h4
+      class="font-sans font-medium text-sm truncate"
+      style="color: hsl(var(--foreground));"
+    >
+      {{ cartItem?.name }}
+    </h4>
+    <p
+      class="text-xs font-sans"
+      style="color: hsl(var(--muted-foreground));"
+    >
+      {{ cartItem?.weight }}
+    </p>
+  </div>
+
+  <div
+    class="flex items-center gap-2 rounded-full px-2 py-1"
+    style="background-color: hsl(var(--secondary));"
+  >
+    <button
+      (click)="decreaseQuantity()"
+      class="w-6 h-6 rounded-full flex items-center justify-center transition-colors"
+      style="color: hsl(var(--muted-foreground));"
+      onmouseover="this.style.backgroundColor='hsl(var(--muted))'"
+      onmouseout="this.style.backgroundColor='transparent'"
+    >
+      <i class="fas fa-minus"></i>
+    </button>
+
+    <span
+      class="text-sm font-medium w-5 text-center font-sans"
+      style="color: hsl(var(--foreground));"
+    >
+      {{ cartItem?.quantity }}
+    </span>
+
+    <button
+      (click)="increaseQuantity()"
+      class="w-6 h-6 rounded-full flex items-center justify-center transition-colors"
+      style="color: hsl(var(--muted-foreground));"
+      onmouseover="this.style.backgroundColor='hsl(var(--muted))'"
+      onmouseout="this.style.backgroundColor='transparent'"
+    >
+      <i class="fas fa-plus"></i>
+    </button>
+  </div>
+
+  <span
+    class="font-sans font-medium text-sm w-16 text-right"
+    style="color: hsl(var(--foreground));"
+  >
+    {{ (cartItem?.price ?? 0) * (cartItem?.quantity ?? 0) | currency: 'USD' }}
+  </span>
+
+  <button
+    (click)="onRemove()"
+    class="p-1 rounded-full transition-colors"
+    style="color: hsl(var(--muted-foreground));"
+    onmouseover="this.style.color='hsl(var(--foreground))'"
+    onmouseout="this.style.color='hsl(var(--muted-foreground))'"
+  >
+    <i class="fas fa-trash"></i>
+  </button>
+</div>

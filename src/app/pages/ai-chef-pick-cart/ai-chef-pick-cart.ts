@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
+import { CartService } from '../../core/services/cart.service';
 
 interface CartIngredient {
   name: string;
@@ -47,6 +48,7 @@ export class AiChefPickCart implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
+    private cartService: CartService
   ) {}
 
   ngOnInit(): void {
@@ -89,5 +91,13 @@ export class AiChefPickCart implements OnInit {
     const selected = this.selectedIngredients;
     console.log('Add to cart – selected items:', selected);
     this.router.navigate(['cart']);
+    this.cartService.addItems(selected.map(i => ({
+      id: i.name.toLowerCase().replace(/\s+/g, '-'), // simple ID generation
+      name: i.name,
+      price: i.price,
+      quantity: 1, 
+      weight: i.quantity, 
+      image: '', 
+    })));
   }
 }

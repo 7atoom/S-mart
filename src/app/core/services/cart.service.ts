@@ -8,7 +8,6 @@ import { Products } from '../../utils/Product';
 export class CartService {
   private cartItems = signal<CartItem[]>([]);
 
-  // Computed values
   items = computed(() => this.cartItems());
   itemCount = computed(() => this.cartItems().reduce((sum, item) => sum + item.quantity, 0));
   total = computed(() => this.cartItems().reduce((sum, item) => sum + (item.price * item.quantity), 0));
@@ -17,7 +16,6 @@ export class CartService {
     this.loadCart();
   }
 
-  // Add item to cart
   addItem(product: Products) {
     const currentItems = this.cartItems();
     const existingItem = currentItems.find(item => item.id === product.id);
@@ -25,7 +23,6 @@ export class CartService {
     if (existingItem) {
       this.updateQuantity(product.id, existingItem.quantity + 1);
     } else {
-      // Add new item
       const newItem: CartItem = {
         id: product.id,
         name: product.name,
@@ -37,6 +34,23 @@ export class CartService {
       this.cartItems.set([...currentItems, newItem]);
       this.saveCart();
     }
+  }
+
+  addItems(items: CartItem[]) {
+    const currentItems = this.cartItems();
+    const updatedItems = [...currentItems];
+
+    items.forEach(newItem => {
+      const existingItem = updatedItems.find(item => item.id === newItem.id);
+      if (existingItem) {
+        existingItem.quantity += newItem.quantity;
+      } else {
+        updatedItems.push(newItem);
+      }
+    });
+
+    this.cartItems.set(updatedItems);
+    this.saveCart();
   }
 
   updateQuantity(productId: string, quantity: number) {

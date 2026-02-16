@@ -1,0 +1,89 @@
+@if (cartItemsCount() === 0) {
+  <div class="min-h-screen pt-20 pb-24 flex flex-col items-center justify-center px-6">
+    <div class="text-center">
+      <div
+        class="w-20 h-20 rounded-full bg-[hsl(var(--cream-dark))] flex items-center justify-center mx-auto mb-6"
+      >
+        <i class="fas fa-shopping-cart text-6xl text-[hsl(var(--muted-foreground))]"></i>
+      </div>
+
+      <h1 class="font-serif text-3xl font-bold text-[hsl(var(--foreground))] mb-3">
+        Your cart is empty
+      </h1>
+
+      <p class="font-sans mb-8 max-w-sm text-[hsl(var(--muted-foreground))]">
+        Start adding fresh ingredients or let our AI build a recipe for you.
+      </p>
+
+      <div class="flex flex-col sm:flex-row gap-3 justify-center">
+        <a
+          routerLink="/shop"
+          class="px-6 py-3 rounded-2xl bg-[hsl(var(--primary))] text-[hsl(var(--primary-foreground))] font-medium transition-colors hover:bg-[hsl(var(--olive-light))]"
+        >
+          Browse Shop
+        </a>
+
+        <a
+          routerLink="/aiChef"
+          class="flex items-center justify-center gap-2 px-6 py-3 rounded-2xl border-2 border-[hsl(var(--gold)/0.4)] text-[hsl(var(--foreground))] font-medium transition-colors hover:bg-[hsl(var(--cream-dark))]"
+        >
+          <i class="fas fa-robot text-[hsl(var(--gold))]"></i>
+          Try AI Chef
+        </a>
+      </div>
+    </div>
+  </div>
+} @else {
+  <div class="min-h-screen pt-20 pb-24 md:pb-12">
+    <div class="max-w-4xl mx-auto px-6">
+      <h1 class="font-serif text-4xl font-bold text-[hsl(var(--foreground))] mb-8">Your Cart</h1>
+
+      <div class="grid md:grid-cols-3 gap-8">
+        <!-- LEFT: Cart items -->
+        <div class="md:col-span-2 space-y-2">
+          <!-- Cart List -->
+          <div class="rounded-2xl bg-[hsl(var(--card))] shadow-(--shadow-warm) p-5">
+            <div class="divide-y divide-[hsl(var(--border)/0.5)]">
+              @for (item of cartIems(); track item.id) {
+                <app-cart-item-row
+                  [cartItem]="item"
+                  (quantityChange)="updateQuantity($event.itemId, $event.newQuantity)"
+                  (remove)="removeItem($event)"
+                ></app-cart-item-row>
+              }
+            </div>
+          </div>
+
+          <!-- AI suggestion -->
+          <div class="rounded-2xl bg-[hsl(var(--cream-dark))] p-5 flex items-center gap-3 mt-4">
+            <div
+              class="w-8 h-8 rounded-full bg-gradient-gold flex items-center justify-center shrink-0"
+            >
+              <i class="fas fa-robot w-4 h-4 text-[hsl(var(--foreground))]"></i>
+            </div>
+
+            <p class="text-sm font-sans text-[hsl(var(--muted-foreground))]">
+              <span class="text-[hsl(var(--foreground))] font-medium">Don't forget!</span>
+              Add some fresh herbs to complement your meal.
+            </p>
+
+            <a
+              routerLink="/shop"
+              [queryParams]="{ category: 'Spices & Herbs' }"
+              class="text-[hsl(var(--accent))] text-sm font-medium whitespace-nowrap hover:underline"
+            >
+              Browse →
+            </a>
+          </div>
+        </div>
+
+        <!-- RIGHT: Order Summary -->
+        <app-cart-summary
+          class="block sticky top-24"
+          [total]="total()"
+          [deliveryFee]="deliveryFee()"
+        ></app-cart-summary>
+      </div>
+    </div>
+  </div>
+}
