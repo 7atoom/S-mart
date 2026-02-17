@@ -1,0 +1,260 @@
+<div class="min-h-screen pt-12 pb-24 md:pb-12">
+  <div class="max-w-2xl mx-auto px-6">
+    <div class="flex items-center justify-center gap-2 mb-10">
+      @for (s of steps; track s.key; let i = $index) {
+        <div class="flex items-center gap-2">
+          <div
+            class="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-sans font-medium transition-colors warm-shadow"
+            [ngClass]="
+              i <= stepIdx
+                ? 'bg-[hsl(var(--primary))] text-[hsl(var(--primary-foreground))]'
+                : 'bg-[hsl(var(--secondary))] text-[hsl(var(--muted-foreground))]'
+            "
+          >
+            @switch (s.key) {
+              @case ('shipping') {
+                <lucide-icon [img]="MapPin" [size]="16"></lucide-icon>
+              }
+              @case ('payment') {
+                <lucide-icon [img]="CreditCard" [size]="16"></lucide-icon>
+              }
+              @case ('confirmation') {
+                <lucide-icon [img]="CheckCircle2" [size]="16"></lucide-icon>
+              }
+            }
+
+            <span class="hidden sm:inline">{{ s.label }}</span>
+          </div>
+
+          <!-- Connector -->
+          @if (i < steps.length - 1) {
+            <div
+              class="w-8 h-0.5 transition-colors"
+              [ngClass]="i < stepIdx ? 'bg-[hsl(var(--primary))]' : 'bg-[hsl(var(--border))]'"
+            ></div>
+          }
+        </div>
+      }
+      <!-- SHIPPING -->
+    </div>
+    @if (step === 'shipping') {
+      <form
+        [formGroup]="shippingForm"
+        (ngSubmit)="handleShippingNext()"
+        class="rounded-2xl bg-[hsl(var(--card))] warm-shadow-lg p-6 md:p-8 border border-[hsl(var(--border))]"
+      >
+        <h2 class="font-serif text-2xl font-bold text-[hsl(var(--foreground))] mb-6">
+          Shipping Details
+        </h2>
+
+        <div class="space-y-5">
+          <!-- Full Name -->
+          <div>
+            <label class="font-sans text-sm text-[hsl(var(--foreground))]">Full Name</label>
+            <input
+              type="text"
+              formControlName="fullName"
+              placeholder="John Doe"
+              class="mt-1 w-full rounded-xl bg-[hsl(var(--input))] border border-[hsl(var(--border))] px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[hsl(var(--ring))]"
+            />
+            @if (shippingForm.controls.fullName.touched && shippingForm.controls.fullName.invalid) {
+              <p class="text-[hsl(var(--destructive))] text-xs mt-1">Required</p>
+            }
+          </div>
+
+          <!-- Address -->
+          <div>
+            <label class="font-sans text-sm text-[hsl(var(--foreground))]">Address</label>
+            <input
+              type="text"
+              formControlName="address"
+              placeholder="123 Main Street"
+              class="mt-1 w-full rounded-xl bg-[hsl(var(--input))] border border-[hsl(var(--border))] px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[hsl(var(--ring))]"
+            />
+            @if (shippingForm.controls.address.touched && shippingForm.controls.address.invalid) {
+              <p class="text-[hsl(var(--destructive))] text-xs mt-1">Required</p>
+            }
+          </div>
+
+          <!-- City + ZIP -->
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="font-sans text-sm text-[hsl(var(--foreground))]">City</label>
+              <input
+                type="text"
+                formControlName="city"
+                placeholder="New York"
+                class="mt-1 w-full rounded-xl bg-[hsl(var(--input))] border border-[hsl(var(--border))] px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[hsl(var(--ring))]"
+              />
+              @if (shippingForm.controls.city.touched && shippingForm.controls.city.invalid) {
+                <p class="text-[hsl(var(--destructive))] text-xs mt-1">Required</p>
+              }
+            </div>
+
+            <div>
+              <label class="font-sans text-sm text-[hsl(var(--foreground))]">ZIP Code</label>
+              <input
+                type="text"
+                formControlName="postalCode"
+                placeholder="10001"
+                class="mt-1 w-full rounded-xl bg-[hsl(var(--input))] border border-[hsl(var(--border))] px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[hsl(var(--ring))]"
+              />
+              @if (
+                shippingForm.controls.postalCode.touched && shippingForm.controls.postalCode.invalid
+              ) {
+                <p class="text-[hsl(var(--destructive))] text-xs mt-1">Required</p>
+              }
+            </div>
+          </div>
+
+          <!-- Phone -->
+          <div>
+            <label class="font-sans text-sm text-[hsl(var(--foreground))]">Phone Number</label>
+            <input
+              type="tel"
+              formControlName="phone"
+              placeholder="+1 (555) 123-4567"
+              class="mt-1 w-full rounded-xl bg-[hsl(var(--input))] border border-[hsl(var(--border))] px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[hsl(var(--ring))]"
+            />
+            @if (shippingForm.controls.phone.touched && shippingForm.controls.phone.invalid) {
+              <p class="text-[hsl(var(--destructive))] text-xs mt-1">Required</p>
+            }
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="flex justify-between mt-8">
+          <button
+            type="button"
+            (click)="goToCart()"
+            class="inline-flex items-center gap-2 rounded-xl px-4 py-2 text-[hsl(var(--foreground))] hover:bg-[hsl(var(--terracotta))] hover:text-[hsl(var(--accent-foreground))] transition"
+          >
+            <lucide-icon [img]="ArrowLeft" [size]="16"></lucide-icon>
+            Back to Cart
+          </button>
+
+          <button
+            type="submit"
+            class="inline-flex items-center gap-2 rounded-xl bg-[hsl(var(--terracotta))] text-[hsl(var(--accent-foreground))] px-5 py-2.5 hover:bg-[hsl(var(--terracotta-light))] transition shadow-(--shadow-warm)"
+            (click)="handleShippingNext()"
+          >
+            Continue to Payment
+            <lucide-icon [img]="ArrowRight" [size]="16"></lucide-icon>
+          </button>
+        </div>
+      </form>
+    }
+
+    @if (step === 'payment') {
+      <form [formGroup]="paymentForm" (ngSubmit)="handlePaymentNext()" class="space-y-6">
+        <div
+          class="rounded-2xl bg-[hsl(var(--card))] warm-shadow-lg p-6 md:p-8 border border-[hsl(var(--border))]"
+        >
+          <h2
+            class="font-serif text-2xl font-bold text-[hsl(var(--foreground))] mb-6 gold-underline"
+          >
+            Payment Details
+          </h2>
+
+          <p
+            class="text-xs font-sans mb-4 rounded-lg px-3 py-2 bg-[hsl(var(--secondary))] text-[hsl(var(--muted-foreground))]"
+          >
+            🔒 This is a demo — no real payment will be processed.
+          </p>
+
+          <div class="space-y-5">
+            <!-- Name on Card -->
+            <div>
+              <label class="font-sans text-sm text-[hsl(var(--foreground))]">Name on Card</label>
+              <input
+                type="text"
+                formControlName="cardName"
+                placeholder="John Doe"
+                class="mt-1 w-full rounded-xl bg-[hsl(var(--input))] border border-[hsl(var(--border))] px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[hsl(var(--ring))]"
+              />
+              @if (paymentForm.controls.cardName.touched && paymentForm.controls.cardName.invalid) {
+                <p class="text-[hsl(var(--destructive))] text-xs mt-1">Required</p>
+              }
+            </div>
+
+            <!-- Card Number -->
+            <div>
+              <label class="font-sans text-sm text-[hsl(var(--foreground))]">Card Number</label>
+              <input
+                type="text"
+                formControlName="cardNumber"
+                placeholder="1234 5678 9012 3456"
+                maxlength="19"
+                [value]="paymentForm.controls.cardNumber.value | formatCardNumer"
+                (input)="formatCardNumber($event)"
+                class="mt-1 w-full rounded-xl bg-[hsl(var(--input))] border border-[hsl(var(--border))] px-4 py-2 tracking-widest focus:outline-none focus:ring-2 focus:ring-[hsl(var(--ring))]"
+              />
+              @if (
+                paymentForm.controls.cardNumber.touched && paymentForm.controls.cardNumber.invalid
+              ) {
+                <p class="text-[hsl(var(--destructive))] text-xs mt-1">Invalid card number</p>
+              }
+            </div>
+
+            <!-- Expiry + CVV -->
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="font-sans text-sm text-[hsl(var(--foreground))]">Expiry</label>
+                <input
+                  type="text"
+                  formControlName="expiryDate"
+                  placeholder="MM/YY"
+                  maxlength="5"
+                  [value]="paymentForm.controls.expiryDate.value | formatExpiary"
+                  (input)="formatExpiry($event)"
+                  class="mt-1 w-full rounded-xl bg-[hsl(var(--input))] border border-[hsl(var(--border))] px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[hsl(var(--ring))]"
+                />
+                @if (
+                  paymentForm.controls.expiryDate.touched && paymentForm.controls.expiryDate.invalid
+                ) {
+                  <p class="text-[hsl(var(--destructive))] text-xs mt-1">Invalid expiry</p>
+                }
+              </div>
+
+              <div>
+                <label class="font-sans text-sm text-[hsl(var(--foreground))]">CVV</label>
+                <input
+                  type="password"
+                  formControlName="cvv"
+                  placeholder="123"
+                  maxlength="4"
+                  [value]="paymentForm.controls.cvv.value | formatCvv"
+                  (input)="formatCvv($event)"
+                  class="mt-1 w-full rounded-xl bg-[hsl(var(--input))] border border-[hsl(var(--border))] px-4 py-2 tracking-widest focus:outline-none focus:ring-2 focus:ring-[hsl(var(--ring))]"
+                />
+                @if (paymentForm.controls.cvv.touched && paymentForm.controls.cvv.invalid) {
+                  <p class="text-[hsl(var(--destructive))] text-xs mt-1">Invalid CVV</p>
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="flex justify-between mt-8">
+          <button
+            type="button"
+            (click)="goBackToShipping()"
+            class="inline-flex items-center gap-2 rounded-xl px-4 py-2 text-[hsl(var(--foreground))] hover:bg-[hsl(var(--secondary))] transition"
+          >
+            <lucide-icon [img]="ArrowLeft" [size]="16"></lucide-icon>
+            Back to Shipping
+          </button>
+
+          <button
+            type="submit"
+            class="inline-flex items-center gap-2 rounded-xl bg-[hsl(var(--terracotta))] text-[hsl(var(--accent-foreground))] px-5 py-2.5 hover:bg-[hsl(var(--terracotta-light))] transition shadow-(--shadow-warm)"
+          >
+            Confirm Order
+            <lucide-icon [img]="ArrowRight" [size]="16"></lucide-icon>
+          </button>
+        </div>
+      </form>
+    }
+  </div>
+</div>

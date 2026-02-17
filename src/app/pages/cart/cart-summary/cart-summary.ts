@@ -1,9 +1,10 @@
 import { CurrencyPipe } from '@angular/common';
 import { Component, Input } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-cart-summary',
-  imports: [CurrencyPipe],
+  imports: [CurrencyPipe, RouterLink],
   templateUrl: './cart-summary.html',
   styles: ``,
 })

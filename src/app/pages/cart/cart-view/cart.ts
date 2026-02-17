@@ -27,7 +27,6 @@ export class Cart {
   }
 
   removeItem(itemId: string) {
-    // Remove the item from the cart
     this.cartService.removeItem(itemId);
   }
 

@@ -34,55 +34,57 @@
     </div>
   </div>
 } @else {
-  <div class="min-h-screen pt-20 pb-24 md:pb-12">
-    <div class="max-w-4xl mx-auto px-6">
-      <h1 class="font-serif text-4xl font-bold text-[hsl(var(--foreground))] mb-8">Your Cart</h1>
+  <div class="container mx-auto 2xl:w-[85%]">
+    <div class="min-h-screen pt-20">
+      <div class="mx-auto px-6">
+        <h1 class="font-serif text-4xl font-bold text-[hsl(var(--foreground))] mb-8">Your Cart</h1>
 
-      <div class="grid md:grid-cols-3 gap-8">
-        <!-- LEFT: Cart items -->
-        <div class="md:col-span-2 space-y-2">
-          <!-- Cart List -->
-          <div class="rounded-2xl bg-[hsl(var(--card))] shadow-(--shadow-warm) p-5">
-            <div class="divide-y divide-[hsl(var(--border)/0.5)]">
-              @for (item of cartIems(); track item.id) {
-                <app-cart-item-row
-                  [cartItem]="item"
-                  (quantityChange)="updateQuantity($event.itemId, $event.newQuantity)"
-                  (remove)="removeItem($event)"
-                ></app-cart-item-row>
-              }
+        <div class="grid md:grid-cols-3 gap-8">
+          <!-- LEFT: Cart items -->
+          <div class="md:col-span-2 space-y-2">
+            <!-- Cart List -->
+            <div class="rounded-2xl bg-[hsl(var(--card))] shadow-(--shadow-warm) p-5">
+              <div class="divide-y divide-[hsl(var(--border)/0.5)]">
+                @for (item of cartIems(); track item.id) {
+                  <app-cart-item-row
+                    [cartItem]="item"
+                    (quantityChange)="updateQuantity($event.itemId, $event.newQuantity)"
+                    (remove)="removeItem($event)"
+                  ></app-cart-item-row>
+                }
+              </div>
+            </div>
+
+            <!-- AI suggestion -->
+            <div class="rounded-2xl bg-[hsl(var(--cream-dark))] p-5 flex items-center gap-3 mt-4">
+              <div
+                class="w-8 h-8 rounded-full bg-gradient-gold flex items-center justify-center shrink-0"
+              >
+                <i class="fas fa-robot w-4 h-4 text-[hsl(var(--foreground))]"></i>
+              </div>
+
+              <p class="text-sm font-sans text-[hsl(var(--muted-foreground))]">
+                <span class="text-[hsl(var(--foreground))] font-medium">Don't forget!</span>
+                Add some fresh herbs to complement your meal.
+              </p>
+
+              <a
+                routerLink="/shop"
+                [queryParams]="{ category: 'Spices & Herbs' }"
+                class="text-[hsl(var(--accent))] text-sm font-medium whitespace-nowrap hover:underline"
+              >
+                Browse →
+              </a>
             </div>
           </div>
 
-          <!-- AI suggestion -->
-          <div class="rounded-2xl bg-[hsl(var(--cream-dark))] p-5 flex items-center gap-3 mt-4">
-            <div
-              class="w-8 h-8 rounded-full bg-gradient-gold flex items-center justify-center shrink-0"
-            >
-              <i class="fas fa-robot w-4 h-4 text-[hsl(var(--foreground))]"></i>
-            </div>
-
-            <p class="text-sm font-sans text-[hsl(var(--muted-foreground))]">
-              <span class="text-[hsl(var(--foreground))] font-medium">Don't forget!</span>
-              Add some fresh herbs to complement your meal.
-            </p>
-
-            <a
-              routerLink="/shop"
-              [queryParams]="{ category: 'Spices & Herbs' }"
-              class="text-[hsl(var(--accent))] text-sm font-medium whitespace-nowrap hover:underline"
-            >
-              Browse →
-            </a>
-          </div>
+          <!-- RIGHT: Order Summary -->
+          <app-cart-summary
+            class="block sticky top-24"
+            [total]="total()"
+            [deliveryFee]="deliveryFee()"
+          ></app-cart-summary>
         </div>
-
-        <!-- RIGHT: Order Summary -->
-        <app-cart-summary
-          class="block sticky top-24"
-          [total]="total()"
-          [deliveryFee]="deliveryFee()"
-        ></app-cart-summary>
       </div>
     </div>
   </div>

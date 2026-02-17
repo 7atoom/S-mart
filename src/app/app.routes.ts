@@ -9,6 +9,7 @@ import { AiChefPickPeople } from './pages/ai-chef-pick-people/ai-chef-pick-peopl
 import { AiChefPickCart } from './pages/ai-chef-pick-cart/ai-chef-pick-cart';
 import { Login } from './pages/login/login';
 import { Signup } from './pages/signup/signup';
+import { CheckoutComponent } from './pages/checkout/checkout';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -20,6 +21,7 @@ export const routes: Routes = [
   { path: 'aiChef/:meal', component: AiChefPick },
   { path: 'aiChef/:meal/:selectedRecipe', component: AiChefPickPeople },
   { path: 'aiChef/:meal/:selectedRecipe/cart', component: AiChefPickCart },
+  { path: 'checkout', component: CheckoutComponent },
   { path: 'cart', component: Cart },
   { path: '**', component: NotFound },
 ];

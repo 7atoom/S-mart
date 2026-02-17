@@ -1,39 +1,38 @@
 <div class="md:col-span-1">
-        <div
-          class="rounded-2xl p-6 sticky top-24 bg-[hsl(var(--card))] shadow-(--shadow-warm)"
-        >
-          <h3 class="font-serif text-lg font-semibold text-[hsl(var(--foreground))] mb-5">
-            Order Summary
-          </h3>
+  <div class="rounded-2xl p-6 sticky top-24 bg-[hsl(var(--card))] shadow-(--shadow-warm)">
+    <h3 class="font-serif text-lg font-semibold text-[hsl(var(--foreground))] mb-5">
+      Order Summary
+    </h3>
 
-          <div class="space-y-3 mb-5">
-            <div class="flex justify-between text-sm font-sans">
-              <span class="text-[hsl(var(--muted-foreground))]">Subtotal</span>
-              <span class="text-[hsl(var(--foreground))]"> {{ total | currency: 'USD' }} </span>
-            </div>
-
-            <div class="flex justify-between text-sm font-sans">
-              <span class="text-[hsl(var(--muted-foreground))]">Delivery</span>
-              <span class="text-[hsl(var(--foreground))]">
-                {{ deliveryFee | currency: 'USD' }}
-              </span>
-            </div>
-
-            <div class="h-px bg-[hsl(var(--border))]"></div>
-
-            <div class="flex justify-between font-sans">
-              <span class="font-semibold text-[hsl(var(--foreground))]">Total</span>
-              <span class="font-semibold text-[hsl(var(--foreground))] text-lg">
-                {{ (total + deliveryFee) | currency: 'USD' }}
-              </span>
-            </div>
-          </div>
-
-          <button
-            class="w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl bg-[hsl(var(--accent))] text-[hsl(var(--accent-foreground))] font-medium transition-colors shadow-(--shadow-warm) hover:bg-[hsl(var(--terracotta-light))]"
-          >
-            Proceed to Checkout
-            <i class="fas fa-arrow-right w-4 h-4"></i>
-          </button>
-        </div>
+    <div class="space-y-3 mb-5">
+      <div class="flex justify-between text-sm font-sans">
+        <span class="text-[hsl(var(--muted-foreground))]">Subtotal</span>
+        <span class="text-[hsl(var(--foreground))]"> {{ total | currency: 'USD' }} </span>
       </div>
+
+      <div class="flex justify-between text-sm font-sans">
+        <span class="text-[hsl(var(--muted-foreground))]">Delivery</span>
+        <span class="text-[hsl(var(--foreground))]">
+          {{ deliveryFee | currency: 'USD' }}
+        </span>
+      </div>
+
+      <div class="h-px bg-[hsl(var(--border))]"></div>
+
+      <div class="flex justify-between font-sans">
+        <span class="font-semibold text-[hsl(var(--foreground))]">Total</span>
+        <span class="font-semibold text-[hsl(var(--foreground))] text-lg">
+          {{ total + deliveryFee | currency: 'USD' }}
+        </span>
+      </div>
+    </div>
+
+    <button
+      class="w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl bg-[hsl(var(--accent))] text-[hsl(var(--accent-foreground))] font-medium transition-colors shadow-(--shadow-warm) hover:bg-[hsl(var(--terracotta-light))]"
+      routerLink="/checkout"
+    >
+      Proceed to Checkout
+      <i class="fas fa-arrow-right w-4 h-4"></i>
+    </button>
+  </div>
+</div>
