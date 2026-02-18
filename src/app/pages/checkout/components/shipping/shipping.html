@@ -1,0 +1,132 @@
+<form
+        [formGroup]="shippingForm"
+        (ngSubmit)="onSubmit()"
+        class="rounded-2xl bg-[hsl(var(--card))] warm-shadow-lg p-6 md:p-8 border border-[hsl(var(--border))]"
+      >
+        <h2 class="font-serif text-2xl font-bold text-[hsl(var(--foreground))] mb-6">
+          Shipping Details
+        </h2>
+
+        <div class="space-y-5">
+          <!-- Full Name -->
+          <div>
+            <label class="font-sans text-sm text-[hsl(var(--foreground))] font-medium">
+              Full Name <span class="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              formControlName="fullName"
+              placeholder="John Doe"
+              [class.border-red-500]="hasError('fullName')"
+              class="mt-1 w-full rounded-xl bg-[hsl(var(--input))] border border-[hsl(var(--border))] px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[hsl(var(--ring))] transition-colors"
+            />
+            @if (hasError('fullName')) {
+              <p class="text-red-500 text-xs mt-1 flex items-center gap-1">
+                <i class="fas fa-exclamation-circle"></i>
+                {{ getErrorMessage('fullName') }}
+              </p>
+            }
+          </div>
+
+          <!-- Phone -->
+          <div>
+            <label class="font-sans text-sm text-[hsl(var(--foreground))] font-medium">
+              Phone Number <span class="text-red-500">*</span>
+            </label>
+            <input
+              type="tel"
+              formControlName="phone"
+              placeholder="1234567890"
+              [class.border-red-500]="hasError('phone')"
+              class="mt-1 w-full rounded-xl bg-[hsl(var(--input))] border border-[hsl(var(--border))] px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[hsl(var(--ring))] transition-colors"
+            />
+            @if (hasError('phone')) {
+              <p class="text-red-500 text-xs mt-1 flex items-center gap-1">
+                <i class="fas fa-exclamation-circle"></i>
+                {{ getErrorMessage('phone') }}
+              </p>
+            }
+          </div>
+
+          <!-- Address -->
+          <div>
+            <label class="font-sans text-sm text-[hsl(var(--foreground))] font-medium">
+              Address <span class="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              formControlName="address"
+              placeholder="123 Main Street, Apt 4B"
+              [class.border-red-500]="hasError('address')"
+              class="mt-1 w-full rounded-xl bg-[hsl(var(--input))] border border-[hsl(var(--border))] px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[hsl(var(--ring))] transition-colors"
+            />
+            @if (hasError('address')) {
+              <p class="text-red-500 text-xs mt-1 flex items-center gap-1">
+                <i class="fas fa-exclamation-circle"></i>
+                {{ getErrorMessage('address') }}
+              </p>
+            }
+          </div>
+
+          <!-- City + ZIP -->
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="font-sans text-sm text-[hsl(var(--foreground))] font-medium">
+                City <span class="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                formControlName="city"
+                placeholder="Cairo"
+                [class.border-red-500]="hasError('city')"
+                class="mt-1 w-full rounded-xl bg-[hsl(var(--input))] border border-[hsl(var(--border))] px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[hsl(var(--ring))] transition-colors"
+              />
+              @if (hasError('city')) {
+                <p class="text-red-500 text-xs mt-1 flex items-center gap-1">
+                  <i class="fas fa-exclamation-circle"></i>
+                  {{ getErrorMessage('city') }}
+                </p>
+              }
+            </div>
+
+            <div>
+              <label class="font-sans text-sm text-[hsl(var(--foreground))] font-medium">
+                ZIP Code <span class="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                formControlName="postalCode"
+                placeholder="12345"
+                [class.border-red-500]="hasError('postalCode')"
+                class="mt-1 w-full rounded-xl bg-[hsl(var(--input))] border border-[hsl(var(--border))] px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[hsl(var(--ring))] transition-colors"
+              />
+              @if (hasError('postalCode')) {
+                <p class="text-red-500 text-xs mt-1 flex items-center gap-1">
+                  <i class="fas fa-exclamation-circle"></i>
+                  {{ getErrorMessage('postalCode') }}
+                </p>
+              }
+            </div>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="flex justify-between mt-8">
+          <button
+            type="button"
+            (click)="onBackToCart()"
+            class="inline-flex items-center gap-2 rounded-xl px-4 py-2 text-[hsl(var(--foreground))] hover:bg-[hsl(var(--terracotta))] hover:text-[hsl(var(--accent-foreground))] transition"
+          >
+            <lucide-icon [img]="ArrowLeft" [size]="16"></lucide-icon>
+            Back to Cart
+          </button>
+
+          <button
+            type="submit"
+            class="inline-flex items-center gap-2 rounded-xl bg-[hsl(var(--terracotta))] text-[hsl(var(--accent-foreground))] px-5 py-2.5 hover:bg-[hsl(var(--terracotta-light))] transition shadow-(--shadow-warm)"
+          >
+            Continue to Payment
+            <lucide-icon [img]="ArrowRight" [size]="16"></lucide-icon>
+          </button>
+        </div>
+      </form>

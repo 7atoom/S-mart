@@ -11,6 +11,7 @@ export class CartService {
   items = computed(() => this.cartItems());
   itemCount = computed(() => this.cartItems().reduce((sum, item) => sum + item.quantity, 0));
   total = computed(() => this.cartItems().reduce((sum, item) => sum + (item.price * item.quantity), 0));
+  deliveryFee = 4.99;
 
   constructor() {
     this.loadCart();

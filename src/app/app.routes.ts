@@ -3,7 +3,7 @@ import { Home } from './pages/home/home';
 import { Shop } from './pages/shop/shop';
 import { AiChef } from './pages/ai-chef/ai-chef';
 import { NotFound } from './pages/not-found/not-found';
-import { Cart } from './pages/cart/cart-view/cart';
+import { Cart } from './pages/cart/cart';
 import { AiChefPick } from './pages/ai-chef-pick/ai-chef-pick';
 import { AiChefPickPeople } from './pages/ai-chef-pick-people/ai-chef-pick-people';
 import { AiChefPickCart } from './pages/ai-chef-pick-cart/ai-chef-pick-cart';

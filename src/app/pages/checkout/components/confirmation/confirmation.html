@@ -1,0 +1,42 @@
+<div class="rounded-2xl bg-[hsl(var(--card))] warm-shadow p-8 md:p-12 text-center">
+  <div class="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 bg-[hsl(var(--primary)/0.1)]">
+    <lucide-icon [img]="CheckCircle2" [size]="32" class="text-[hsl(var(--primary))]"></lucide-icon>
+  </div>
+
+  <h2 class="font-serif text-3xl font-bold text-[hsl(var(--foreground))] mb-3">
+    Order Confirmed!
+  </h2>
+
+  <p class="text-[hsl(var(--muted-foreground))] font-sans mb-2">
+    Thank you, {{ shippingData?.fullName }}! Your order has been placed.
+  </p>
+
+  <p class="text-sm text-[hsl(var(--muted-foreground))] font-sans mb-1">
+    Delivering to: {{ shippingData?.address }}, {{ shippingData?.city }} {{ shippingData?.postalCode }}
+  </p>
+
+  <div class="inline-flex items-center gap-2 rounded-full px-4 py-2 mt-4 mb-8 bg-[hsl(var(--secondary))] warm-shadow">
+    <lucide-icon [img]="Package" [size]="16" class="text-[hsl(var(--accent))]"></lucide-icon>
+    <span class="text-sm font-sans font-medium text-[hsl(var(--foreground))]">
+      Order #{{ orderNumber }}
+    </span>
+  </div>
+
+  <div class="flex flex-col sm:flex-row gap-3 justify-center">
+    <button
+      type="button"
+      (click)="onGoHome()"
+      class="rounded-xl px-4 py-2 hover:bg-[hsl(var(--terracotta))] hover:text-[hsl(var(--accent-foreground))] transition cursor-pointer"
+    >
+      Back to Home
+    </button>
+
+    <button
+      type="button"
+      (click)="onGoShop()"
+      class="rounded-xl px-4 py-2 bg-[hsl(var(--primary))] text-[hsl(var(--primary-foreground))] hover:bg-[hsl(var(--olive-light))] transition cursor-pointer"
+    >
+      Continue Shopping
+    </button>
+  </div>
+</div>

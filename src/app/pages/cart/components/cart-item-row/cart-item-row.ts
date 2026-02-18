@@ -1,7 +1,6 @@
 import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
-import { CartItem } from '../../../utils/CartItem';
+import { CartItem } from '../../../../utils/CartItem';
 import { CurrencyPipe } from '@angular/common';
-import { CartService } from '../../../core/services/cart.service';
 
 @Component({
   selector: 'app-cart-item-row',

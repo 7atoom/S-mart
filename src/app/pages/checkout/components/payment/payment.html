@@ -1,0 +1,144 @@
+<form [formGroup]="paymentForm" (ngSubmit)="onSubmit()" class="space-y-6">
+  <div
+    class="rounded-2xl bg-[hsl(var(--card))] warm-shadow-lg p-6 md:p-8 border border-[hsl(var(--border))]"
+  >
+    <h2 class="font-serif text-2xl font-bold text-[hsl(var(--foreground))] mb-6">
+      Payment Details
+    </h2>
+
+    <p
+      class="text-xs font-sans mb-4 rounded-lg px-3 py-2 bg-[hsl(var(--secondary))] text-[hsl(var(--muted-foreground))]"
+    >
+      🔒 This is a demo — no real payment will be processed.
+    </p>
+
+    <div class="space-y-5">
+      <!-- Name on Card -->
+      <div>
+        <label class="font-sans text-sm text-[hsl(var(--foreground))]">Name on Card</label>
+        <input
+          type="text"
+          formControlName="cardName"
+          placeholder="John Doe"
+          class="mt-1 w-full rounded-xl bg-[hsl(var(--input))] border border-[hsl(var(--border))] px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[hsl(var(--ring))]"
+        />
+        @if (paymentForm.controls.cardName.touched && paymentForm.controls.cardName.invalid) {
+          <p class="text-[hsl(var(--destructive))] text-xs mt-1">Required</p>
+        }
+      </div>
+
+      <!-- Card Number -->
+      <div>
+        <label class="font-sans text-sm text-[hsl(var(--foreground))]">Card Number</label>
+        <input
+          type="text"
+          formControlName="cardNumber"
+          placeholder="1234 5678 9012 3456"
+          maxlength="19"
+          [value]="paymentForm.controls.cardNumber.value | formatCardNumer"
+          (input)="formatCardNumber($event)"
+          class="mt-1 w-full rounded-xl bg-[hsl(var(--input))] border border-[hsl(var(--border))] px-4 py-2 tracking-widest focus:outline-none focus:ring-2 focus:ring-[hsl(var(--ring))]"
+        />
+        @if (paymentForm.controls.cardNumber.touched && paymentForm.controls.cardNumber.invalid) {
+          <p class="text-[hsl(var(--destructive))] text-xs mt-1">Invalid card number</p>
+        }
+      </div>
+
+      <!-- Expiry + CVV -->
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="font-sans text-sm text-[hsl(var(--foreground))]">Expiry</label>
+          <input
+            type="text"
+            formControlName="expiryDate"
+            placeholder="MM/YY"
+            maxlength="5"
+            [value]="paymentForm.controls.expiryDate.value | formatExpiary"
+            (input)="formatExpiry($event)"
+            class="mt-1 w-full rounded-xl bg-[hsl(var(--input))] border border-[hsl(var(--border))] px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[hsl(var(--ring))]"
+          />
+          @if (paymentForm.controls.expiryDate.touched && paymentForm.controls.expiryDate.invalid) {
+            <p class="text-[hsl(var(--destructive))] text-xs mt-1">Invalid expiry</p>
+          }
+        </div>
+
+        <div>
+          <label class="font-sans text-sm text-[hsl(var(--foreground))]">CVV</label>
+          <input
+            type="password"
+            formControlName="cvv"
+            placeholder="123"
+            maxlength="4"
+            [value]="paymentForm.controls.cvv.value | formatCvv"
+            (input)="formatCvv($event)"
+            class="mt-1 w-full rounded-xl bg-[hsl(var(--input))] border border-[hsl(var(--border))] px-4 py-2 tracking-widest focus:outline-none focus:ring-2 focus:ring-[hsl(var(--ring))]"
+          />
+          @if (paymentForm.controls.cvv.touched && paymentForm.controls.cvv.invalid) {
+            <p class="text-[hsl(var(--destructive))] text-xs mt-1">Invalid CVV</p>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Order summary -->
+  <div class="rounded-2xl bg-[hsl(var(--card))] warm-shadow p-6">
+    <h3 class="font-serif text-lg font-semibold text-[hsl(var(--foreground))] mb-4">
+      Order Summary
+    </h3>
+
+    <div class="space-y-2 text-sm font-sans">
+      @for (item of cartItems; track item.id) {
+        <div class="flex justify-between">
+          <span class="text-[hsl(var(--muted-foreground))]">
+            {{ item.name }} × {{ item.quantity }}
+          </span>
+          <span class="text-[hsl(var(--foreground))]">
+            ${{ item.price * item.quantity | number: '1.2-2' }}
+          </span>
+        </div>
+      }
+
+      <div class="h-px bg-[hsl(var(--border))] my-2"></div>
+
+      <div class="flex justify-between">
+        <span class="text-[hsl(var(--muted-foreground))]">Subtotal</span>
+        <span class="text-[hsl(var(--foreground))]">
+          ${{ cartService.total() | number: '1.2-2' }}
+        </span>
+      </div>
+
+      <div class="flex justify-between">
+        <span class="text-[hsl(var(--muted-foreground))]">Delivery</span>
+        <span class="text-[hsl(var(--foreground))]"> ${{ deliveryFee | number: '1.2-2' }} </span>
+      </div>
+
+      <div class="h-px bg-[hsl(var(--border))] my-2"></div>
+
+      <div class="flex justify-between font-semibold text-base">
+        <span>Total</span>
+        <span> ${{ cartService.total() + deliveryFee | number: '1.2-2' }} </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Actions -->
+  <div class="flex justify-between mt-8">
+    <button
+      type="button"
+      (click)="onBackToShipping()"
+      class="inline-flex items-center gap-2 rounded-xl px-4 py-2 text-[hsl(var(--foreground))] hover:bg-[hsl(var(--terracotta))] hover:text-[hsl(var(--accent-foreground))] transition cursor-pointer"
+    >
+      <lucide-icon [img]="ArrowLeft" [size]="16"></lucide-icon>
+      Back to Shipping
+    </button>
+
+    <button
+      type="submit"
+      class="inline-flex items-center gap-2 rounded-xl bg-[hsl(var(--terracotta))] text-[hsl(var(--accent-foreground))] px-5 py-2.5 hover:bg-[hsl(var(--terracotta-light))] transition shadow-(--shadow-warm) cursor-pointer"
+    >
+      Confirm Order
+      <lucide-icon [img]="ArrowRight" [size]="16"></lucide-icon>
+    </button>
+  </div>
+</form>
