@@ -1,7 +1,10 @@
 <nav class="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-xl border-b">
   <div class="mx-auto px-6 h-16 flex items-center justify-between">
     <!-- Logo -->
-    <a routerLink="/" class="font-serif text-2xl font-bold tracking-tight text-[hsl(var(--foreground))]">
+    <a
+      routerLink="/"
+      class="font-serif text-2xl font-bold tracking-tight text-[hsl(var(--foreground))]"
+    >
       S-Mart
     </a>
 
@@ -37,7 +40,10 @@
     <!-- Desktop actions -->
     <div class="hidden md:flex items-center gap-4">
       <!-- Cart -->
-      <a routerLink="/cart" class="relative p-2 rounded-full hover:bg-[hsl(var(--secondary))] transition-colors group">
+      <a
+        routerLink="/cart"
+        class="relative p-2 rounded-full hover:bg-[hsl(var(--secondary))] transition-colors group"
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="20"
@@ -64,7 +70,10 @@
       </a>
 
       <!-- User -->
-      <a routerLink="/login" class="p-2 rounded-full hover:bg-[hsl(var(--secondary))] transition-colors cursor-pointer group">
+      <a
+        routerLink="/login"
+        class="p-2 rounded-full hover:bg-[hsl(var(--secondary))] transition-colors cursor-pointer group"
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="20"
@@ -120,6 +129,7 @@
         (click)="closeMobileMenu()"
         class="flex items-center gap-2 py-2 text-[hsl(var(--foreground))] font-medium hover:text-[hsl(var(--primary))] transition-colors"
       >
+        <lucide-icon [img]="SparkleIcon" [size]="16"></lucide-icon>
         AI Chef
       </a>
 
