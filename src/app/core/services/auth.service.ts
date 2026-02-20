@@ -10,7 +10,10 @@ import { jwtDecode } from "jwt-decode";
 export class Auth {
   constructor(private httpClient:HttpClient){}
   sendLoginForm(data:object) : Observable<any>{
-    return this.httpClient.post('https://api.escuelajs.co/api/v1/auth/login', data)
+    return this.httpClient.post("https://s-mart-api.vercel.app/api/auth/login", data)
+  }
+  sendSignupForm(data:object): Observable<any>{
+    return this.httpClient.post("https://s-mart-api.vercel.app/api/auth/register", data)
   }
   getUserData(){
     console.log(jwtDecode(localStorage.getItem('token')!))
