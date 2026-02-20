@@ -8,7 +8,7 @@
     <div class="bg-[hsl(var(--card))] rounded-2xl p-8 warm-shadow-lg border border-[hsl(var(--border))]">
       <h1 class="font-serif text-2xl font-bold text-[hsl(var(--foreground))] mb-6">Create Account</h1>
 
-      <form class="space-y-5" (ngSubmit)="onSubmit()">
+      <form class="space-y-5" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
         <div class="grid grid-cols-2 gap-3">
           <div class="space-y-2">
             <label
@@ -20,11 +20,24 @@
             <input
               type="text"
               id="firstName"
-              [(ngModel)]="firstName"
+              formControlName="firstName"
               name="firstName"
               placeholder="John"
               class="flex w-full border px-3 py-2 text-base h-12 rounded-full bg-[hsl(var(--secondary))] border-[hsl(var(--border))] text-[hsl(var(--foreground))] placeholder:text-[hsl(var(--muted-foreground))] focus:outline-none focus:ring-2 focus:ring-[hsl(var(--ring))] focus:ring-offset-2 focus:border-[hsl(var(--primary))]"
             />
+            @if(registerForm.get("firstName")?.errors && registerForm.get("firstName")?.touched){
+              <div class="error-msgs-container">
+                @if(registerForm.get("firstName")?.getError("required")){
+                  <p class="text-sm text-red-500">first name is required</p>
+                }
+                @else if(registerForm.get("firstName")?.getError('minlength')){
+                  <p class="text-sm  text-red-500">first name must be atleast 3 letters</p>
+                }
+                @else if(registerForm.get("firstName")?.getError('maxlength')){
+                  <p class="text-sm text-red-500">first name is 20 char max</p>
+                }
+              </div>
+            }
           </div>
           <div class="space-y-2">
             <label
@@ -36,11 +49,24 @@
             <input
               type="text"
               id="lastName"
-              [(ngModel)]="lastName"
+            formControlName="lastName"
               name="lastName"
               placeholder="Doe"
               class="flex w-full border px-3 py-2 text-base h-12 rounded-full bg-[hsl(var(--secondary))] border-[hsl(var(--border))] text-[hsl(var(--foreground))] placeholder:text-[hsl(var(--muted-foreground))] focus:outline-none focus:ring-2 focus:ring-[hsl(var(--ring))] focus:ring-offset-2 focus:border-[hsl(var(--primary))]"
             />
+              @if(registerForm.get("lastName")?.errors && registerForm.get("lastName")?.touched){
+                <div class="error-msgs-container">
+                  @if(registerForm.get("lastName")?.getError("required")){
+                    <p class="text-sm text-red-500">last name is required</p>
+                  }
+                  @else if(registerForm.get("lastName")?.getError('minlength')){
+                    <p class="text-sm  text-red-500">last name must be atleast 3 letters</p>
+                  }
+                  @else if(registerForm.get("lastName")?.getError('maxlength')){
+                    <p class="text-sm text-red-500">last name is 20 char max</p>
+                  }
+                </div>
+              }
           </div>
         </div>
 
@@ -54,11 +80,21 @@
           <input
             type="email"
             id="email"
-            [(ngModel)]="email"
+          formControlName="email"
             name="email"
             placeholder="you@example.com"
             class="flex w-full border px-3 py-2 text-base h-12 rounded-full bg-[hsl(var(--secondary))] border-[hsl(var(--border))] text-[hsl(var(--foreground))] placeholder:text-[hsl(var(--muted-foreground))] focus:outline-none focus:ring-2 focus:ring-[hsl(var(--ring))] focus:ring-offset-2 focus:border-[hsl(var(--primary))]"
           />
+          @if(registerForm.get('email')?.errors && registerForm.get('email')?.touched){
+            <div class="errors-msgs-container">
+              @if(registerForm.get("email")?.getError("required")){
+                <p class="text-sm text-red-500"> email is required</p>
+              }
+              @else if(registerForm.get('email')?.getError("email")){
+                <p class="text-sm text-red-500"> please enter a valid email</p>
+              }
+            </div>
+          }
         </div>
 
         <div class="space-y-2">
@@ -71,11 +107,23 @@
           <input
             type="password"
             id="password"
-            [(ngModel)]="password"
+          formControlName="password"
             name="password"
             placeholder="At least 8 characters"
             class="flex w-full border px-3 py-2 text-base h-12 rounded-full bg-[hsl(var(--secondary))] border-[hsl(var(--border))] text-[hsl(var(--foreground))] placeholder:text-[hsl(var(--muted-foreground))] focus:outline-none focus:ring-2 focus:ring-[hsl(var(--ring))] focus:ring-offset-2 focus:border-[hsl(var(--primary))]"
           />
+          @if(registerForm.get('password')?.errors && registerForm.get('password')?.touched){
+            <div class="errors-msgs-container">
+              @if(registerForm.get("password")?.getError("required")){
+                <p class="text-sm text-red-500"> password is required</p>
+              }
+              @else if(registerForm.get('password')?.getError("pattern")){
+                <p class="text-xs text-red-500 leading-tight">
+                Password must be at least 8 characters with letters, numbers & symbols.
+              </p>
+              }
+            </div>
+          }
         </div>
 
         <!-- <div class="flex items-start gap-2">
