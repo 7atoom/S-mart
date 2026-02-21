@@ -9,8 +9,8 @@
         <p class="text-muted text-lg md:text-xl">S-Mart brings premium groceries to your door - with an Al chef that plans
         recipes, picks ingredients, and makes cooking effortless.</p>
         <div class="buttons-container mt-8 flex flex-wrap items-center justify-center gap-4">
-            <a routerLink="/aiChef" class="btn-primary text-lg">Try AI Chef</a>
-            <a routerLink="/shop" class="btn-accent text-lg"> Browse Shop</a>
+            <a routerLink="/aiChef" class="btn-primary text-lg cursor-pointer">Try AI Chef</a>
+            <a routerLink="/shop" class="btn-accent text-lg cursor-pointer"> Browse Shop</a>
         </div>
     </div>
 </div>
@@ -24,7 +24,7 @@
             <p class="text-white">Dates, samosas, laban & more - all your Ramadan essentials
             in one place.
             </p>
-            <a (click)="navigateToCategory('Ramadan Essentials')" class=" btn-accent text-md self-start ">Shop Ramadan &RightArrow;</a>
+            <a (click)="navigateToCategory('Ramadan Essentials')" class=" btn-accent text-md self-start cursor-pointer">Shop Ramadan &RightArrow;</a>
     </div>
  </div>
  </div>
@@ -61,11 +61,11 @@
     <div class="container mx-auto 2xl:w-[85%]">
         <div class="top-part flex items-center justify-between mb-12">
             <h2 class="font-serif text-3xl md:text-5xl font-bold">Shop by Category</h2>
-            <a routerLink="/shop" class="text-sm text-[hsl(var(--accent))] font-medium hover:underline">View all &rightarrow;</a>
+            <a routerLink="/shop" class="text-sm text-[hsl(var(--accent))] font-medium hover:underline cursor-pointer">View all &rightarrow;</a>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 auto-rows-[250px] lg:auto-rows-[300px]">
             <!-- Vegetables & Fruits - tall card -->
-            <a (click)="navigateToCategory('Vegetables & Fruits')" class="lg:row-span-2  group">
+            <a (click)="navigateToCategory('Vegetables & Fruits')" class="lg:row-span-2  group cursor-pointer">
                 <div class="relative rounded-3xl overflow-hidden h-full bg-gray-300">
                     <img src="/images/ramadan-bg.png" alt="Vegetables & Fruits" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                     <div class="absolute inset-0 bg-linear-to-t from-black/60 to-transparent"></div>
@@ -75,7 +75,7 @@
                 </div>
             </a>
             <!-- Meat & Poultry -->
-            <a (click)="navigateToCategory('Meat & Poultry')" class="group lg:row-span-2">
+            <a (click)="navigateToCategory('Meat & Poultry')" class="group lg:row-span-2 cursor-pointer">
                 <div class="relative rounded-3xl overflow-hidden h-full bg-gray-300">
                     <img src="/images/ramadan-bg.png" alt="Meat & Poultry" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                     <div class="absolute inset-0 bg-linear-to-t from-black/60 to-transparent"></div>
@@ -85,7 +85,7 @@
                 </div>
             </a>
             <!-- Dairy & Eggs -->
-            <a (click)="navigateToCategory('Dairy & Eggs')" class="group">
+            <a (click)="navigateToCategory('Dairy & Eggs')" class="group cursor-pointer">
                 <div class="relative rounded-3xl overflow-hidden h-full bg-gray-300">
                     <img src="/images/ramadan-bg.png" alt="Dairy & Eggs" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                     <div class="absolute inset-0 bg-linear-to-t from-black/60 to-transparent"></div>
@@ -95,7 +95,7 @@
                 </div>
             </a>
             <!-- Bakery -->
-            <a (click)="navigateToCategory('Bakery')" class="group">
+            <a (click)="navigateToCategory('Bakery')" class="group cursor-pointer">
                 <div class="relative rounded-3xl overflow-hidden h-full bg-gray-300">
                     <img src="/images/ramadan-bg.png" alt="Bakery" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                     <div class="absolute inset-0 bg-linear-to-t from-black/60 to-transparent"></div>
@@ -105,7 +105,7 @@
                 </div>
             </a>
             <!-- Spices & Herbs -->
-            <a (click)="navigateToCategory('Spices & Herbs')" class="group">
+            <a (click)="navigateToCategory('Spices & Herbs')" class="group cursor-pointer">
                 <div class="relative rounded-3xl overflow-hidden h-full bg-gray-300">
                     <img src="/images/ramadan-bg.png" alt="Spices & Herbs" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                     <div class="absolute inset-0 bg-linear-to-t from-black/60 to-transparent"></div>
@@ -115,7 +115,7 @@
                 </div>
             </a>
             <!-- Pantry Staples -->
-            <a (click)="navigateToCategory('Pantry Staples')" class="group">
+            <a (click)="navigateToCategory('Pantry Staples')" class="group cursor-pointer">
                 <div class="relative rounded-3xl overflow-hidden h-full bg-gray-300">
                     <img src="/images/ramadan-bg.png" alt="Pantry Staples" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                     <div class="absolute inset-0 bg-linear-to-t from-black/60 to-transparent"></div>
@@ -125,7 +125,7 @@
                 </div>
             </a>
             <!-- Beverages -->
-            <a (click)="navigateToCategory('Beverages')" class="group">
+            <a (click)="navigateToCategory('Beverages')" class="group cursor-pointer">
                 <div class="relative rounded-3xl overflow-hidden h-full bg-gray-300">
                     <img src="/images/ramadan-bg.png" alt="Beverages" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                     <div class="absolute inset-0 bg-linear-to-t from-black/60 to-transparent"></div>
@@ -135,7 +135,7 @@
                 </div>
             </a>
             <!-- Snacks -->
-            <a (click)="navigateToCategory('Snacks')" class="group">
+            <a (click)="navigateToCategory('Snacks')" class="group cursor-pointer">
                 <div class="relative rounded-3xl overflow-hidden h-full bg-gray-300">
                     <img src="/images/ramadan-bg.png" alt="Snacks" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                     <div class="absolute inset-0 bg-linear-to-t from-black/60 to-transparent"></div>
@@ -156,7 +156,7 @@
         </div>
         <h2 class="font-serif text-4xl md:text-5xl lg:text-6xl font-bold">Your AI Sous Chef</h2>
         <p class="text-muted text-lg md:text-xl max-w-2xl">Describe any dish you're dreaming of — our AI finds the perfect recipe, lists every ingredient, and adds them all to your cart in one click.</p>
-        <a routerLink="/aiChef" class="btn-accent text-lg mt-4">Start Cooking Smarter &RightArrow;</a>
+        <a routerLink="/aiChef" class="btn-accent text-lg mt-4 cursor-pointer">Start Cooking Smarter &RightArrow;</a>
     </div>
 </div>
 
@@ -175,9 +175,9 @@
                 <div class="flex flex-col gap-4">
                     <h4 class="font-sans font-semibold text-lg">Shop</h4>
                     <ul class="flex flex-col gap-3">
-                        <li><a href="#" class="text-muted hover:text-[hsl(var(--accent))] transition-colors text-sm">Browse</a></li>
-                        <li><a href="#" class="text-muted hover:text-[hsl(var(--accent))] transition-colors text-sm">AI Chef</a></li>
-                        <li><a href="#" class="text-muted hover:text-[hsl(var(--accent))] transition-colors text-sm">Cart</a></li>
+                        <li><a href="#" class="text-muted hover:text-[hsl(var(--accent))] transition-colors text-sm cursor-pointer">Browse</a></li>
+                        <li><a href="#" class="text-muted hover:text-[hsl(var(--accent))] transition-colors text-sm cursor-pointer">AI Chef</a></li>
+                        <li><a href="#" class="text-muted hover:text-[hsl(var(--accent))] transition-colors text-sm cursor-pointer">Cart</a></li>
                     </ul>
                 </div>
                 <!-- about column -->

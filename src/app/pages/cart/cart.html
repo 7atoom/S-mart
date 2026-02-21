@@ -36,14 +36,14 @@
 } @else {
   <div class="container mx-auto 2xl:w-[85%]">
     <div class="min-h-screen pt-12">
-      <div class="mx-auto px-6">
-        <h1 class="font-serif text-4xl font-bold text-[hsl(var(--foreground))] mb-8">Your Cart</h1>
+      <div class="mx-auto px-4 sm:px-6">
+        <h1 class="font-serif text-3xl sm:text-4xl font-bold text-[hsl(var(--foreground))] mb-6 sm:mb-8">Your Cart</h1>
 
-        <div class="grid md:grid-cols-3 gap-8">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
           <!-- LEFT: Cart items -->
-          <div class="md:col-span-2 space-y-2">
+          <div class="lg:col-span-2 space-y-2 sm:space-y-4">
             <!-- Cart List -->
-            <div class="rounded-2xl bg-[hsl(var(--card))] shadow-(--shadow-warm) p-5">
+            <div class="rounded-2xl bg-[hsl(var(--card))] shadow-(--shadow-warm) p-3 sm:p-5">
               <div class="divide-y divide-[hsl(var(--border)/0.5)]">
                 @for (item of cartIems(); track item.id) {
                   <app-cart-item-row
@@ -56,14 +56,14 @@
             </div>
 
             <!-- AI suggestion -->
-            <div class="rounded-2xl bg-[hsl(var(--cream-dark))] p-5 flex items-center gap-3 mt-4">
+            <div class="rounded-2xl bg-[hsl(var(--cream-dark))] p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center gap-3 mt-4">
               <div
                 class="w-8 h-8 rounded-full bg-gradient-gold flex items-center justify-center shrink-0"
               >
                 <i class="fas fa-robot w-4 h-4 text-[hsl(var(--foreground))]"></i>
               </div>
 
-              <p class="text-sm font-sans text-[hsl(var(--muted-foreground))]">
+              <p class="text-xs sm:text-sm font-sans text-[hsl(var(--muted-foreground))] flex-1">
                 <span class="text-[hsl(var(--foreground))] font-medium">Don't forget!</span>
                 Add some fresh herbs to complement your meal.
               </p>
@@ -71,19 +71,21 @@
               <a
                 routerLink="/shop"
                 [queryParams]="{ category: 'Spices & Herbs' }"
-                class="text-[hsl(var(--accent))] text-sm font-medium whitespace-nowrap hover:underline"
+                class="text-[hsl(var(--accent))] text-sm font-medium whitespace-nowrap hover:underline self-end sm:self-auto"
               >
                 Browse →
               </a>
             </div>
           </div>
 
-          <!-- RIGHT: Order Summary -->
-          <app-cart-summary
-            class="block sticky top-24"
-            [total]="total()"
-            [deliveryFee]="deliveryFee()"
-          ></app-cart-summary>
+          <!-- RIGHT: Order Summary (Sticky only on large screens) -->
+          <div class="lg:col-span-1">
+            <app-cart-summary
+              class="block lg:sticky lg:top-24"
+              [total]="total()"
+              [deliveryFee]="deliveryFee()"
+            ></app-cart-summary>
+          </div>
         </div>
       </div>
     </div>

@@ -3,10 +3,11 @@ import { CartService } from '../../core/services/cart.service';
 import { RouterLink } from "@angular/router";
 import { CartItemRow } from "./components/cart-item-row/cart-item-row";
 import { CartSummary } from "./components/cart-summary/cart-summary";
+import { LucideAngularModule } from "lucide-angular";
 
 @Component({
   selector: 'app-cart',
-  imports: [RouterLink, CartItemRow, CartSummary],
+  imports: [RouterLink, CartItemRow, CartSummary, LucideAngularModule],
   templateUrl: './cart.html',
   styles: ``,
 })

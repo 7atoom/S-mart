@@ -9,7 +9,6 @@ import { finalize } from 'rxjs';
   standalone: true,
   imports: [RouterLink, FormsModule, ReactiveFormsModule],
   templateUrl: './login.html',
-  styleUrl: './login.css',
 })
 export class Login {
   private readonly auth = inject(Auth)

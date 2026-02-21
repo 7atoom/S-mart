@@ -19,4 +19,22 @@ export class Auth {
     console.log(jwtDecode(localStorage.getItem('token')!))
     return jwtDecode(localStorage.getItem('token')!)
   }
+  
+  isAuthenticated(): boolean {
+    const token = localStorage.getItem('token');
+    if (!token) return false;
+    
+    try {
+      const decoded: any = jwtDecode(token);
+      // Check if token is expired
+      const currentTime = Date.now() / 1000;
+      return decoded.exp > currentTime;
+    } catch (error) {
+      return false;
+    }
+  }
+  
+  logout(){
+    localStorage.removeItem('token')
+  }
 }

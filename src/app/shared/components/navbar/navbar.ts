@@ -1,8 +1,9 @@
 import { Component, inject } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { RouterLink, RouterLinkActive, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { CartService } from '../../../core/services/cart.service';
 import { SparkleIcon, LucideAngularModule } from 'lucide-angular/src/icons';
+import { Auth } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-navbar',
@@ -14,6 +15,10 @@ import { SparkleIcon, LucideAngularModule } from 'lucide-angular/src/icons';
 export class Navbar {
   isMobileMenuOpen = false;
   cartService = inject(CartService);
+  authService = inject(Auth);
+  private router = inject(Router);
+
+  cartItemsCount = this.cartService.itemCount();
 
   readonly SparkleIcon = SparkleIcon;
 
@@ -23,5 +28,10 @@ export class Navbar {
 
   closeMobileMenu() {
     this.isMobileMenuOpen = false;
+  }
+
+  logout() {
+    this.authService.logout();
+    this.router.navigate(['/']);
   }
 }

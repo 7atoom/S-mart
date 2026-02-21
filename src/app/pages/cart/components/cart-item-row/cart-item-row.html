@@ -1,76 +1,87 @@
-<div class="flex items-center gap-4 py-4">
-  <div
-    class="w-16 h-16 rounded-xl shrink-0 overflow-hidden"
-    style="background-color: hsl(var(--cream-dark)); box-shadow: var(--shadow-warm);"
-  >
-    <img
-      [src]="cartItem?.image"
-      [alt]="cartItem?.name"
-      class="w-full h-full object-cover"
-    />
+<div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 py-4">
+  <!-- Product Image & Info -->
+  <div class="flex items-center gap-3 flex-1 min-w-0 w-full sm:w-auto">
+    <div
+      class="w-16 h-16 sm:w-16 sm:h-16 rounded-xl shrink-0 overflow-hidden"
+      style="background-color: hsl(var(--cream-dark)); box-shadow: var(--shadow-warm);"
+    >
+      <img
+        [src]="cartItem?.image"
+        [alt]="cartItem?.name"
+        class="w-full h-full object-cover"
+      />
+    </div>
+
+    <div class="flex-1 min-w-0">
+      <h4
+        class="font-sans font-medium text-sm sm:text-base truncate"
+        style="color: hsl(var(--foreground));"
+      >
+        {{ cartItem?.name }}
+      </h4>
+      <p
+        class="text-xs sm:text-sm font-sans"
+        style="color: hsl(var(--muted-foreground));"
+      >
+        {{ cartItem?.weight }}
+      </p>
+      <!-- Price on mobile -->
+      <span
+        class="sm:hidden font-sans font-semibold text-sm mt-1 inline-block"
+        style="color: hsl(var(--primary));"
+      >
+        {{ (cartItem?.price ?? 0) * (cartItem?.quantity ?? 0) | currency: 'USD' }}
+      </span>
+    </div>
   </div>
 
-  <div class="flex-1 min-w-0">
-    <h4
-      class="font-sans font-medium text-sm truncate"
-      style="color: hsl(var(--foreground));"
+  <!-- Quantity Controls & Actions -->
+  <div class="flex items-center justify-between sm:justify-end gap-3 w-full sm:w-auto">
+    <!-- Quantity Controls -->
+    <div
+      class="flex items-center gap-2 rounded-full px-2 py-1"
+      style="background-color: hsl(var(--secondary));"
     >
-      {{ cartItem?.name }}
-    </h4>
-    <p
-      class="text-xs font-sans"
-      style="color: hsl(var(--muted-foreground));"
-    >
-      {{ cartItem?.weight }}
-    </p>
-  </div>
+      <button
+        (click)="decreaseQuantity()"
+        class="w-7 h-7 sm:w-6 sm:h-6 rounded-full flex items-center justify-center transition-colors hover:bg-[hsl(var(--muted))]"
+        style="color: hsl(var(--muted-foreground));"
+      >
+        <i class="fas fa-minus text-xs"></i>
+      </button>
 
-  <div
-    class="flex items-center gap-2 rounded-full px-2 py-1"
-    style="background-color: hsl(var(--secondary));"
-  >
-    <button
-      (click)="decreaseQuantity()"
-      class="w-6 h-6 rounded-full flex items-center justify-center transition-colors"
-      style="color: hsl(var(--muted-foreground));"
-      onmouseover="this.style.backgroundColor='hsl(var(--muted))'"
-      onmouseout="this.style.backgroundColor='transparent'"
-    >
-      <i class="fas fa-minus"></i>
-    </button>
+      <span
+        class="text-sm font-medium w-6 sm:w-5 text-center font-sans"
+        style="color: hsl(var(--foreground));"
+      >
+        {{ cartItem?.quantity }}
+      </span>
 
+      <button
+        (click)="increaseQuantity()"
+        class="w-7 h-7 sm:w-6 sm:h-6 rounded-full flex items-center justify-center transition-colors hover:bg-[hsl(var(--muted))]"
+        style="color: hsl(var(--muted-foreground));"
+      >
+        <i class="fas fa-plus text-xs"></i>
+      </button>
+    </div>
+
+    <!-- Price on desktop -->
     <span
-      class="text-sm font-medium w-5 text-center font-sans"
+      class="hidden sm:inline-block font-sans font-medium text-sm w-20 text-right"
       style="color: hsl(var(--foreground));"
     >
-      {{ cartItem?.quantity }}
+      {{ (cartItem?.price ?? 0) * (cartItem?.quantity ?? 0) | currency: 'USD' }}
     </span>
 
+    <!-- Remove Button -->
     <button
-      (click)="increaseQuantity()"
-      class="w-6 h-6 rounded-full flex items-center justify-center transition-colors"
-      style="color: hsl(var(--muted-foreground));"
-      onmouseover="this.style.backgroundColor='hsl(var(--muted))'"
-      onmouseout="this.style.backgroundColor='transparent'"
+      (click)="onRemove()"
+      class="p-2 sm:p-1 rounded-full transition-colors hover:bg-red-50"
+      style="color: hsl(var(--destructive));"
+      title="Remove item"
     >
-      <i class="fas fa-plus"></i>
+      <i class="fas fa-trash text-sm sm:text-base"></i>
     </button>
   </div>
-
-  <span
-    class="font-sans font-medium text-sm w-16 text-right"
-    style="color: hsl(var(--foreground));"
-  >
-    {{ (cartItem?.price ?? 0) * (cartItem?.quantity ?? 0) | currency: 'USD' }}
-  </span>
-
-  <button
-    (click)="onRemove()"
-    class="p-1 rounded-full transition-colors"
-    style="color: hsl(var(--muted-foreground));"
-    onmouseover="this.style.color='hsl(var(--foreground))'"
-    onmouseout="this.style.color='hsl(var(--muted-foreground))'"
-  >
-    <i class="fas fa-trash"></i>
-  </button>
 </div>
