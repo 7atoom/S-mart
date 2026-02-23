@@ -20,7 +20,7 @@ export class Home {
   navigateToCategory(category: string) {
     this.router.navigate(['/shop'], {
       queryParams: {category: category}
-    }).then(r =>
+    }).then(() =>
     window.scrollTo(0, 0));
   }
 
