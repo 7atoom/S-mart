@@ -61,7 +61,7 @@
           <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
         </svg>
         <!-- Cart count badge -->
-        @if (cartItemsCount > 0) {
+        @if (cartItemsCount() > 0) {
           <span
             class="absolute -top-1 -right-1 bg-[hsl(var(--accent))] text-[hsl(var(--accent-foreground))] text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold"
           >
@@ -170,7 +170,7 @@
         class="flex items-center gap-2 py-2 text-[hsl(var(--foreground))] font-medium hover:text-[hsl(var(--primary))] transition-colors"
       >
         Cart
-        @if (cartItemsCount > 0) {
+        @if (cartItemsCount() > 0) {
           <span
             class="ml-1 bg-[hsl(var(--accent))] text-[hsl(var(--accent-foreground))] text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold"
           >

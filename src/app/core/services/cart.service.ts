@@ -56,7 +56,7 @@ export class CartService {
 
   updateQuantity(productId: string, quantity: number) {
     const currentItems = this.cartItems();
-    
+
     if (quantity <= 0) {
       this.removeItem(productId);
     } else {

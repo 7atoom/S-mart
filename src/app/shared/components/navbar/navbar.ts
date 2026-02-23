@@ -18,7 +18,7 @@ export class Navbar {
   authService = inject(Auth);
   private router = inject(Router);
 
-  cartItemsCount = this.cartService.itemCount();
+  cartItemsCount = this.cartService.itemCount;
 
   readonly SparkleIcon = SparkleIcon;
 
