@@ -1,0 +1,107 @@
+<div class="categories-sec mt-16 py-16 px-6 bg-page text-foreground">
+  <div class="container mx-auto 2xl:w-[85%]">
+    <div class="top-part flex items-center justify-between mb-12">
+      <h2 class="font-serif text-3xl md:text-5xl font-bold">Shop by Category</h2>
+      <a (click)="navigateToCategory('All')" class="text-sm text-[hsl(var(--accent))] font-medium hover:underline cursor-pointer">View
+        all &rightarrow;</a>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 auto-rows-[250px] lg:auto-rows-[300px]">
+      <!-- Vegetables & Fruits - tall card -->
+      <a (click)="navigateToCategory('Vegetables & Fruits')" class="lg:row-span-2  group cursor-pointer">
+        <div class="relative rounded-3xl overflow-hidden h-full bg-gray-300">
+          <img ngSrc="/images/ramadan-bg.png" alt="Vegetables & Fruits"
+               class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" height="1024"
+               width="1536">
+          <div class="absolute inset-0 bg-linear-to-t from-black/60 to-transparent"></div>
+          <div class="absolute bottom-0 left-0 p-6">
+            <h3 class="text-white text-2xl font-semibold">Vegetables & Fruits</h3>
+          </div>
+        </div>
+      </a>
+      <!-- Meat & Poultry -->
+      <a (click)="navigateToCategory('Meat & Poultry')" class="group lg:row-span-2 cursor-pointer">
+        <div class="relative rounded-3xl overflow-hidden h-full bg-gray-300">
+          <img ngSrc="/images/ramadan-bg.png" alt="Meat & Poultry"
+               class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" height="1024"
+               width="1536">
+          <div class="absolute inset-0 bg-linear-to-t from-black/60 to-transparent"></div>
+          <div class="absolute bottom-0 left-0 p-6">
+            <h3 class="text-white text-xl font-semibold">Meat & Poultry</h3>
+          </div>
+        </div>
+      </a>
+      <!-- Dairy & Eggs -->
+      <a (click)="navigateToCategory('Dairy & Eggs')" class="group cursor-pointer">
+        <div class="relative rounded-3xl overflow-hidden h-full bg-gray-300">
+          <img ngSrc="/images/ramadan-bg.png" alt="Dairy & Eggs"
+               class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" height="1024"
+               width="1536">
+          <div class="absolute inset-0 bg-linear-to-t from-black/60 to-transparent"></div>
+          <div class="absolute bottom-0 left-0 p-6">
+            <h3 class="text-white text-xl font-semibold">Dairy & Eggs</h3>
+          </div>
+        </div>
+      </a>
+      <!-- Bakery -->
+      <a (click)="navigateToCategory('Bakery')" class="group cursor-pointer">
+        <div class="relative rounded-3xl overflow-hidden h-full bg-gray-300">
+          <img ngSrc="/images/ramadan-bg.png" alt="Bakery"
+               class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" height="1024"
+               width="1536">
+          <div class="absolute inset-0 bg-linear-to-t from-black/60 to-transparent"></div>
+          <div class="absolute bottom-0 left-0 p-6">
+            <h3 class="text-white text-xl font-semibold">Bakery</h3>
+          </div>
+        </div>
+      </a>
+      <!-- Spices & Herbs -->
+      <a (click)="navigateToCategory('Spices & Herbs')" class="group cursor-pointer">
+        <div class="relative rounded-3xl overflow-hidden h-full bg-gray-300">
+          <img ngSrc="/images/ramadan-bg.png" alt="Spices & Herbs"
+               class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" height="1024"
+               width="1536">
+          <div class="absolute inset-0 bg-linear-to-t from-black/60 to-transparent"></div>
+          <div class="absolute bottom-0 left-0 p-6">
+            <h3 class="text-white text-xl font-semibold">Spices & Herbs</h3>
+          </div>
+        </div>
+      </a>
+      <!-- Pantry Staples -->
+      <a (click)="navigateToCategory('Pantry Staples')" class="group cursor-pointer">
+        <div class="relative rounded-3xl overflow-hidden h-full bg-gray-300">
+          <img ngSrc="/images/ramadan-bg.png" alt="Pantry Staples"
+               class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" height="1024"
+               width="1536">
+          <div class="absolute inset-0 bg-linear-to-t from-black/60 to-transparent"></div>
+          <div class="absolute bottom-0 left-0 p-6">
+            <h3 class="text-white text-xl font-semibold">Pantry Staples</h3>
+          </div>
+        </div>
+      </a>
+      <!-- Beverages -->
+      <a (click)="navigateToCategory('Beverages')" class="group cursor-pointer">
+        <div class="relative rounded-3xl overflow-hidden h-full bg-gray-300">
+          <img ngSrc="/images/ramadan-bg.png" alt="Beverages"
+               class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" height="1024"
+               width="1536">
+          <div class="absolute inset-0 bg-linear-to-t from-black/60 to-transparent"></div>
+          <div class="absolute bottom-0 left-0 p-6">
+            <h3 class="text-white text-xl font-semibold">Beverages</h3>
+          </div>
+        </div>
+      </a>
+      <!-- Snacks -->
+      <a (click)="navigateToCategory('Snacks')" class="group cursor-pointer">
+        <div class="relative rounded-3xl overflow-hidden h-full bg-gray-300">
+          <img ngSrc="/images/ramadan-bg.png" alt="Snacks"
+               class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" height="1024"
+               width="1536">
+          <div class="absolute inset-0 bg-linear-to-t from-black/60 to-transparent"></div>
+          <div class="absolute bottom-0 left-0 p-6">
+            <h3 class="text-white text-xl font-semibold">Snacks</h3>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+</div>

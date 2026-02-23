@@ -1,0 +1,22 @@
+<div class="popular-sec mt-16 py-24 px-6 bg-page text-foreground">
+  <div class="container mx-auto 2xl:w-[85%]">
+    <div class="flex items-end justify-between mb-12">
+      <h2 class="font-serif text-3xl md:text-5xl font-bold">Popular this week</h2>
+      <a routerLink="/shop"
+         class="flex items-center gap-1 text-sm text-[hsl(var(--accent))] font-medium hover:underline cursor-pointer">
+        Shop all &rsaquo;
+      </a>
+    </div>
+    <div class="flex gap-5 overflow-x-auto pb-4 scrollbar-hide">
+      @for (product of featuredProducts; track product.id) {
+        <div class="min-w-60 max-w-55 shrink-0">
+          <app-product-card
+            [product]="product"
+            [cartItem]="getCartItem(product.id)"
+            (addToCart)="onAddToCart($event)"
+            (updateQuantity)="onUpdateQuantity($event)"/>
+        </div>
+      }
+    </div>
+  </div>
+</div>
