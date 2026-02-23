@@ -1,12 +1,12 @@
-import { Component, Input, Output, EventEmitter, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
-import { LucideAngularModule, ArrowLeft, ArrowRight } from 'lucide-angular';
-import { CartService } from '../../../../core/services/cart.service';
-import { FormatCardNumerPipe } from '../../../../pipes/format-card-numer-pipe';
-import { FormatExpiaryPipe } from '../../../../pipes/format-expiary-pipe';
-import { FormatCvvPipe } from '../../../../pipes/format-cvv-pipe';
-import { CartItem } from '../../../../utils/CartItem';
+import {Component, EventEmitter, inject, Input, Output} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
+import {ArrowLeft, ArrowRight, LucideAngularModule} from 'lucide-angular';
+import {CartService} from '../../../../core/services/cart.service';
+import {FormatCardNumerPipe} from '../../../../shared/pipes/format-card-numer-pipe';
+import {FormatExpiaryPipe} from '../../../../shared/pipes/format-expiary-pipe';
+import {FormatCvvPipe} from '../../../../shared/pipes/format-cvv-pipe';
+import {CartItem} from '../../../../utils/CartItem';
 
 @Component({
   selector: 'app-payment',
@@ -50,8 +50,7 @@ export class PaymentComponent {
   formatCardNumber(event: Event) {
     const input = event.target as HTMLInputElement;
     const value = input.value.replace(/\D/g, '').slice(0, 16);
-    const formatted = value.replace(/(\d{4})(?=\d)/g, '$1 ');
-    input.value = formatted;
+    input.value = value.replace(/(\d{4})(?=\d)/g, '$1 ');
     this.paymentForm.patchValue({ cardNumber: value }, { emitEvent: false });
   }
 
