@@ -7,7 +7,7 @@
   [ngStyle]="isHovered ? {'box-shadow': 'var(--shadow-warm-hover)'} : {'box-shadow': 'var(--shadow-warm)'}"
   [class.transform]="isHovered"
   [class.-translate-y-1]="isHovered"
-> 
+>
   <div class="aspect-square overflow-hidden bg-[hsl(var(--cream-dark))] relative">
     <img
       [src]="product.image"
@@ -40,7 +40,7 @@
         <div class="flex items-center gap-2 bg-[hsl(var(--secondary))] rounded-full px-2 py-1">
           <button
             (click)="onUpdateQuantity($event, cartItem.quantity - 1)"
-            class="w-6 h-6 rounded-full flex items-center justify-center hover:bg-[hsl(var(--muted))] transition-colors"
+            class="w-6 h-6 rounded-full flex items-center justify-center hover:bg-[hsl(var(--muted))] transition-colors cursor-pointer"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -59,7 +59,7 @@
           <span class="text-sm font-medium w-5 text-center">{{ cartItem.quantity }}</span>
           <button
             (click)="onUpdateQuantity($event, cartItem.quantity + 1)"
-            class="w-6 h-6 rounded-full flex items-center justify-center hover:bg-[hsl(var(--muted))] transition-colors"
+            class="w-6 h-6 rounded-full flex items-center justify-center hover:bg-[hsl(var(--muted))] transition-colors cursor-pointer"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -81,7 +81,7 @@
       } @else {
         <button
           (click)="onAddToCart($event)"
-          class="w-8 h-8 rounded-full bg-[hsl(var(--primary))] text-[hsl(var(--primary-foreground))] flex items-center justify-center hover:bg-[hsl(var(--olive-light))] transition-colors"
+          class="w-8 h-8 rounded-full bg-[hsl(var(--primary))] text-[hsl(var(--primary-foreground))] flex items-center justify-center hover:bg-[hsl(var(--olive-light))] transition-colors cursor-pointer"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

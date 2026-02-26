@@ -1,6 +1,6 @@
 import { Injectable, signal, computed } from '@angular/core';
 import { CartItem } from '../../utils/CartItem';
-import { Products } from '../../utils/Product';
+import { Product } from '../../utils/Product';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +17,7 @@ export class CartService {
     this.loadCart();
   }
 
-  addItem(product: Products) {
+  addItem(product: Product) {
     const currentItems = this.cartItems();
     const existingItem = currentItems.find(item => item.id === product.id);
 

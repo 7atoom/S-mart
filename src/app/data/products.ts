@@ -1,6 +1,6 @@
-import { Products } from "../utils/Product";
+import { Product } from "../utils/Product";
 
-export const products: Products[] = [
+export const products: Product[] = [
   { id: "1", name: "Organic Avocados", price: 4.99, weight: "3 pack", category: "Vegetables & Fruits", image: "/placeholder.svg", featured: true },
   { id: "2", name: "Heirloom Tomatoes", price: 5.49, weight: "500g", category: "Vegetables & Fruits", image: "/placeholder.svg" },
   { id: "3", name: "Baby Spinach", price: 3.99, weight: "200g", category: "Vegetables & Fruits", image: "/placeholder.svg" },

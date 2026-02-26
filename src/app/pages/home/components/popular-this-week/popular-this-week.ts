@@ -1,7 +1,7 @@
 import {Component, inject} from '@angular/core';
 import {ProductCard} from "../../../../shared/components/product-card/product-card";
 import {RouterLink} from "@angular/router";
-import {Products} from '../../../../utils/Product';
+import {Product} from '../../../../utils/Product';
 import {products} from '../../../../data/products';
 import {CartService} from '../../../../core/services/cart.service';
 
@@ -18,7 +18,7 @@ export class PopularThisWeek {
   featuredProducts = products.filter(p => p.featured);
   cartService = inject(CartService);
 
-  onAddToCart(product: Products) {
+  onAddToCart(product: Product) {
     this.cartService.addItem(product);
   }
 

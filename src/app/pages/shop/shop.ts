@@ -1,13 +1,14 @@
 import { CommonModule, NgClass } from '@angular/common';
-import { Component, computed, inject, signal } from '@angular/core';
+import {Component, computed, inject, OnInit, signal} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { products } from '../../data/products';
-import { categories } from '../../data/products';
+// import { categories } from '../../data/products';
 import { ProductCard } from '../../shared/components/product-card/product-card';
 import { CartService } from '../../core/services/cart.service';
-import { Products } from '../../utils/Product';
+import { Product } from '../../utils/Product';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Router } from '@angular/router';
+import {CategoriesService} from '../../core/services/categories.service';
 
 @Component({
   selector: 'app-shop',
@@ -16,23 +17,29 @@ import { Router } from '@angular/router';
   templateUrl: './shop.html',
   styles: ``,
 })
-export class Shop {
+export class Shop implements OnInit {
   router = inject(Router);
   route = inject(ActivatedRoute);
   cartService = inject(CartService);
+  categoriesService = inject(CategoriesService);
   activeCategory = signal<string>('All');
   sortBy = signal<string>('default');
-  categories = categories;
+
+  categories = this.categoriesService.categories;
+  isLoadingCategories = this.categoriesService.isLoading;
+  isErrorCategories = this.categoriesService.isError;
+
   allProducts = products;
 
   ngOnInit() {
+    this.categoriesService.getCategories().subscribe();
+
     this.route.queryParams.subscribe(params => {
       if (params['category']) {
         this.setActiveCategory(params['category']);
       }
     });
 
-    // scroll to top when navigating to shop
     this.router.events.subscribe(() => {
       window.scrollTo(0, 0);
     });
@@ -68,13 +75,18 @@ export class Shop {
     this.activeCategory.set(cat);
   }
 
+  retryCategories() {
+    this.categoriesService.isError.set(false);
+    this.categoriesService.getCategories().subscribe();
+  }
+
 
   setSortBy(sort: string) {
     this.sortBy.set(sort);
     console.log(`Sort by: ${sort}`);
   }
 
-  onAddToCart(product: Products) {
+  onAddToCart(product: Product) {
     this.cartService.addItem(product);
   }
 

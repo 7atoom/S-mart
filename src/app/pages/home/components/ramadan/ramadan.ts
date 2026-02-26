@@ -1,7 +1,7 @@
 import {Component, inject} from '@angular/core';
 import {ProductCard} from "../../../../shared/components/product-card/product-card";
 import {products} from '../../../../data/products';
-import {Products} from '../../../../utils/Product';
+import {Product} from '../../../../utils/Product';
 import {CartService} from '../../../../core/services/cart.service';
 import {Router} from '@angular/router';
 
@@ -21,7 +21,7 @@ export class Ramadan {
     this.router.navigate(['/shop'], { queryParams: { category } }).then(() => window.scrollTo(0, 0));
   }
 
-  onAddToCart(product: Products) {
+  onAddToCart(product: Product) {
     this.cartService.addItem(product);
   }
 
