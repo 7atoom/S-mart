@@ -1,6 +1,6 @@
-import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-import { Navbar } from "./shared/components/navbar/navbar";
+import {Component} from '@angular/core';
+import {RouterOutlet} from '@angular/router';
+import {Navbar} from "./shared/components/navbar/navbar";
 
 @Component({
   selector: 'app-root',
@@ -9,5 +9,6 @@ import { Navbar } from "./shared/components/navbar/navbar";
   styleUrl: './app.css'
 })
 export class App {
-  
+
+
 }

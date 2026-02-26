@@ -2,106 +2,67 @@
   <div class="container mx-auto 2xl:w-[85%]">
     <div class="top-part flex items-center justify-between mb-12">
       <h2 class="font-serif text-3xl md:text-5xl font-bold">Shop by Category</h2>
-      <a (click)="navigateToCategory('All')" class="text-sm text-[hsl(var(--accent))] font-medium hover:underline cursor-pointer">View
-        all &rightarrow;</a>
-    </div>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 auto-rows-[250px] lg:auto-rows-[300px]">
-      <!-- Vegetables & Fruits - tall card -->
-      <a (click)="navigateToCategory('Vegetables & Fruits')" class="lg:row-span-2  group cursor-pointer">
-        <div class="relative rounded-3xl overflow-hidden h-full bg-gray-300">
-          <img ngSrc="/images/ramadan-bg.png" alt="Vegetables & Fruits"
-               class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" height="1024"
-               width="1536">
-          <div class="absolute inset-0 bg-linear-to-t from-black/60 to-transparent"></div>
-          <div class="absolute bottom-0 left-0 p-6">
-            <h3 class="text-white text-2xl font-semibold">Vegetables & Fruits</h3>
-          </div>
-        </div>
-      </a>
-      <!-- Meat & Poultry -->
-      <a (click)="navigateToCategory('Meat & Poultry')" class="group lg:row-span-2 cursor-pointer">
-        <div class="relative rounded-3xl overflow-hidden h-full bg-gray-300">
-          <img ngSrc="/images/ramadan-bg.png" alt="Meat & Poultry"
-               class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" height="1024"
-               width="1536">
-          <div class="absolute inset-0 bg-linear-to-t from-black/60 to-transparent"></div>
-          <div class="absolute bottom-0 left-0 p-6">
-            <h3 class="text-white text-xl font-semibold">Meat & Poultry</h3>
-          </div>
-        </div>
-      </a>
-      <!-- Dairy & Eggs -->
-      <a (click)="navigateToCategory('Dairy & Eggs')" class="group cursor-pointer">
-        <div class="relative rounded-3xl overflow-hidden h-full bg-gray-300">
-          <img ngSrc="/images/ramadan-bg.png" alt="Dairy & Eggs"
-               class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" height="1024"
-               width="1536">
-          <div class="absolute inset-0 bg-linear-to-t from-black/60 to-transparent"></div>
-          <div class="absolute bottom-0 left-0 p-6">
-            <h3 class="text-white text-xl font-semibold">Dairy & Eggs</h3>
-          </div>
-        </div>
-      </a>
-      <!-- Bakery -->
-      <a (click)="navigateToCategory('Bakery')" class="group cursor-pointer">
-        <div class="relative rounded-3xl overflow-hidden h-full bg-gray-300">
-          <img ngSrc="/images/ramadan-bg.png" alt="Bakery"
-               class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" height="1024"
-               width="1536">
-          <div class="absolute inset-0 bg-linear-to-t from-black/60 to-transparent"></div>
-          <div class="absolute bottom-0 left-0 p-6">
-            <h3 class="text-white text-xl font-semibold">Bakery</h3>
-          </div>
-        </div>
-      </a>
-      <!-- Spices & Herbs -->
-      <a (click)="navigateToCategory('Spices & Herbs')" class="group cursor-pointer">
-        <div class="relative rounded-3xl overflow-hidden h-full bg-gray-300">
-          <img ngSrc="/images/ramadan-bg.png" alt="Spices & Herbs"
-               class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" height="1024"
-               width="1536">
-          <div class="absolute inset-0 bg-linear-to-t from-black/60 to-transparent"></div>
-          <div class="absolute bottom-0 left-0 p-6">
-            <h3 class="text-white text-xl font-semibold">Spices & Herbs</h3>
-          </div>
-        </div>
-      </a>
-      <!-- Pantry Staples -->
-      <a (click)="navigateToCategory('Pantry Staples')" class="group cursor-pointer">
-        <div class="relative rounded-3xl overflow-hidden h-full bg-gray-300">
-          <img ngSrc="/images/ramadan-bg.png" alt="Pantry Staples"
-               class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" height="1024"
-               width="1536">
-          <div class="absolute inset-0 bg-linear-to-t from-black/60 to-transparent"></div>
-          <div class="absolute bottom-0 left-0 p-6">
-            <h3 class="text-white text-xl font-semibold">Pantry Staples</h3>
-          </div>
-        </div>
-      </a>
-      <!-- Beverages -->
-      <a (click)="navigateToCategory('Beverages')" class="group cursor-pointer">
-        <div class="relative rounded-3xl overflow-hidden h-full bg-gray-300">
-          <img ngSrc="/images/ramadan-bg.png" alt="Beverages"
-               class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" height="1024"
-               width="1536">
-          <div class="absolute inset-0 bg-linear-to-t from-black/60 to-transparent"></div>
-          <div class="absolute bottom-0 left-0 p-6">
-            <h3 class="text-white text-xl font-semibold">Beverages</h3>
-          </div>
-        </div>
-      </a>
-      <!-- Snacks -->
-      <a (click)="navigateToCategory('Snacks')" class="group cursor-pointer">
-        <div class="relative rounded-3xl overflow-hidden h-full bg-gray-300">
-          <img ngSrc="/images/ramadan-bg.png" alt="Snacks"
-               class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" height="1024"
-               width="1536">
-          <div class="absolute inset-0 bg-linear-to-t from-black/60 to-transparent"></div>
-          <div class="absolute bottom-0 left-0 p-6">
-            <h3 class="text-white text-xl font-semibold">Snacks</h3>
-          </div>
-        </div>
+      <a (click)="navigateToCategory('All')"
+         class="text-sm font-medium hover:underline cursor-pointer"
+         style="color: hsl(var(--accent))">
+        View all &rightarrow;
       </a>
     </div>
+
+    @if (isLoading()) {
+      <!-- Skeleton grid -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 auto-rows-[250px] lg:auto-rows-[300px]">
+        @for (item of [1, 2]; track item) {
+          <div class="lg:row-span-2 rounded-3xl overflow-hidden animate-pulse h-full"
+               style="background-color: hsl(var(--muted))">
+            <div class="w-full h-full" style="background-color: hsl(var(--border))"></div>
+          </div>
+        }
+        @for (item of [3, 4, 5, 6]; track item) {
+          <div class="rounded-3xl overflow-hidden animate-pulse h-full"
+               style="background-color: hsl(var(--muted))">
+            <div class="w-full h-full" style="background-color: hsl(var(--border))"></div>
+          </div>
+        }
+      </div>
+
+    } @else if (isError()) {
+      <!-- Error state -->
+      <div class="flex flex-col items-center justify-center py-20 gap-4 text-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-14 h-14" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+             style="color: hsl(var(--destructive))">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+        </svg>
+        <p class="text-lg font-semibold" style="color: hsl(var(--foreground))">Failed to load categories</p>
+        <p class="text-sm" style="color: hsl(var(--muted-foreground))">Something went wrong. Please try again.</p>
+        <button (click)="retry()"
+                class="mt-2 px-6 py-2 rounded-full text-sm font-medium transition-opacity hover:opacity-90 btn-accent cursor-pointer">
+          Retry
+        </button>
+      </div>
+
+    } @else {
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 auto-rows-[250px] lg:auto-rows-[300px]">
+        @for (category of categories().slice(1); track category._id; let i = $index) {
+          <a (click)="navigateToCategory(category.name)"
+             class="group cursor-pointer"
+             [class.lg:row-span-2]="i < 2">
+            <div class="relative rounded-3xl overflow-hidden h-full warm-shadow"
+                 style="background-color: hsl(var(--muted))">
+              <img [src]="category.image" [alt]="category.name"
+                   class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+              <div class="absolute inset-0 bg-linear-to-t from-black/60 to-transparent"></div>
+              <div class="absolute bottom-0 left-0 p-6">
+                <h3 class="font-semibold" style="color: hsl(var(--primary-foreground))"
+                    [class.text-2xl]="i < 2" [class.text-xl]="i >= 2">
+                  {{ category.name }}
+                </h3>
+              </div>
+            </div>
+          </a>
+        }
+      </div>
+    }
   </div>
 </div>

@@ -4,18 +4,35 @@
     <h1 class="font-serif text-4xl md:text-5xl font-bold text-foreground mb-8">Shop</h1>
   </div>
   <div class="px-6 flex gap-2 overflow-x-auto pb-4 scrollbar-hide mb-6">
-    @for (cat of categories; track cat) {
-      <button
-        (click)="setActiveCategory(cat)"
-        class="whitespace-nowrap px-5 py-2.5 rounded-full text-sm font-medium font-sans transition-all"
-        [ngClass]="
-          activeCategory() === cat
-            ? 'bg-[hsl(var(--primary))] text-[hsl(var(--primary-foreground))] hover:bg-[hsl(var(--primary))]'
-            : 'bg-[hsl(var(--secondary))] text-[hsl(var(--secondary-foreground))] hover:bg-[hsl(var(--muted))]'
-        "
-      >
-        {{ cat }}
-      </button>
+    @if (isLoadingCategories()) {
+      <!-- Skeleton pills -->
+      @for (item of [1,2,3,4,5,6,7,8,9,10]; track item) {
+        <div class="h-10 w-24 rounded-full animate-pulse shrink-0"
+             style="background-color: hsl(var(--muted))"></div>
+      }
+    } @else if (isErrorCategories()) {
+      <!-- Error state -->
+      <div class="flex items-center gap-3 px-2">
+        <span class="text-sm" style="color: hsl(var(--destructive))">Failed to load categories.</span>
+        <button (click)="retryCategories()"
+                class="px-4 py-1.5 rounded-full text-sm font-medium btn-accent cursor-pointer">
+          Retry
+        </button>
+      </div>
+    } @else {
+      @for (cat of categories(); track cat._id) {
+        <button
+          (click)="setActiveCategory(cat.name)"
+          class="whitespace-nowrap px-5 py-2.5 rounded-full text-sm font-medium font-sans transition-all cursor-pointer shrink-0"
+          [ngClass]="
+            activeCategory() === cat.name
+              ? 'bg-[hsl(var(--primary))] text-[hsl(var(--primary-foreground))]'
+              : 'bg-[hsl(var(--secondary))] text-[hsl(var(--secondary-foreground))] hover:bg-[hsl(var(--muted))]'
+          "
+        >
+          {{ cat.name }}
+        </button>
+      }
     }
   </div>
 
@@ -35,16 +52,59 @@
   </div>
 
   <div class="px-6">
-    <div class="grid grid-cols-1 lg:grid-cols-4 xl:grid-cols-4 gap-4 md:gap-6">
-      @for (product of filteredProducts(); track product.id) {
-        <app-product-card
-          [product]="product"
-          [cartItem]="getCartItem(product.id)"
-          (addToCart)="onAddToCart($event)"
-          (updateQuantity)="onUpdateQuantity($event)"
-        />
+
+    @if (isLoadingProducts()) {
+      <!-- Skeleton grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-4 xl:grid-cols-4 gap-4 md:gap-6">
+        @for (item of [1,2,3,4,5,6,7,8]; track item) {
+          <div class="rounded-2xl overflow-hidden animate-pulse" style="background-color: hsl(var(--card))">
+            <div class="h-48 w-full" style="background-color: hsl(var(--muted))"></div>
+            <div class="p-4 flex flex-col gap-3">
+              <div class="h-4 rounded-full w-3/4" style="background-color: hsl(var(--muted))"></div>
+              <div class="h-3 rounded-full w-1/2" style="background-color: hsl(var(--muted))"></div>
+              <div class="h-8 rounded-xl w-full mt-2" style="background-color: hsl(var(--muted))"></div>
+            </div>
+          </div>
+        }
+      </div>
+
+    } @else if (isErrorProducts()) {
+      <!-- Error state -->
+      <div class="flex flex-col items-center justify-center py-24 gap-4">
+        <div class="w-14 h-14 rounded-full flex items-center justify-center"
+             style="background-color: hsl(var(--destructive) / 0.1)">
+          <i class="fas fa-exclamation-triangle text-xl" style="color: hsl(var(--destructive))"></i>
+        </div>
+        <p class="font-sans text-base" style="color: hsl(var(--destructive))">
+          Failed to load products. Please try again.
+        </p>
+        <button (click)="productsService.getProducts().subscribe()"
+                class="px-6 py-2.5 rounded-xl text-sm font-medium cursor-pointer transition-colors"
+                style="background-color: hsl(var(--accent)); color: hsl(var(--accent-foreground))">
+          Retry
+        </button>
+      </div>
+
+    } @else {
+      <div class="grid grid-cols-1 lg:grid-cols-4 xl:grid-cols-4 gap-4 md:gap-6">
+        @for (product of filteredProducts(); track product._id) {
+          <app-product-card
+            [product]="product"
+            [cartItem]="getCartItem(product._id)"
+            (addToCart)="onAddToCart($event)"
+            (updateQuantity)="onUpdateQuantity($event)"
+          />
+        }
+      </div>
+
+      @if (filteredProducts().length === 0) {
+        <div class="text-center py-20">
+          <p class="text-[hsl(var(--muted-foreground))] text-lg font-sans">
+            No products found in this category
+          </p>
+        </div>
       }
-    </div>
+    }
 
     <div
       class="col-span-2 md:col-span-3 lg:col-span-4 rounded-2xl bg-cream-dark p-8 flex flex-col md:flex-row items-center justify-between gap-4"
@@ -69,14 +129,6 @@
         Try AI Chef
       </a>
     </div>
-
-    @if (filteredProducts().length === 0) {
-      <div class="text-center py-20">
-        <p class="text-[hsl(var(--muted-foreground))] text-lg font-sans">
-          No products found in this category
-        </p>
-      </div>
-    }
   </div>
 </div>
 

@@ -8,11 +8,11 @@
       </a>
     </div>
     <div class="flex gap-5 overflow-x-auto pb-4 scrollbar-hide">
-      @for (product of featuredProducts; track product.id) {
+      @for (product of featuredProducts(); track product._id) {
         <div class="min-w-60 max-w-55 shrink-0">
           <app-product-card
             [product]="product"
-            [cartItem]="getCartItem(product.id)"
+            [cartItem]="getCartItem(product._id)"
             (addToCart)="onAddToCart($event)"
             (updateQuantity)="onUpdateQuantity($event)"/>
         </div>
