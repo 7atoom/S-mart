@@ -19,16 +19,16 @@ export class CartService {
 
   addItem(product: Product) {
     const currentItems = this.cartItems();
-    const existingItem = currentItems.find(item => item.id === product.id);
+    const existingItem = currentItems.find(item => item.id === product._id);
 
     if (existingItem) {
-      this.updateQuantity(product.id, existingItem.quantity + 1);
+      this.updateQuantity(product._id, existingItem.quantity + 1);
     } else {
       const newItem: CartItem = {
-        id: product.id,
-        name: product.name,
+        id: product._id,
+        name: product.title,
         price: product.price,
-        weight: product.weight,
+        weight: product.unit,
         image: product.image,
         quantity: 1
       };

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {Hero} from './components/hero/hero';
 import {Ramadan} from './components/ramadan/ramadan';
 import {HowItWorks} from './components/how-it-works/how-it-works';

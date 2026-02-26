@@ -1,14 +1,13 @@
 import { CommonModule, NgClass } from '@angular/common';
 import {Component, computed, inject, OnInit, signal} from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { products } from '../../data/products';
-// import { categories } from '../../data/products';
 import { ProductCard } from '../../shared/components/product-card/product-card';
 import { CartService } from '../../core/services/cart.service';
 import { Product } from '../../utils/Product';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Router } from '@angular/router';
 import {CategoriesService} from '../../core/services/categories.service';
+import {ProductsService} from '../../core/services/products.service';
 
 @Component({
   selector: 'app-shop',
@@ -22,6 +21,7 @@ export class Shop implements OnInit {
   route = inject(ActivatedRoute);
   cartService = inject(CartService);
   categoriesService = inject(CategoriesService);
+  productsService = inject(ProductsService);
   activeCategory = signal<string>('All');
   sortBy = signal<string>('default');
 
@@ -29,10 +29,13 @@ export class Shop implements OnInit {
   isLoadingCategories = this.categoriesService.isLoading;
   isErrorCategories = this.categoriesService.isError;
 
-  allProducts = products;
+  allProducts = this.productsService.products;
+  isLoadingProducts = this.productsService.isLoading;
+  isErrorProducts = this.productsService.isError;
 
   ngOnInit() {
     this.categoriesService.getCategories().subscribe();
+    this.productsService.getProducts().subscribe();
 
     this.route.queryParams.subscribe(params => {
       if (params['category']) {
@@ -46,10 +49,11 @@ export class Shop implements OnInit {
   }
 
   filteredProducts = computed(() => {
-    let filtered = this.allProducts;
+    let filtered = this.allProducts();
+    if (!Array.isArray(filtered)) filtered = [];
 
     if (this.activeCategory() !== 'All') {
-      filtered = filtered.filter(p => p.category === this.activeCategory());
+      filtered = filtered.filter(p => p.category.name === this.activeCategory());
     }
 
     const sorted = [...filtered];

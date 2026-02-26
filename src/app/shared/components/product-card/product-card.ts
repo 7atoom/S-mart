@@ -26,7 +26,7 @@ export class ProductCard {
 
   onUpdateQuantity(event: Event, quantity: number) {
     event.stopPropagation();
-    this.updateQuantity.emit({ productId: this.product.id, quantity });
+    this.updateQuantity.emit({ productId: this.product._id, quantity });
   }
 
   onProductClick() {

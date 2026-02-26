@@ -1,9 +1,9 @@
-import {Component, inject} from '@angular/core';
+import {Component, computed, inject} from '@angular/core';
 import {ProductCard} from "../../../../shared/components/product-card/product-card";
-import {products} from '../../../../data/products';
 import {Product} from '../../../../utils/Product';
 import {CartService} from '../../../../core/services/cart.service';
 import {Router} from '@angular/router';
+import {ProductsService} from '../../../../core/services/products.service';
 
 @Component({
   selector: 'app-ramadan',
@@ -14,8 +14,10 @@ import {Router} from '@angular/router';
 export class Ramadan {
   private cartService = inject(CartService);
   private router = inject(Router);
+  private productsService = inject(ProductsService);
+  products = this.productsService.products;
 
-  ramadanProducts = products.filter(p => p.category === 'Ramadan Essentials');
+  ramadanProducts = computed(() => this.products().filter(p => p.category?.name === 'Ramadan Essentials'));
 
   navigateToCategory(category: string) {
     this.router.navigate(['/shop'], { queryParams: { category } }).then(() => window.scrollTo(0, 0));
