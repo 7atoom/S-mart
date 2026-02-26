@@ -30,12 +30,12 @@
     </div>
     <!-- Ramadan products carousel -->
     <div class="flex gap-5 overflow-x-auto pb-4 pt-8 scrollbar-hide">
-      @for (product of ramadanProducts; track product.id) {
+      @for (product of ramadanProducts(); track product._id) {
         <div class="min-w-60 max-w-55 shrink-0">
           <app-product-card [product]="product"
                             (addToCart)="onAddToCart($event)"
                             (updateQuantity)="onUpdateQuantity($event)"
-                            [cartItem]="getCartItem(product.id)"/>
+                            [cartItem]="getCartItem(product._id)"/>
         </div>
       }
     </div>

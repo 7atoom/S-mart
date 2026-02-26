@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule, NgStyle } from '@angular/common';
-import { Products } from '../../../utils/Product';
+import { Product } from '../../../utils/Product';
 import { CartItem } from '../../../utils/CartItem';
 
 
@@ -12,9 +12,9 @@ import { CartItem } from '../../../utils/CartItem';
   styles: ``,
 })
 export class ProductCard {
-  @Input() product!: Products;
+  @Input() product!: Product;
   @Input() cartItem?: CartItem;
-  @Output() addToCart = new EventEmitter<Products>();
+  @Output() addToCart = new EventEmitter<Product>();
   @Output() updateQuantity = new EventEmitter<{ productId: string; quantity: number }>();
 
   isHovered = false;
@@ -26,7 +26,7 @@ export class ProductCard {
 
   onUpdateQuantity(event: Event, quantity: number) {
     event.stopPropagation();
-    this.updateQuantity.emit({ productId: this.product.id, quantity });
+    this.updateQuantity.emit({ productId: this.product._id, quantity });
   }
 
   onProductClick() {

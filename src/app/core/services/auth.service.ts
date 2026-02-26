@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, inject } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { jwtDecode } from "jwt-decode";
 
@@ -19,11 +19,11 @@ export class Auth {
     console.log(jwtDecode(localStorage.getItem('token')!))
     return jwtDecode(localStorage.getItem('token')!)
   }
-  
+
   isAuthenticated(): boolean {
     const token = localStorage.getItem('token');
     if (!token) return false;
-    
+
     try {
       const decoded: any = jwtDecode(token);
       // Check if token is expired
@@ -33,7 +33,7 @@ export class Auth {
       return false;
     }
   }
-  
+
   logout(){
     localStorage.removeItem('token')
   }
