@@ -8,15 +8,17 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Router } from '@angular/router';
 import {CategoriesService} from '../../core/services/categories.service';
 import {ProductsService} from '../../core/services/products.service';
+import { SearchPipe } from '../../core/pipes/search.pipe';
 
 @Component({
   selector: 'app-shop',
   standalone: true,
-  imports: [NgClass, FormsModule, ProductCard, RouterLink, CommonModule],
+  imports: [NgClass, FormsModule, ProductCard, RouterLink, CommonModule,SearchPipe],
   templateUrl: './shop.html',
   styles: ``,
 })
 export class Shop implements OnInit {
+  searchText:string =""
   router = inject(Router);
   route = inject(ActivatedRoute);
   cartService = inject(CartService);

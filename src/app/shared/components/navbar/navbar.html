@@ -1,4 +1,4 @@
-<nav class="fixed top-0 left-0 right-0 z-50 bg-background/300 backdrop-blur-xl border-b">
+<nav class="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-3xl border-b">
   <div class="mx-auto px-6 h-16 flex items-center justify-between">
     <!-- Logo -->
     <a
@@ -75,7 +75,7 @@
         <!-- Logout Button -->
         <button
           (click)="logout()"
-          class="flex items-center gap-2 px-4 py-2 rounded-full bg-[hsl(var(--secondary))] hover:bg-[hsl(var(--muted))] transition-colors group cursor-pointer"
+          class="flex items-center gap-2 px-4 py-2 rounded-full bg-[hsl(var(--accent))] hover:bg-[hsl(var(--accent))]/90 text-[hsl(var(--accent-foreground))] transition-colors group cursor-pointer"
           title="Logout"
         >
           <svg
@@ -88,13 +88,13 @@
             stroke-width="2"
             stroke-linecap="round"
             stroke-linejoin="round"
-            class="text-[hsl(var(--foreground))]"
+            class="text-[hsl(var(--accent-foreground))] group-hover:scale-110 transition-transform"
           >
             <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
             <polyline points="16 17 21 12 16 7"></polyline>
             <line x1="21" x2="9" y1="12" y2="12"></line>
           </svg>
-          <span class="text-sm font-medium text-[hsl(var(--foreground))]">Logout</span>
+          <span class="text-sm font-medium text-[hsl(var(--accent-foreground))]">Logout</span>
         </button>
       } @else {
         <!-- Sign In Button -->
