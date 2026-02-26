@@ -194,6 +194,56 @@
     box-shadow: var(--shadow-warm-hover);
     transform: scale(1.02);
   }
+  .Ai-btn{
+    border-radius: 15px;
+    background-color: hsl(var(--gold-light));
+    box-shadow: var(--shadow-warm-hover);
+    transform: scale(1.02);
+    z-index: 1;
+
+  }
+  .Ai-btn:hover{
+    color:#fff7cc;
+  }
+  .Ai-btn:before {
+    content: '';
+    background:linear-gradient(45deg,#ffd900d3, #ffa600d1,  #ffd900d3, #ffa600d1 );   /* #FFD700, #FFA500,  #FFD700, #FFA500*/
+    position: absolute;
+    top: -2px;
+    left:-2px;
+    background-size: 400%;
+    z-index: -1;
+    filter: blur(40px);
+    width: calc(100% + 4px);
+    height: calc(100% + 4px);
+    animation: glowing 20s linear infinite;
+    opacity: 0;
+    transition: opacity .3s ease-in-out;
+    border-radius: 15px;
+}
+
+
+.Ai-btn:hover:before {
+    opacity: 1;
+}
+
+.Ai-btn:after {
+    z-index: -1;
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: hsl(var(--gold-light));
+    left: 0;
+    top: 0;
+    border-radius: 15px;
+}
+
+@keyframes glowing {
+    0% { background-position: 0 0; }
+    50% { background-position: 400% 0; }
+    100% { background-position: 0 0; }
+}
 
   /* Accent (terracotta) button */
   .btn-accent {
