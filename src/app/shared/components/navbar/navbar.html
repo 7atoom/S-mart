@@ -1,18 +1,18 @@
 <nav class="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-3xl border-b">
   <div class="mx-auto px-6 h-16 flex items-center justify-between">
     <!-- Logo -->
-       
+
       <a
       routerLink="/"
-      class="logo-container flex items-center gap-3"
+      class="logo-container flex items-center gap-3 select-none"
     >
       <img src="/images/logo.png" alt="S-Mart Logo" class="w-8 h-8">
       <span class="font-serif text-2xl font-bold tracking-tight text-[hsl(var(--foreground))]">S-Mart</span>
     </a>
-    
+
 
     <!-- Desktop nav -->
-    <div class="hidden md:flex items-center gap-8">
+    <div class="hidden md:flex items-center gap-8 select-none">
       <a
         routerLink="/home"
         routerLinkActive="text-[hsl(var(--primary))]"
@@ -97,7 +97,7 @@
             <polyline points="16 17 21 12 16 7"></polyline>
             <line x1="21" x2="9" y1="12" y2="12"></line>
           </svg>
-          <span class="text-sm font-medium text-[hsl(var(--accent-foreground))]">Logout</span>
+          <span class="select-none text-sm font-medium text-[hsl(var(--accent-foreground))]">Logout</span>
         </button>
       } @else {
         <!-- Sign In Button -->
@@ -121,7 +121,7 @@
             <polyline points="10 17 15 12 10 7"></polyline>
             <line x1="15" x2="3" y1="12" y2="12"></line>
           </svg>
-          <span class="text-sm font-medium">Sign In</span>
+          <span class=" select-none text-sm font-medium">Sign In</span>
         </a>
       }
     </div>
