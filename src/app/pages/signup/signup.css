@@ -1,1 +1,4 @@
 /* Signup page styles - theme uses global design tokens */
+input{
+  transition: all 0.3s ease;
+}

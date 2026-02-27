@@ -9,6 +9,7 @@ import { finalize } from 'rxjs';
   standalone: true,
   imports: [RouterLink, FormsModule, ReactiveFormsModule],
   templateUrl: './login.html',
+  styleUrl: './login.css',
 })
 export class Login {
   private readonly auth = inject(Auth)
@@ -26,7 +27,7 @@ export class Login {
       console.log(this.loginForm.value)
       this.isLoading.set(true)
       this.auth.sendLoginForm(this.loginForm.value).subscribe({
-        
+
         next:(res)=>{
           this.isLoading.set(false)
           console.log(res)
@@ -40,7 +41,7 @@ export class Login {
           setTimeout(()=>{
             this.router.navigate(['/shop'])
           },2000)
-          
+
         },
         error:(err)=>{
           console.log(err)
@@ -53,5 +54,5 @@ export class Login {
       this.loginForm.markAllAsTouched()
     }
   }
-  
+
 }

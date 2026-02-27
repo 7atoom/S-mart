@@ -19,7 +19,7 @@
       <div class="flex items-center justify-center gap-6 mb-12">
         <button
           (click)="decrease()"
-          class="w-14 h-14 rounded-2xl bg-card border-2 border-border flex items-center justify-center text-main font-sans text-2xl font-medium warm-shadow hover:bg-secondary transition-all"
+          class="w-14 h-14 rounded-2xl bg-card border-2 border-border flex items-center justify-center text-main font-sans text-2xl font-medium warm-shadow hover:bg-secondary transition-all cursor-pointer hover:scale-105 hover:drop-shadow-lg"
         >
           −
         </button>
@@ -36,18 +36,18 @@
 
         <button
           (click)="increase()"
-          class="w-14 h-14 rounded-2xl bg-card border-2 border-border flex items-center justify-center text-main font-sans text-2xl font-medium warm-shadow hover:bg-secondary transition-all"
+          class="w-14 h-14 rounded-2xl bg-card border-2 border-border flex items-center justify-center text-main font-sans text-2xl font-medium warm-shadow hover:bg-secondary transition-all cursor-pointer hover:scale-105 hover:drop-shadow-lg"
         >
           +
         </button>
       </div>
 
       <!-- Presets -->
-      <div class="flex flex-wrap justify-center gap-2 mb-10">
+      <div class="flex flex-wrap justify-between gap-2 mb-10">
         @for (n of presets; track n) {
           <button
             (click)="setServings(n)"
-            class="px-5 py-2.5 rounded-full text-sm font-medium font-sans transition-all hero-pill"
+            class="hover:border-2 hover:border-[hsl(var(--terracotta)/0.2)] px-5 py-2.5 rounded-full text-sm font-medium font-sans transition-all hero-pill cursor-pointer hover:scale-105 hover:drop-shadow-lg "
             [class.bg-primary]="servings === n"
             [class.text-primary-foreground]="servings === n"
             [class.bg-secondary]="servings !== n"
@@ -73,14 +73,14 @@
       <div class="flex gap-3">
         <button
           (click)="back()"
-          class="flex-1 py-3.5 rounded-2xl border-2 border-border font-sans font-medium text-main bg-card warm-shadow hover:bg-secondary transition-all"
+          class="cursor-pointer flex-1 py-3.5 rounded-2xl border-2 border-border font-sans font-medium text-main bg-card warm-shadow hover:bg-secondary hover:scale-105 hover:drop-shadow-lg transition-all"
         >
           Back
         </button>
 
         <button
           (click)="continue()"
-          class="flex-1 py-3.5 rounded-2xl btn-accent font-sans"
+          class="cursor-pointer flex-1 py-3.5 rounded-2xl btn-accent font-sans"
         >
           Continue →
         </button>

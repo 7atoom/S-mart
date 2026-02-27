@@ -19,6 +19,7 @@
   box-shadow: var(--shadow-warm-hover);
   background-color: hsl(var(--secondary));
   border-color: hsl(var(--terracotta) / 0.4);
+  /* border-color: hsl(var(--gold-light)); */
 }
 
 .recipe-card .arrow-icon {
