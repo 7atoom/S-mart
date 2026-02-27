@@ -36,12 +36,12 @@
       @for (item of recipes; track item.id) {
         <button
           (click)="openSelectPeople(item.id)"
-          class="w-full flex items-center gap-5 p-5 rounded-2xl recipe-card warm-shadow transition-all group text-left cursor-pointer"
+          class="w-full flex flex-col sm:flex-row items-center gap-5 p-5 rounded-2xl recipe-card warm-shadow transition-all group text-left cursor-pointer"
         >
           <div
-            class="w-24 h-24 md:w-32 md:h-32 rounded-xl recipe-card-image shrink-0 flex items-center justify-center"
+            class="w-full sm:w-24 h-24 md:w-32 md:h-32 rounded-xl recipe-card-image shrink-0 flex items-center justify-center"
           >
-            <span class="text-3xl opacity-60">🍽️</span>
+            <span class="text-6xl sm:text-3xl opacity-60">🍽️</span>
           </div>
 
           <div class="flex-1 min-w-0">

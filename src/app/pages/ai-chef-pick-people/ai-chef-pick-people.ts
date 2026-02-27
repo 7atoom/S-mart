@@ -19,7 +19,7 @@ interface Recipe {
 })
 export class AiChefPickPeople implements OnInit {
   servings = 2;
-  presets = [1, 2, 4, 6, 8];
+  presets = [1, 2, 4, 6, 8, 10];
 
   searchTerm: string = '';
   selectedRecipe: number = 0;
