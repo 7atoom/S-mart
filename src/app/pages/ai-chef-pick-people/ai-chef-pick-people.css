@@ -1,8 +1,1 @@
 /* Styling comes from global styles (src/styles.css) */
-.people-preset{
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(8rem , 1fr));
-}
-.people-preset button{
-  text-align: center;
-}

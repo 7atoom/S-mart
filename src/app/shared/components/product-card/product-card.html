@@ -4,7 +4,7 @@
   (mouseleave)="isHovered = false"
   (click)="onProductClick()"
   class="group rounded-2xl bg-[hsl(var(--card))] overflow-hidden"
-  style="box-shadow: var(--shadow-warm); transition: box-shadow 0.9s;"
+  style="box-shadow: var(--shadow-warm); transition: all 0.3s;"
   [ngStyle]="isHovered ? {'box-shadow': 'var(--shadow-warm-hover)'} : {'box-shadow': 'var(--shadow-warm)'}"
   [class.transform]="isHovered"
   [class.-translate-y-1]="isHovered"
