@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CartItem } from '../../../../utils/CartItem';
 import { CurrencyPipe } from '@angular/common';
 
@@ -15,20 +15,20 @@ export class CartItemRow {
 
   increaseQuantity() {
     this.quantityChange.emit({
-      itemId: this.cartItem?.id || '',
+      itemId: this.cartItem?.productId || this.cartItem?._id || '',
       newQuantity: this.cartItem ? this.cartItem.quantity + 1 : 0
     });
   }
 
   decreaseQuantity() {
     this.quantityChange.emit({
-      itemId: this.cartItem?.id || '',
+      itemId: this.cartItem?.productId || this.cartItem?._id || '',
       newQuantity: this.cartItem ? this.cartItem.quantity - 1 : 0
     });
   }
 
   onRemove() {
-    this.remove.emit(this.cartItem?.id || '');
+    this.remove.emit(this.cartItem?.productId || this.cartItem?._id || '');
   }
 
 }
