@@ -10,14 +10,15 @@ import { AiChefPickCart } from './pages/ai-chef-pick-cart/ai-chef-pick-cart';
 import { Login } from './pages/login/login';
 import { Signup } from './pages/signup/signup';
 import { CheckoutComponent } from './pages/checkout/checkout';
+import { Dashboard } from './pages/dashboard/dashboard';
 import { authGuard } from './core/guards/auth.guard';
 import { guestGuard } from './core/guards/guest.guard';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'home', component: Home },
-  { path: 'login', component: Login,canActivate:[guestGuard] },
-  { path: 'signup', component: Signup,canActivate:[guestGuard] },
+  { path: 'login', component: Login, canActivate: [guestGuard] },
+  { path: 'signup', component: Signup, canActivate: [guestGuard] },
   { path: 'shop', component: Shop },
   { path: 'aiChef', component: AiChef },
   { path: 'aiChef/:meal', component: AiChefPick },
@@ -25,5 +26,6 @@ export const routes: Routes = [
   { path: 'aiChef/:meal/:selectedRecipe/cart', component: AiChefPickCart },
   { path: 'checkout', component: CheckoutComponent },
   { path: 'cart', component: Cart, canActivate: [authGuard] },
+  { path: 'dashboard', component: Dashboard, canActivate: [authGuard] },
   { path: '**', component: NotFound },
 ];

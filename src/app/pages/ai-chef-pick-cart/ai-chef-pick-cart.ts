@@ -91,13 +91,13 @@ export class AiChefPickCart implements OnInit {
     const selected = this.selectedIngredients;
     console.log('Add to cart – selected items:', selected);
     this.router.navigate(['cart']);
-    this.cartService.addItems(selected.map(i => ({
-      id: i.name.toLowerCase().replace(/\s+/g, '-'), // simple ID generation
-      name: i.name,
-      price: i.price,
-      quantity: 1, 
-      weight: i.quantity, 
-      image: '', 
-    })));
+    // this.cartService.addItems(selected.map(i => ({
+    //   id: i.name.toLowerCase().replace(/\s+/g, '-'), // simple ID generation
+    //   name: i.name,
+    //   price: i.price,
+    //   quantity: 1,
+    //   weight: i.quantity,
+    //   image: '',
+    // })));
   }
 }

@@ -3,15 +3,15 @@ import {CommonModule} from '@angular/common';
 import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {ArrowLeft, ArrowRight, LucideAngularModule} from 'lucide-angular';
 import {CartService} from '../../../../core/services/cart.service';
-import {FormatCardNumerPipe} from '../../../../shared/pipes/format-card-numer-pipe';
-import {FormatExpiaryPipe} from '../../../../shared/pipes/format-expiary-pipe';
-import {FormatCvvPipe} from '../../../../shared/pipes/format-cvv-pipe';
+import {FormatCvvPipe} from '../../../../shared/pipes/format-cvv.pipe';
+import {FormatExpiryPipe} from '../../../../shared/pipes/format-expiry.pipe';
+import {FormatCardNumberPipe} from '../../../../shared/pipes/format-card-number.pipe';
 import {CartItem} from '../../../../utils/CartItem';
 
 @Component({
   selector: 'app-payment',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, LucideAngularModule, FormatCardNumerPipe, FormatExpiaryPipe, FormatCvvPipe],
+  imports: [CommonModule, ReactiveFormsModule, LucideAngularModule, FormatCvvPipe, FormatExpiryPipe, FormatCardNumberPipe],
   templateUrl: './payment.html',
 })
 export class PaymentComponent {
