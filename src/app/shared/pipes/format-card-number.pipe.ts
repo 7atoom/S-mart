@@ -1,9 +1,9 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'formatCardNumer',
+  name: 'formatCardNumber',
 })
-export class FormatCardNumerPipe implements PipeTransform {
+export class FormatCardNumberPipe implements PipeTransform {
 
   transform(value: string | null | undefined): string {
     if (!value) return '';

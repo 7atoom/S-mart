@@ -45,7 +45,7 @@
             <!-- Cart List -->
             <div class="rounded-2xl bg-[hsl(var(--card))] shadow-(--shadow-warm) p-3 sm:p-5">
               <div class="divide-y divide-[hsl(var(--border)/0.5)]">
-                @for (item of cartIems(); track item.id) {
+                @for (item of cartItems(); track item.productId ?? item._id) {
                   <app-cart-item-row
                     [cartItem]="item"
                     (quantityChange)="updateQuantity($event.itemId, $event.newQuantity)"

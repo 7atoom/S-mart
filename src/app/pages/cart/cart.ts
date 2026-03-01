@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import {Component, computed, inject, OnInit} from '@angular/core';
 import { CartService } from '../../core/services/cart.service';
 import { RouterLink } from "@angular/router";
 import { CartItemRow } from "./components/cart-item-row/cart-item-row";
@@ -11,16 +11,16 @@ import { LucideAngularModule } from "lucide-angular";
   templateUrl: './cart.html',
   styles: ``,
 })
-export class Cart {
+export class Cart implements OnInit {
   cartService = inject(CartService);
   cartItemsCount = this.cartService.itemCount;
-  cartIems = this.cartService.items;
+  cartItems = this.cartService.items;
   total = this.cartService.total;
   deliveryFee = computed(() => this.cartItemsCount() > 0 ? 5 : 0); // $5 delivery fee if there are items in the cart
 
   ngOnInit() {
     console.log('Cart items count:', this.cartItemsCount());
-    console.log('Cart items:', this.cartIems());
+    console.log('Cart items:', this.cartItems());
   }
 
   updateQuantity(itemId: string, newQuantity: number) {

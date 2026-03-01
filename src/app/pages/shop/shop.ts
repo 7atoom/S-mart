@@ -8,7 +8,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Router } from '@angular/router';
 import {CategoriesService} from '../../core/services/categories.service';
 import {ProductsService} from '../../core/services/products.service';
-import { SearchPipe } from '../../core/pipes/search.pipe';
+import {SearchPipe} from '../../shared/pipes/search.pipe';
 
 @Component({
   selector: 'app-shop',
@@ -25,7 +25,7 @@ export class Shop implements OnInit {
   categoriesService = inject(CategoriesService);
   productsService = inject(ProductsService);
   activeCategory = signal<string>('All');
-  sortBy = signal<string>('default');
+  sortBy = 'default';
 
   categories = this.categoriesService.categories;
   isLoadingCategories = this.categoriesService.isLoading;
@@ -38,6 +38,7 @@ export class Shop implements OnInit {
   ngOnInit() {
     this.categoriesService.getCategories().subscribe();
     this.productsService.getProducts().subscribe();
+    this.cartService.getCart();
 
     this.route.queryParams.subscribe(params => {
       if (params['category']) {
@@ -59,7 +60,7 @@ export class Shop implements OnInit {
     }
 
     const sorted = [...filtered];
-    switch (this.sortBy()) {
+    switch (this.sortBy) {
       case 'price-low':
         sorted.sort((a, b) => a.price - b.price);
         break;
@@ -88,8 +89,7 @@ export class Shop implements OnInit {
 
 
   setSortBy(sort: string) {
-    this.sortBy.set(sort);
-    console.log(`Sort by: ${sort}`);
+    this.sortBy = sort;
   }
 
   onAddToCart(product: Product) {
