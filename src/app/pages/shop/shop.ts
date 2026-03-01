@@ -25,7 +25,7 @@ export class Shop implements OnInit {
   categoriesService = inject(CategoriesService);
   productsService = inject(ProductsService);
   activeCategory = signal<string>('All');
-  sortBy = 'default';
+  sortBy = signal<string>('default');
 
   categories = this.categoriesService.categories;
   isLoadingCategories = this.categoriesService.isLoading;
@@ -60,7 +60,7 @@ export class Shop implements OnInit {
     }
 
     const sorted = [...filtered];
-    switch (this.sortBy) {
+    switch (this.sortBy()) {
       case 'price-low':
         sorted.sort((a, b) => a.price - b.price);
         break;
@@ -89,7 +89,7 @@ export class Shop implements OnInit {
 
 
   setSortBy(sort: string) {
-    this.sortBy = sort;
+    this.sortBy.set(sort);
   }
 
   onAddToCart(product: Product) {
