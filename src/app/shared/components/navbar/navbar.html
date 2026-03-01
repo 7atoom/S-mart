@@ -38,6 +38,16 @@
         <lucide-icon [img]="SparkleIcon" [size]="16"></lucide-icon>
         AI Chef
       </a>
+
+      @if (authService.isAuthenticated()) {
+        <a
+          routerLink="/dashboard"
+          routerLinkActive="text-[hsl(var(--primary))]"
+          class="flex items-center gap-1.5 text-sm font-medium transition-colors text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))]"
+        >
+          Dashboard
+        </a>
+      }
     </div>
 
     <!-- Desktop actions -->
@@ -166,6 +176,16 @@
         <lucide-icon [img]="SparkleIcon" [size]="16"></lucide-icon>
         AI Chef
       </a>
+
+      @if (authService.isAuthenticated()) {
+        <a
+          routerLink="/dashboard"
+          (click)="closeMobileMenu()"
+          class="flex items-center gap-2 py-2 text-[hsl(var(--foreground))] font-medium hover:text-[hsl(var(--primary))] transition-colors"
+        >
+          Dashboard
+        </a>
+      }
 
       <a
         routerLink="/cart"

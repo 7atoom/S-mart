@@ -1,7 +1,17 @@
 import {inject, Injectable, signal} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Product} from '../../utils/Product';
-import {catchError, Observable, tap, throwError} from 'rxjs';
+import {catchError, map, Observable, tap, throwError} from 'rxjs';
+
+export interface AddProductBody {
+  title: string;
+  description?: string;
+  price: number;
+  image?: string;
+  category: string;
+  unit?: string;
+  featured?: boolean;
+}
 
 @Injectable({
   providedIn: 'root',
@@ -15,8 +25,15 @@ export class ProductsService {
   isLoading = signal<boolean>(false);
   isError = signal<boolean>(false);
 
-  getProducts() : Observable<Product[]> {
-    if(this.products().length > 0) {
+  private authHeaders(): HttpHeaders {
+    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+    return new HttpHeaders({
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    });
+  }
+
+  getProducts(): Observable<Product[]> {
+    if (this.products().length > 0) {
       return new Observable(observer => {
         observer.next(this.products());
         observer.complete();
@@ -35,5 +52,52 @@ export class ProductsService {
         return throwError(() => error);
       })
     );
+  }
+
+  getProductById(id: string): Observable<Product> {
+    return this.httpClient.get<{ product: Product }>(`${this.baseUrl}${id}`).pipe(
+      map(res => res.product),
+      catchError(err => throwError(() => err))
+    );
+  }
+
+  addProduct(body: AddProductBody): Observable<{ product: Product }> {
+    return this.httpClient.post<{ message: string; product: Product }>(this.baseUrl, body, {
+      headers: this.authHeaders(),
+    }).pipe(
+      tap(res => {
+        const current = this.products();
+        this.products.set([...current, res.product]);
+      }),
+      catchError(err => throwError(() => err))
+    );
+  }
+
+  updateProduct(id: string, body: Partial<AddProductBody>): Observable<{ newProduct: Product }> {
+    return this.httpClient.patch<{ message: string; newProduct: Product }>(`${this.baseUrl}${id}`, body, {
+      headers: this.authHeaders(),
+    }).pipe(
+      tap(res => {
+        const current = this.products();
+        this.products.set(current.map(p => p._id === id ? res.newProduct : p));
+      }),
+      catchError(err => throwError(() => err))
+    );
+  }
+
+  deleteProduct(id: string): Observable<{ message: string }> {
+    return this.httpClient.delete<{ message: string }>(`${this.baseUrl}${id}`, {
+      headers: this.authHeaders(),
+    }).pipe(
+      tap(() => {
+        this.products.set(this.products().filter(p => p._id !== id));
+      }),
+      catchError(err => throwError(() => err))
+    );
+  }
+
+  refreshProducts(): void {
+    this.products.set([]);
+    this.getProducts().subscribe();
   }
 }
