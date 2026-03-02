@@ -1,1 +1,62 @@
-/* Styling comes from global styles (src/styles.css) */
+/* =====================================================
+   Full-screen Lottie overlay
+   ===================================================== */
+.lottie-overlay {
+    position: fixed;
+    inset: 0;
+    /* top:0 right:0 bottom:0 left:0 */
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+
+    /* Warm, frosted-glass backdrop that matches the app palette */
+    background:
+        radial-gradient(circle at 30% 40%, hsla(40, 60%, 92%, 0.85), transparent 55%),
+        radial-gradient(circle at 70% 60%, hsla(18, 55%, 88%, 0.7), transparent 55%),
+        hsla(0, 0%, 100%, 0.75);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+
+    animation: overlayFadeIn 0.35s ease forwards;
+}
+
+@keyframes overlayFadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* =====================================================
+   Storytelling text beneath the animation
+   ===================================================== */
+.storytelling-text {
+    font-family: var(--font-serif, Georgia, serif);
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: hsl(var(--foreground));
+    letter-spacing: 0.01em;
+    text-align: center;
+    max-width: 28ch;
+    line-height: 1.5;
+
+    animation: textFadeSlide 0.4s ease forwards;
+}
+
+@keyframes textFadeSlide {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
