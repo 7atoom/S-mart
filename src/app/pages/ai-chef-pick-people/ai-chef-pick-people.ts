@@ -2,14 +2,14 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AiChefService } from '../../core/services/ai-chef.service';
 import { RecipeIngredient } from '../../utils/AiChefRecipe';
-import {CurrencyPipe} from '@angular/common';
+import {DecimalPipe} from '@angular/common';
 
 @Component({
   selector: 'app-ai-chef-pick-people',
   templateUrl: './ai-chef-pick-people.html',
   styleUrl: './ai-chef-pick-people.css',
   imports: [
-    CurrencyPipe
+    DecimalPipe
   ]
 })
 export class AiChefPickPeople implements OnInit {
