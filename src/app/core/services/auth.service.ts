@@ -1,14 +1,16 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import {inject, Injectable} from '@angular/core';
 import { Observable } from 'rxjs';
 import { jwtDecode } from "jwt-decode";
+import {CartService} from './cart.service';
 
 
 @Injectable({
   providedIn: 'root',
 })
 export class Auth {
-  constructor(private httpClient:HttpClient){}
+  cartService = inject(CartService);
+  httpClient = inject(HttpClient);
   sendLoginForm(data:object) : Observable<any>{
     return this.httpClient.post("https://s-mart-api.vercel.app/api/auth/login", data)
   }
@@ -35,6 +37,7 @@ export class Auth {
   }
 
   logout(){
-    localStorage.removeItem('token')
+    this.cartService.clearCart();
+    localStorage.removeItem('token');
   }
 }

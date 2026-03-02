@@ -14,6 +14,13 @@ export class CartService {
   isLoading = signal<boolean>(false);
   isError = signal<boolean>(false);
 
+  private authHeaders() {
+    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+    return {
+      ...(token ? {Authorization: `Bearer ${token}`} : {}),
+    };
+  }
+
 
   items = computed(() => {
     const items = this.cartItems();
@@ -36,27 +43,40 @@ export class CartService {
   }
 
   getCart() {
-    const token = localStorage.getItem('token');
-    if (!token) return;
-    const headers = {Authorization: `Bearer ${token}`};
-
     this.isLoading.set(true);
-    this.httpClient.get<any>(`${this.baseUrl}`, {headers}).subscribe({
+    this.httpClient.get<any>(`${this.baseUrl}`, {headers: this.authHeaders()}).subscribe({
       next: (res) => {
-        console.log('Cart API response:', res);
-        const rawItems= Array.isArray(res) ? res : (res?.cart ?? res?.items ?? res?.data ?? []);
+        const rawItems = Array.isArray(res) ? res : (res?.cart ?? res?.items ?? res?.data ?? []);
+
+        // Read recipeGroup map from localStorage (persisted by saveCart) so groups survive server sync
+        let localGroupMap: Record<string, string | undefined> = {};
+        try {
+          const saved = localStorage.getItem('smart-cart');
+          if (saved) {
+            const parsed: CartItem[] = JSON.parse(saved);
+            parsed.forEach(item => {
+              if (item.recipeGroup) {
+                localGroupMap[item._id] = item.recipeGroup;
+                localGroupMap[item.productId] = item.recipeGroup;
+              }
+            });
+          }
+        } catch {}
+
         const flattenedItems: CartItem[] = (Array.isArray(rawItems) ? rawItems : []).map((item: any) => {
           if (item.product) {
+            const id = item.product._id;
             return {
-              _id: item.product._id,
-              productId: item.product._id,
+              _id: id,
+              productId: id,
               name: item.product.title || item.product.name,
               title: item.product.title,
               price: item.product.price,
               image: item.product.image,
               weight: item.product.unit || item.product.weight || '',
               quantity: item.quantity,
-              category: item.product.category
+              category: item.product.category,
+              recipeGroup: localGroupMap[id],  // restore from localStorage
             };
           }
           return item;
@@ -77,9 +97,6 @@ export class CartService {
 
   addItem(product: Product) {
     const payload = { productId: product._id, quantity: 1 };
-    const token = localStorage.getItem('token');
-    const headers = {Authorization: `Bearer ${token}`};
-
     const previous = this.cartItems();
     const existing = previous.find(i => i.productId === product._id || i._id === product._id);
     if (existing) {
@@ -103,7 +120,7 @@ export class CartService {
     }
     this.saveCart();
 
-    this.httpClient.post(`${this.baseUrl}`, payload, {headers}).subscribe({
+    this.httpClient.post(`${this.baseUrl}`, payload, {headers: this.authHeaders()}).subscribe({
       next: () => {
         this.getCart();
       },
@@ -117,50 +134,56 @@ export class CartService {
   }
 
   addItems(items: CartItem[]) {
-    const payload = items.map(item => ({
-      productId: item._id,
-      quantity: item.quantity
-    }));
-
-    const token = localStorage.getItem('token');
-    const headers = {Authorization: `Bearer ${token}`};
-
+    if (!items.length) return;
     this.isLoading.set(true);
-    this.httpClient.post<CartItem[]>(`${this.baseUrl}/bulk`, payload, {headers}).subscribe({
-      next: (newItems) => {
-        const currentItems = this.cartItems();
-        const updatedItems = [...currentItems];
 
-        newItems.forEach(newItem => {
-          const existing = updatedItems.find(item => item._id === newItem._id);
-          if (existing) {
-            existing.quantity += newItem.quantity;
-          } else {
-            updatedItems.push(newItem);
-          }
-        });
-
-        this.cartItems.set(updatedItems);
-        this.saveCart();
-        this.isLoading.set(false);
-      },
-      error: (err) => {
-        console.error('Failed to add items to cart:', err);
-        this.isError.set(true);
-        this.isLoading.set(false);
+    // Optimistic update
+    const previous = this.cartItems();
+    const optimistic = [...previous];
+    items.forEach(newItem => {
+      const existing = optimistic.find(i => i._id === newItem._id || i.productId === newItem._id);
+      if (existing) {
+        existing.quantity += newItem.quantity;
+      } else {
+        optimistic.push(newItem);
       }
+    });
+    this.cartItems.set(optimistic);
+    this.saveCart();
+
+    let remaining = items.length;
+    let hasFailed = false;
+
+    items.forEach(item => {
+      const payload = { productId: item._id, quantity: item.quantity };
+      this.httpClient.post(`${this.baseUrl}`, payload, { headers: this.authHeaders() }).subscribe({
+        next: () => {
+          remaining--;
+          if (remaining === 0) {
+            this.getCart();
+            this.isLoading.set(false);
+          }
+        },
+        error: (err) => {
+          console.error('Failed to add item to cart (bulk):', err);
+          if (!hasFailed) {
+            hasFailed = true;
+            this.cartItems.set(previous);
+            this.saveCart();
+            this.isError.set(true);
+            this.isLoading.set(false);
+          }
+        }
+      });
     });
   }
 
   updateQuantity(productId: string, quantity: number) {
-    const token = localStorage.getItem('token');
-    const headers = {Authorization: `Bearer ${token}`};
-
     const previous = this.cartItems();
     if (quantity <= 0) {
       this.cartItems.set(previous.filter(i => i.productId !== productId && i._id !== productId));
       this.saveCart();
-      this.httpClient.delete(`${this.baseUrl}/${productId}`, {headers}).subscribe({
+      this.httpClient.delete(`${this.baseUrl}/${productId}`, {headers: this.authHeaders()}).subscribe({
         next: () => this.getCart(),
         error: (err) => {
           console.error('Failed to remove item:', err);
@@ -179,7 +202,7 @@ export class CartService {
     ));
     this.saveCart();
 
-    this.httpClient.patch<any>(`${this.baseUrl}/${productId}`, {quantity}, {headers}).subscribe({
+    this.httpClient.patch<any>(`${this.baseUrl}/${productId}`, {quantity}, {headers: this.authHeaders()}).subscribe({
       next: () => this.getCart(), // Sync silently
       error: (err) => {
         console.error('Failed to update item quantity:', err);
@@ -191,15 +214,11 @@ export class CartService {
   }
 
   removeItem(productId: string) {
-    const token = localStorage.getItem('token');
-    const headers = {Authorization: `Bearer ${token}`};
-
-    // Optimistic update: remove instantly
     const previous = this.cartItems();
     this.cartItems.set(previous.filter(i => i.productId !== productId && i._id !== productId));
     this.saveCart();
 
-    this.httpClient.delete(`${this.baseUrl}/${productId}`, {headers}).subscribe({
+    this.httpClient.delete(`${this.baseUrl}/${productId}`, {headers: this.authHeaders()}).subscribe({
       next: () => this.getCart(),
       error: (err) => {
         console.error('Failed to remove item from cart:', err);
@@ -217,18 +236,19 @@ export class CartService {
   }
 
   clearCart() {
-    const token = localStorage.getItem('token');
-    const headers = {Authorization: `Bearer ${token}`};
+    // Always clear local state immediately
+    this.cartItems.set([]);
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('smart-cart');
+    }
 
     this.isLoading.set(true);
-    this.httpClient.delete(`${this.baseUrl}/clear`, {headers}).subscribe({
+    this.httpClient.delete(`${this.baseUrl}/clear`, {headers: this.authHeaders()}).subscribe({
       next: () => {
-        this.cartItems.set([]);
-        this.saveCart();
         this.isLoading.set(false);
       },
       error: (err) => {
-        console.error('Failed to clear cart:', err);
+        console.error('Failed to clear cart on server:', err);
         this.isError.set(true);
         this.isLoading.set(false);
       }

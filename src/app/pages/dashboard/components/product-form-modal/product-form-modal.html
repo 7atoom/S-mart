@@ -41,7 +41,7 @@
 
       <div>
         <label for="price" class="block text-xs font-medium text-[hsl(var(--muted-foreground))] uppercase tracking-wider mb-1.5">
-          Price ($)
+          Price <span class="normal-case text-[hsl(var(--muted-foreground))]">(in EGP)</span>
         </label>
         <input
           id="price"
@@ -62,15 +62,34 @@
 
       <div>
         <label for="unit" class="block text-xs font-medium text-[hsl(var(--muted-foreground))] uppercase tracking-wider mb-1.5">
-          Weight / Size
+          Unit (piece / kg / pack …)
         </label>
         <input
           id="unit"
           type="text"
           formControlName="unit"
-          placeholder="e.g. 500g"
+          placeholder="e.g. piece"
           class="w-full px-3 py-2 rounded-lg border bg-[hsl(var(--secondary))] text-[hsl(var(--foreground))] placeholder:text-[hsl(var(--muted-foreground))] focus:outline-none focus:ring-2 focus:ring-[hsl(var(--ring))] border-[hsl(var(--border))]"
         />
+      </div>
+
+      <div>
+        <label for="quantityInGram" class="block text-xs font-medium text-[hsl(var(--muted-foreground))] uppercase tracking-wider mb-1.5">
+          Quantity in Gram <span class="normal-case text-[hsl(var(--muted-foreground))]">(per unit)</span>
+        </label>
+        <input
+          id="quantityInGram"
+          type="number"
+          formControlName="quantityInGram"
+          min="0"
+          step="1"
+          placeholder="e.g. 100"
+          class="w-full px-3 py-2 rounded-lg border bg-[hsl(var(--secondary))] text-[hsl(var(--foreground))] placeholder:text-[hsl(var(--muted-foreground))] focus:outline-none focus:ring-2 focus:ring-[hsl(var(--ring))] border-[hsl(var(--border))]"
+        />
+        <p class="mt-1 text-xs text-[hsl(var(--muted-foreground))]">Used to calculate how many units are needed for a recipe</p>
+        @if (form.get('quantityInGram')?.touched && form.get('quantityInGram')?.errors?.['min']) {
+          <p class="mt-1 text-xs" style="color: hsl(var(--destructive))">Must be 0 or greater</p>
+        }
       </div>
 
       <div>

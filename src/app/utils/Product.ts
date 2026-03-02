@@ -8,6 +8,7 @@ export interface Product {
   image: string;
   category: Category;
   unit: string;
+  quantityInGram: number;
   __v: number;
   featured?: boolean;
   createdAt: Date;

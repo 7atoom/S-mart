@@ -34,9 +34,9 @@
           <span class="font-sans">{{ recipe.time }}</span>
         </div>
         <div class="flex items-center gap-1">
-          <span class="w-2 h-2 rounded-full bg-accent"></span>
-          <span class="w-2 h-2 rounded-full bg-accent"></span>
-          <span class="w-2 h-2 rounded-full bg-accent"></span>
+          <span class="w-2 h-2 rounded-full"></span>
+          <span class="w-2 h-2 rounded-full bg-[hsl(var(--accent))]"></span>
+          <span class="w-2 h-2 rounded-full bg-[hsl(var(--accent))]"></span>
           <span class="text-xs text-muted ml-1 font-sans">{{
             recipe.difficulty
           }}</span>
@@ -73,13 +73,13 @@
         selected
       </span>
       <span class="font-sans font-semibold text-main"
-        >Est. ${{ totalPrice | number : '1.2-2' }}</span
+        >Est. {{ totalPrice | number : '1.2-2' }} EGP</span
       >
     </div>
 
     <!-- Ingredients list -->
     <div class="space-y-3 mb-40">
-      @for (item of ingredients; track item.name) {
+      @for (item of ingredients(); track item.productId) {
         <button
           type="button"
           (click)="toggleItem(item)"
@@ -88,11 +88,11 @@
           [class.cart-item--unselected]="!item.selected"
         >
           <div
-            class="w-12 h-12 rounded-xl flex items-center justify-center shrink-0 cart-item-icon"
+            class="w-12 h-12 rounded-xl overflow-hidden shrink-0 cart-item-icon"
             [class.cart-item-icon--selected]="item.selected"
             [class.cart-item-icon--unselected]="!item.selected"
           >
-            <span class="text-xl">{{ item.emoji }}</span>
+            <img [src]="item.image" [alt]="item.name" class="w-full h-full object-cover" />
           </div>
           <div class="flex-1 min-w-0">
             <h4 class="font-sans font-medium text-sm"
@@ -100,12 +100,12 @@
               [class.text-muted]="!item.selected">
               {{ item.name }}
             </h4>
-            <p class="text-xs text-muted font-sans">{{ item.quantity }}</p>
+            <p class="text-xs text-muted font-sans">{{ scaledQty(item) }} x @if (item.quantityInGram) { ({{ item.quantityInGram }}g) } </p>
           </div>
           <span class="font-sans font-medium text-sm"
             [class.text-main]="item.selected"
             [class.text-muted]="!item.selected">
-            ${{ item.price | number : '1.2-2' }}
+            {{ (item.price * scaledQty(item)) | number : '1.2-2' }} EGP
           </span>
           <div
             class="w-6 h-6 rounded-full flex items-center justify-center shrink-0 cart-item-check"
@@ -145,7 +145,7 @@
             {{ itemCount }} selected · {{ servings }} people
           </p>
           <p class="font-semibold text-lg text-main font-sans">
-            ${{ totalPrice | number : '1.2-2' }}
+            {{ totalPrice | number : '1.2-2' }} EGP
           </p>
         </div>
       </div>
@@ -175,27 +175,33 @@
         </button>
         <button
           (click)="addToCart()"
-          class="cursor-pointer flex-1 flex items-center justify-center gap-2 py-3.5 rounded-2xl btn-accent font-sans font-medium hover:bg-terracotta-light transition-colors warm-shadow  hover:drop-shadow-lg"
+          [disabled]="isAddingToCart()"
+          class="cursor-pointer flex-1 flex items-center justify-center gap-2 py-3.5 rounded-2xl btn-accent font-sans font-medium hover:bg-terracotta-light transition-colors warm-shadow hover:drop-shadow-lg disabled:opacity-60 disabled:cursor-not-allowed"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="w-4 h-4"
-          >
-            <circle cx="8" cy="21" r="1"></circle>
-            <circle cx="19" cy="21" r="1"></circle>
-            <path
-              d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"
-            ></path>
-          </svg>
-          Add to Cart
+          @if (isAddingToCart()) {
+            <div class="w-4 h-4 rounded-full border-2 border-primary-foreground border-t-transparent animate-spin"></div>
+            Adding...
+          } @else {
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="w-4 h-4"
+            >
+              <circle cx="8" cy="21" r="1"></circle>
+              <circle cx="19" cy="21" r="1"></circle>
+              <path
+                d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"
+              ></path>
+            </svg>
+            Add to Cart
+          }
         </button>
       </div>
     </div>

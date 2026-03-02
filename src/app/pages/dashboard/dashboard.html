@@ -36,8 +36,8 @@
             <i class="fas fa-dollar-sign text-[hsl(var(--accent))]"></i>
           </div>
           <div>
-            <p class="text-2xl font-bold text-[hsl(var(--foreground))]">${{ stats().catalogValue.toFixed(2) }}</p>
-            <p class="text-xs text-[hsl(var(--muted-foreground))]">Catalog Value</p>
+            <p class="text-2xl font-bold text-[hsl(var(--foreground))]">{{ stats().catalogValue.toFixed(0) }} EGP</p>
+            <p class="text-xs text-[hsl(var(--muted-foreground))]">Catalog Value (EGP)</p>
           </div>
         </div>
       </div>
@@ -117,7 +117,8 @@
                 <th class="px-4 sm:px-6 py-3 text-xs font-medium text-[hsl(var(--muted-foreground))] uppercase tracking-wider">#</th>
                 <th class="px-4 sm:px-6 py-3 text-xs font-medium text-[hsl(var(--muted-foreground))] uppercase tracking-wider">Product</th>
                 <th class="px-4 sm:px-6 py-3 text-xs font-medium text-[hsl(var(--muted-foreground))] uppercase tracking-wider">Category</th>
-                <th class="px-4 sm:px-6 py-3 text-xs font-medium text-[hsl(var(--muted-foreground))] uppercase tracking-wider">Price ($)</th>
+                <th class="px-4 sm:px-6 py-3 text-xs font-medium text-[hsl(var(--muted-foreground))] uppercase tracking-wider">Price (EGP)</th>
+                <th class="px-4 sm:px-6 py-3 text-xs font-medium text-[hsl(var(--muted-foreground))] uppercase tracking-wider">Unit / Qty (g)</th>
                 <th class="px-4 sm:px-6 py-3 text-xs font-medium text-[hsl(var(--muted-foreground))] uppercase tracking-wider">Status</th>
                 <th class="px-4 sm:px-6 py-3 text-xs font-medium text-[hsl(var(--muted-foreground))] uppercase tracking-wider">Actions</th>
               </tr>
@@ -141,14 +142,21 @@
                     {{ $any(product.category)?.name ?? '—' }}
                   </td>
                   <td class="px-4 sm:px-6 py-3 text-sm font-medium text-[hsl(var(--primary))]">
-                    ${{ product.price.toFixed(2) }}
+                    {{ product.price.toFixed(2) }} EGP
+                  </td>
+                  <td class="px-4 sm:px-6 py-3 text-sm text-[hsl(var(--muted-foreground))]">
+                    <span>{{ product.unit || '—' }}</span>
+                    @if (product.quantityInGram) {
+                      <span class="ml-1 text-xs">({{ product.quantityInGram }}g)</span>
+                    }
                   </td>
                   <td class="px-4 sm:px-6 py-3">
-                    <span class="text-sm text-[hsl(var(--muted-foreground))]">{{ product.unit || '—' }}</span>
                     @if (product.featured) {
-                      <span class="ml-2 px-2 py-0.5 rounded-full bg-[hsl(var(--accent))] text-[hsl(var(--accent-foreground))] text-xs font-medium">
+                      <span class="px-2 py-0.5 rounded-full bg-[hsl(var(--accent))] text-[hsl(var(--accent-foreground))] text-xs font-medium">
                         Featured
                       </span>
+                    } @else {
+                      <span class="text-xs text-[hsl(var(--muted-foreground))]">—</span>
                     }
                   </td>
                   <td class="px-4 sm:px-6 py-3">

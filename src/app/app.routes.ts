@@ -4,7 +4,6 @@ import { Shop } from './pages/shop/shop';
 import { AiChef } from './pages/ai-chef/ai-chef';
 import { NotFound } from './pages/not-found/not-found';
 import { Cart } from './pages/cart/cart';
-import { AiChefPick } from './pages/ai-chef-pick/ai-chef-pick';
 import { AiChefPickPeople } from './pages/ai-chef-pick-people/ai-chef-pick-people';
 import { AiChefPickCart } from './pages/ai-chef-pick-cart/ai-chef-pick-cart';
 import { Login } from './pages/login/login';
@@ -21,9 +20,9 @@ export const routes: Routes = [
   { path: 'signup', component: Signup, canActivate: [guestGuard] },
   { path: 'shop', component: Shop },
   { path: 'aiChef', component: AiChef },
-  { path: 'aiChef/:meal', component: AiChefPick },
-  { path: 'aiChef/:meal/:selectedRecipe', component: AiChefPickPeople },
-  { path: 'aiChef/:meal/:selectedRecipe/cart', component: AiChefPickCart },
+  // { path: 'aiChef/:meal', component: AiChefPick },
+  { path: 'aiChef/:selectedRecipe', component: AiChefPickPeople },
+  { path: 'aiChef/:selectedRecipe/cart', component: AiChefPickCart },
   { path: 'checkout', component: CheckoutComponent },
   { path: 'cart', component: Cart, canActivate: [authGuard] },
   { path: 'dashboard', component: Dashboard, canActivate: [authGuard] },

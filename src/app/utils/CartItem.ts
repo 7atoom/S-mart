@@ -7,5 +7,6 @@ export interface CartItem {
   weight: string;
   image: string;
   quantity: number;
+  recipeGroup?: string;  // set when added via AI Chef
   [key: string]: any;
 }
