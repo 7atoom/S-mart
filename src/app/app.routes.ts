@@ -13,6 +13,7 @@ import { Dashboard } from './pages/dashboard/dashboard';
 import { authGuard } from './core/guards/auth.guard';
 import { guestGuard } from './core/guards/guest.guard';
 import { adminGuard } from './core/guards/admin.guard';
+import { checkoutGuard } from './core/guards/checkout.guard';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -24,8 +25,8 @@ export const routes: Routes = [
   // { path: 'aiChef/:meal', component: AiChefPick },
   { path: 'aiChef/:selectedRecipe', component: AiChefPickPeople },
   { path: 'aiChef/:selectedRecipe/cart', component: AiChefPickCart },
-  { path: 'checkout', component: CheckoutComponent },
+  { path: 'checkout', component: CheckoutComponent, canActivate: [authGuard, checkoutGuard] },
   { path: 'cart', component: Cart, canActivate: [authGuard] },
-  { path: 'dashboard', component: Dashboard, canActivate:[adminGuard] },
+  { path: 'dashboard', component: Dashboard, canActivate: [adminGuard] },
   { path: '**', component: NotFound },
 ];
