@@ -39,7 +39,7 @@
         AI Chef
       </a>
 
-      @if (authService.isAuthenticated()) {
+      @if (authService.isAuthenticated() && authService.isAdmin()) {
         <a
           routerLink="/dashboard"
           routerLinkActive="text-[hsl(var(--primary))]"
@@ -177,7 +177,7 @@
         AI Chef
       </a>
 
-      @if (authService.isAuthenticated()) {
+      @if (authService.isAuthenticated() && authService.isAdmin()) {
         <a
           routerLink="/dashboard"
           (click)="closeMobileMenu()"

@@ -35,7 +35,11 @@ export class Auth {
       return false;
     }
   }
-
+  isAdmin(): boolean {
+    const role = localStorage.getItem('role');
+    return role === 'ADMIN';
+    
+  }
   logout(){
     this.cartService.clearCart();
     localStorage.removeItem('token');
