@@ -42,7 +42,7 @@
       <div class="flex flex-wrap justify-center gap-2">
         @for (item of suggestedMeals; track $index) {
           <button
-            (click)="setsearchControl(item)"
+            (click)="setSearchControl(item)"
             class="suggested-meal-btn active:scale-95 py-3 px-5 text-sm font-medium font-sans transition-all bg-[hsl(var(--secondary))] text-[hsl(var(--secondary-foreground))] hover:bg-[hsl(var(--muted))] cursor-pointer rounded-full shadow"
           >
             {{ item }}

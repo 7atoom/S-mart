@@ -1,17 +1,10 @@
 import {inject, Injectable, signal} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Product} from '../../utils/Product';
+import {AddProductBody} from '../../utils/AddProductBody';
 import {catchError, map, Observable, tap, throwError} from 'rxjs';
 
-export interface AddProductBody {
-  title: string;
-  description?: string;
-  price: number;
-  image?: string;
-  category: string;
-  unit?: string;
-  featured?: boolean;
-}
+
 
 @Injectable({
   providedIn: 'root',

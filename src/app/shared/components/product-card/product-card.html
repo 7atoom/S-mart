@@ -29,16 +29,12 @@
       {{ product.title }}
     </h3>
     <p class="text-xs text-[hsl(var(--muted-foreground))] mt-1">
-      @if (/^\d+\s*g$/i.test(product.unit)) {
-        {{ product.unit }}
-      } @else {
-        1 {{ product.unit }}
-      }
+      {{ product.quantityInGram ? (product.quantityInGram + 'g') : product.unit || '—' }}
     </p>
 
     <div class="flex items-center justify-between mt-3">
       <span class="text-[hsl(var(--primary))] font-semibold">
-        ${{ product.price.toFixed(2) }}
+        EGP {{ product.price | number:'1.2-2' }}
       </span>
 
       @if (cartItem) {
@@ -58,7 +54,7 @@
               stroke-linecap="round"
               stroke-linejoin="round"
             >
-              <path d="M5 12h14" />
+              <path d="M5 12h14"/>
             </svg>
           </button>
           <span class="text-sm font-medium w-5 text-center">{{ cartItem.quantity }}</span>
@@ -77,8 +73,8 @@
               stroke-linecap="round"
               stroke-linejoin="round"
             >
-              <path d="M5 12h14" />
-              <path d="M12 5v14" />
+              <path d="M5 12h14"/>
+              <path d="M12 5v14"/>
             </svg>
           </button>
         </div>
@@ -99,8 +95,8 @@
             stroke-linecap="round"
             stroke-linejoin="round"
           >
-            <path d="M5 12h14" />
-            <path d="M12 5v14" />
+            <path d="M5 12h14"/>
+            <path d="M12 5v14"/>
           </svg>
         </button>
       }

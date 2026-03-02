@@ -1,6 +1,7 @@
-import { Component,  } from '@angular/core';
+import {Component, inject, signal,} from '@angular/core';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import {RecipeIngredient} from '../../utils/AiChefRecipe';
 
 @Component({
   selector: 'app-ai-chef',
@@ -9,17 +10,20 @@ import { Router } from '@angular/router';
   styleUrl: `./ai-chef.css`,
 })
 export class AiChef {
-  constructor(private router: Router) {}
+  router = inject(Router);
+
+  recipe = signal<RecipeIngredient[]>([]);
+  isLoading = signal(false);
 
   searchControl = new FormControl("",[Validators.required,Validators.minLength(3)]);
-  suggestedMeals: string[] = ['steak','Biryani','Sushi','Pasta','Soup','Salad','Dessert'];
+  suggestedMeals: string[] = ['steak','Biryani','Sushi','Pasta','Ful medames','Salad','Dessert'];
   cook(){
     console.log(this.searchControl.value);
     if(this.searchControl.valid){
       this.router.navigate(['aiChef',this.searchControl.value]);
     }
   }
-  setsearchControl(value:string){
+  setSearchControl(value:string){
     this.searchControl.setValue(value);
     this.cook();
   }

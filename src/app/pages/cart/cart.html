@@ -1,4 +1,4 @@
-@if (cartItemsCount() === 0) {
+<script src="../../core/services/ai-chef.service.ts"></script>@if (cartItemsCount() === 0) {
   <div class="min-h-screen pt-20 pb-24 flex flex-col items-center justify-center px-6">
     <div class="text-center">
       <div
@@ -42,18 +42,50 @@
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
           <!-- LEFT: Cart items -->
           <div class="lg:col-span-2 space-y-2 sm:space-y-4">
-            <!-- Cart List -->
-            <div class="rounded-2xl bg-[hsl(var(--card))] shadow-(--shadow-warm) p-3 sm:p-5">
-              <div class="divide-y divide-[hsl(var(--border)/0.5)]">
-                @for (item of cartItems(); track item.productId ?? item._id) {
-                  <app-cart-item-row
-                    [cartItem]="item"
-                    (quantityChange)="updateQuantity($event.itemId, $event.newQuantity)"
-                    (remove)="removeItem($event)"
-                  ></app-cart-item-row>
-                }
+
+            <!-- Recipe Groups -->
+            @for (entry of recipeGroupEntries(); track entry[0]) {
+              <div class="rounded-2xl bg-[hsl(var(--card))] shadow-(--shadow-warm) p-3 sm:p-5">
+                <!-- Group header -->
+                <div class="flex items-center gap-2 mb-3 pb-3 border-b border-[hsl(var(--border))]">
+                  <span class="text-lg">🍳</span>
+                  <h3 class="font-serif font-semibold text-[hsl(var(--foreground))] text-sm capitalize">{{ entry[0] }}</h3>
+                  <span class="text-xs text-[hsl(var(--muted-foreground))] font-sans ml-auto">{{ entry[1].length }} items</span>
+                </div>
+                <!-- Group items -->
+                <div class="divide-y divide-[hsl(var(--border)/0.5)]">
+                  @for (item of entry[1]; track item.productId ?? item._id) {
+                    <app-cart-item-row
+                      [cartItem]="item"
+                      (quantityChange)="updateQuantity($event.itemId, $event.newQuantity)"
+                      (remove)="removeItem($event)"
+                    ></app-cart-item-row>
+                  }
+                </div>
               </div>
-            </div>
+            }
+
+            <!-- Regular Items (not part of any recipe) -->
+            @if (regularItems().length > 0) {
+              <div class="rounded-2xl bg-[hsl(var(--card))] shadow-(--shadow-warm) p-3 sm:p-5">
+                @if (recipeGroupEntries().length > 0) {
+                  <div class="flex items-center gap-2 mb-3 pb-3 border-b border-[hsl(var(--border))]">
+                    <span class="text-lg">🛒</span>
+                    <h3 class="font-serif font-semibold text-[hsl(var(--foreground))] text-sm">Other Items</h3>
+                    <span class="text-xs text-[hsl(var(--muted-foreground))] font-sans ml-auto">{{ regularItems().length }} items</span>
+                  </div>
+                }
+                <div class="divide-y divide-[hsl(var(--border)/0.5)]">
+                  @for (item of regularItems(); track item.productId ?? item._id) {
+                    <app-cart-item-row
+                      [cartItem]="item"
+                      (quantityChange)="updateQuantity($event.itemId, $event.newQuantity)"
+                      (remove)="removeItem($event)"
+                    ></app-cart-item-row>
+                  }
+                </div>
+              </div>
+            }
 
             <!-- AI suggestion -->
             <div class="rounded-2xl bg-[hsl(var(--cream-dark))] p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center gap-3 mt-4">

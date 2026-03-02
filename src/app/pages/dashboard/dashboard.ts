@@ -5,7 +5,7 @@ import { ProductsService } from '../../core/services/products.service';
 import { CategoriesService } from '../../core/services/categories.service';
 import { Product } from '../../utils/Product';
 import { Category } from '../../utils/Category';
-import { AddProductBody } from '../../core/services/products.service';
+import {AddProductBody} from '../../utils/AddProductBody';
 import { ProductFormModal } from './components/product-form-modal/product-form-modal';
 
 @Component({

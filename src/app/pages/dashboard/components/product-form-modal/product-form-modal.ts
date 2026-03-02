@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { Product } from '../../../../utils/Product';
 import { Category } from '../../../../utils/Category';
 import { CategoriesService } from '../../../../core/services/categories.service';
-import { AddProductBody } from '../../../../core/services/products.service';
+import {AddProductBody} from '../../../../utils/AddProductBody';
 
 const URL_PATTERN = /^https?:\/\/.+/i;
 
@@ -27,11 +27,10 @@ export class ProductFormModal implements OnChanges {
     title: new FormControl<string>('', [Validators.required]),
     price: new FormControl<number | null>(null, [Validators.required, Validators.min(0)]),
     unit: new FormControl<string>('', []),
+    quantityInGram: new FormControl<number | null>(null, [Validators.min(0)]),
     category: new FormControl<string>('', [Validators.required]),
     featured: new FormControl<boolean>(false, []),
-    image: new FormControl<string>('', [
-      Validators.pattern(URL_PATTERN),
-    ]),
+    image: new FormControl<string>('', [Validators.pattern(URL_PATTERN)]),
     description: new FormControl<string>('', []),
   });
 
@@ -54,6 +53,7 @@ export class ProductFormModal implements OnChanges {
         title: this.product.title,
         price: this.product.price,
         unit: this.product.unit ?? '',
+        quantityInGram: this.product.quantityInGram ?? null,
         category: cat?._id ?? '',
         featured: this.product.featured ?? false,
         image: this.product.image ?? '',
@@ -64,6 +64,7 @@ export class ProductFormModal implements OnChanges {
         title: '',
         price: null,
         unit: '',
+        quantityInGram: null,
         category: '',
         featured: false,
         image: '',
@@ -83,6 +84,7 @@ export class ProductFormModal implements OnChanges {
       price: Number(v.price) ?? 0,
       category: v.category!,
       unit: v.unit || undefined,
+      quantityInGram: v.quantityInGram != null ? Number(v.quantityInGram) : undefined,
       featured: v.featured ?? false,
       image: v.image && v.image.trim() ? v.image.trim() : undefined,
       description: v.description && v.description.trim() ? v.description.trim() : undefined,

@@ -7,13 +7,13 @@
     <div class="space-y-3 mb-5">
       <div class="flex justify-between text-sm font-sans">
         <span class="text-[hsl(var(--muted-foreground))]">Subtotal</span>
-        <span class="text-[hsl(var(--foreground))]"> {{ total | currency: 'USD' }} </span>
+        <span class="text-[hsl(var(--foreground))]"> EGP {{ total | number:'1.2-2' }} </span>
       </div>
 
       <div class="flex justify-between text-sm font-sans">
         <span class="text-[hsl(var(--muted-foreground))]">Delivery</span>
         <span class="text-[hsl(var(--foreground))]">
-          {{ deliveryFee | currency: 'USD' }}
+          EGP {{ deliveryFee | number:'1.2-2' }}
         </span>
       </div>
 
@@ -22,7 +22,7 @@
       <div class="flex justify-between font-sans">
         <span class="font-semibold text-[hsl(var(--foreground))]">Total</span>
         <span class="font-semibold text-[hsl(var(--foreground))] text-lg">
-          {{ total + deliveryFee | currency: 'USD' }}
+          EGP {{ total + deliveryFee | number:'1.2-2' }}
         </span>
       </div>
     </div>

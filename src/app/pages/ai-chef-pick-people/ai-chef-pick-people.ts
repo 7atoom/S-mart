@@ -1,75 +1,68 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-
-interface Ingredient {
-  name: string;
-  price: number;
-}
-
-interface Recipe {
-  id: number;
-  title: string;
-  ingredients: Ingredient[];
-}
+import { AiChefService } from '../../core/services/ai-chef.service';
+import { RecipeIngredient } from '../../utils/AiChefRecipe';
+import {CurrencyPipe} from '@angular/common';
 
 @Component({
   selector: 'app-ai-chef-pick-people',
   templateUrl: './ai-chef-pick-people.html',
   styleUrl: './ai-chef-pick-people.css',
+  imports: [
+    CurrencyPipe
+  ]
 })
 export class AiChefPickPeople implements OnInit {
-  servings = 2;
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private aiChefService = inject(AiChefService);
+
+  servings = 1;
   presets = [1, 2, 4, 6, 8];
 
-  searchTerm: string = '';
-  selectedRecipe: number = 0;
-
-  selectedRecipeId = 0;
-  currentRecipe!: Recipe;
-
-  recipes: Recipe[] = [
-    {
-      id: 1,
-      title: 'Grilled Ribeye with Herb Butter',
-      ingredients: [
-        { name: 'Beef', price: 20 },
-        { name: 'Butter', price: 5 },
-        { name: 'Herbs', price: 3 },
-        { name: 'Salt', price: 1 },
-        { name: 'Pepper', price: 2 },
-      ],
-    },
-    {
-      id: 2,
-      title: 'Classic Pasta Carbonara',
-      ingredients: [
-        { name: 'Pasta', price: 5 },
-        { name: 'Eggs', price: 4 },
-        { name: 'Cheese', price: 6 },
-        { name: 'Guanciale', price: 8 },
-      ],
-    },
-    {
-      id: 3,
-      title: 'Fresh Caprese Salad',
-      ingredients: [
-        { name: 'Pasta', price: 5 },
-        { name: 'Eggs', price: 4 },
-        { name: 'Cheese', price: 6 },
-        { name: 'Guanciale', price: 8 },
-      ],
-    },
-  ];
-
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-  ) {}
+  dishName = signal('');
+  recipe = signal<RecipeIngredient[]>([]);
+  isLoading = signal(false);
+  isError = signal(false);
 
   ngOnInit(): void {
-    this.selectedRecipeId = Number(this.route.snapshot.paramMap.get('selectedRecipe')) || 1;
-    this.searchTerm = this.route.snapshot.paramMap.get('meal') || '';
-    this.currentRecipe = this.recipes.find((r) => r.id === this.selectedRecipeId)!;
+    const dish = this.route.snapshot.paramMap.get('selectedRecipe') || '';
+    this.dishName.set(dish);
+    this.loadRecipe(dish);
+  }
+
+  loadRecipe(dish: string) {
+    this.isLoading.set(true);
+    this.isError.set(false);
+    this.aiChefService.generateRecipe(dish).subscribe({
+      next: (res) => {
+        this.recipe.set(res.recipe);
+        this.isLoading.set(false);
+      },
+      error: () => {
+        this.isError.set(true);
+        this.isLoading.set(false);
+      },
+    });
+  }
+
+  get foundIngredients(): RecipeIngredient[] {
+    return this.recipe().filter(i => i.found);
+  }
+
+  scaledQty(ingredient: RecipeIngredient): number {
+    const product = ingredient.product!;
+    const gramsNeeded = (ingredient.requiredQuantity / 2) * this.servings;
+    const packsNeeded = gramsNeeded / (product.quantityInGram || 1);
+    return Math.max(1, Math.ceil(packsNeeded));
+  }
+
+  get totalPrice(): number {
+    const total = this.foundIngredients.reduce(
+      (sum, i) => sum + (i.product?.price ?? 0) * this.scaledQty(i),
+      0
+    );
+    return +total.toFixed(2);
   }
 
   decrease() {
@@ -84,18 +77,14 @@ export class AiChefPickPeople implements OnInit {
     this.servings = n;
   }
 
-  get totalPrice(): number {
-    const base = this.currentRecipe.ingredients.reduce((s, i) => s + i.price, 0);
-    return +(base * (this.servings / 2)).toFixed(2);
-  }
-
   back() {
-    this.router.navigate(['aiChef', this.searchTerm]);
+    this.router.navigate(['aiChef']);
   }
 
   continue() {
-    this.router.navigate(['aiChef', this.searchTerm, this.selectedRecipeId, 'cart'], {
+    this.router.navigate(['aiChef', this.dishName(), 'cart'], {
       queryParams: { servings: this.servings },
+      state: { recipe: this.recipe(), servings: this.servings },
     });
   }
 }

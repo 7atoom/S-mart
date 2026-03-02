@@ -71,7 +71,7 @@
       class="hidden sm:inline-block font-sans font-medium text-sm w-20 text-right"
       style="color: hsl(var(--foreground));"
     >
-      {{ (cartItem?.price ?? 0) * (cartItem?.quantity ?? 0) | currency: 'USD' }}
+      EGP {{ (cartItem?.price ?? 0) * (cartItem?.quantity ?? 0) | number:'1.2-2' }}
     </span>
 
     <!-- Remove Button -->

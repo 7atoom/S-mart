@@ -1,15 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, inject, OnInit, signal} from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CartService } from '../../core/services/cart.service';
-
-interface CartIngredient {
-  name: string;
-  quantity: string;
-  price: number;
-  emoji: string;
-  selected: boolean;
-}
+import { RecipeIngredient } from '../../utils/AiChefRecipe';
+import {CartIngredient} from '../../utils/CartIngredient';
 
 @Component({
   selector: 'app-ai-chef-pick-cart',
@@ -19,85 +13,105 @@ interface CartIngredient {
 })
 export class AiChefPickCart implements OnInit {
   meal = '';
-  selectedRecipeId = 1;
-  servings = 2;
+  servings = 1;
 
   recipe = {
-    title: 'Grilled Ribeye with Herb Butter',
-    description:
-      'Perfectly seared steak with a melting compound butter of fresh herbs.',
-    time: '35 min',
-    difficulty: 'Hard',
+    title: '',
+    description: 'Perfectly Ful Medames with a Lemon compound butter of fresh herbs.',
+    time: '30 mins',
+    difficulty: 'medium',
   };
 
-  /** Fake ingredients for final review (matches React example structure) */
-  ingredients: CartIngredient[] = [
-    { name: 'Ribeye Steak', quantity: '2 × 350g', price: 37.98, emoji: '🥘', selected: true },
-    { name: 'Fresh Rosemary', quantity: '30g', price: 2.99, emoji: '🥘', selected: true },
-    { name: 'Smoked Paprika', quantity: '1 tsp', price: 4.49, emoji: '🥘', selected: true },
-    {
-      name: 'Extra Virgin Olive Oil',
-      quantity: '2 tbsp',
-      price: 12.99,
-      emoji: '🥘',
-      selected: true,
-    },
-    { name: 'Free-Range Eggs', quantity: '2 eggs', price: 6.99, emoji: '🥘', selected: true },
-  ];
+  ingredients = signal<CartIngredient[]>([]);
+  isAddingToCart = signal(false);
 
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private cartService: CartService
-  ) {}
+  private cartService = inject(CartService);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
 
   ngOnInit(): void {
-    this.meal = this.route.snapshot.paramMap.get('meal') || '';
-    this.selectedRecipeId = Number(
-      this.route.snapshot.paramMap.get('selectedRecipe'),
-    ) || 1;
+    this.meal = this.route.snapshot.paramMap.get('selectedRecipe') || '';
+
+    const state = history.state as { recipe?: RecipeIngredient[]; servings?: number };
+    const recipeItems: RecipeIngredient[] = state?.recipe ?? [];
+
     const q = this.route.snapshot.queryParamMap.get('servings');
-    this.servings = q ? Number(q) : 2;
+    this.servings = state?.servings ?? (q ? Number(q) : 2);
+
+    this.recipe.title = this.meal;
+
+    this.ingredients.set(
+      recipeItems
+        .filter(i => i.found && i.product)
+        .map(i => ({
+          productId: i.product!._id,
+          name: i.product!.title,
+          baseQuantity: i.requiredQuantity,
+          quantityInGram: i.product!.quantityInGram,
+          unit: i.product!.unit,
+          price: i.product!.price,
+          image: i.product!.image,
+          selected: true,
+        }))
+    );
+  }
+
+  scaledQty(item: CartIngredient): number {
+    const gramsNeeded = (item.baseQuantity / 2) * this.servings;
+    const packsNeeded = gramsNeeded / (item.quantityInGram || 1);
+    return Math.max(1, Math.ceil(packsNeeded));
   }
 
   get totalPrice(): number {
-    return this.ingredients
-      .filter((i) => i.selected)
-      .reduce((sum, i) => sum + i.price, 0);
+    return +this.ingredients()
+      .filter(i => i.selected)
+      .reduce((sum, i) => sum + i.price * this.scaledQty(i), 0)
+      .toFixed(2);
   }
 
   get itemCount(): number {
-    return this.ingredients.filter((i) => i.selected).length;
+    return this.ingredients().filter(i => i.selected).length;
   }
 
   get selectedIngredients(): CartIngredient[] {
-    return this.ingredients.filter((i) => i.selected);
+    return this.ingredients().filter(i => i.selected);
   }
 
   toggleItem(item: CartIngredient): void {
-    item.selected = !item.selected;
+    this.ingredients.update(list =>
+      list.map(i => i.productId === item.productId ? { ...i, selected: !i.selected } : i)
+    );
   }
 
   backToServings(): void {
-    this.router.navigate(['aiChef', this.meal, this.selectedRecipeId]);
+    this.router.navigate(['aiChef', this.meal]);
   }
 
   weCookIt(): void {
-    // TODO: start "we cook it for you" flow
     this.router.navigate(['cart']);
   }
 
   addToCart(): void {
     const selected = this.selectedIngredients;
-    console.log('Add to cart – selected items:', selected);
+    if (!selected.length) return;
+
+    this.isAddingToCart.set(true);
+
+    const cartItems: any[] = selected.map(item => ({
+      _id: item.productId,
+      productId: item.productId,
+      name: item.name,
+      title: item.name,
+      price: item.price,
+      image: item.image,
+      weight: item.unit,
+      quantity: this.scaledQty(item),
+      category: '',
+      recipeGroup: this.meal,
+    }));
+
+    this.cartService.addItems(cartItems);
+    this.isAddingToCart.set(false);
     this.router.navigate(['cart']);
-    // this.cartService.addItems(selected.map(i => ({
-    //   id: i.name.toLowerCase().replace(/\s+/g, '-'), // simple ID generation
-    //   name: i.name,
-    //   price: i.price,
-    //   quantity: 1,
-    //   weight: i.quantity,
-    //   image: '',
-    // })));
   }
 }
