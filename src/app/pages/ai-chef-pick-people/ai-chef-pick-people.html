@@ -2,120 +2,114 @@
   <div class="flex flex-col items-center justify-center min-h-[70vh] px-6">
     <div class="text-center max-w-lg w-full">
 
-      @if (isLoading()) {
-        <div class="flex flex-col items-center gap-4 py-16">
-          <div class="w-12 h-12 rounded-full border-4 border-border border-t-primary animate-spin"></div>
-          <p class="text-muted font-sans">Generating your recipe...</p>
-        </div>
-      } @else if (isError()) {
-        <div class="flex flex-col items-center gap-4 py-16">
-          <p class="text-destructive font-sans">Failed to generate recipe. Please try again.</p>
-          <button (click)="loadRecipe(dishName())" class="btn-accent px-6 py-2 rounded-xl font-sans cursor-pointer">
-            Retry
-          </button>
-        </div>
-      } @else {
-        <!-- Recipe name -->
-        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cream-dark mb-8 warm-shadow">
-          <span class="text-lg">🍽️</span>
-          <span class="font-sans text-sm font-medium text-main capitalize">
-            {{ dishName() }}
+      <!-- ===================== LOADING STATE ===================== -->
+      @if (recipeResource.isLoading()) {
+      <div class="lottie-overlay">
+        <ng-lottie [options]="lottieOptions" width="400px" height="400px" />
+        <p class="storytelling-text">{{ storytellingText() }}</p>
+      </div>
+
+      <!-- ===================== ERROR STATE ===================== -->
+      } @else if (recipeResource.error()) {
+      <div class="flex flex-col items-center gap-4 py-16">
+        <span class="text-5xl">😕</span>
+        <p class="text-destructive font-sans">Failed to generate recipe. Please try again.</p>
+        <button (click)="retry()" class="btn-accent px-6 py-2 rounded-xl font-sans cursor-pointer">
+          Retry
+        </button>
+      </div>
+
+      <!-- ===================== SUCCESS STATE ===================== -->
+      } @else if (recipeResource.value()) {
+      <!-- Recipe name -->
+      <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cream-dark mb-8 warm-shadow">
+        <span class="text-lg">🍽️</span>
+        <span class="font-sans text-sm font-medium text-main capitalize">
+          {{ dishName() }}
+        </span>
+      </div>
+
+      <h2 class="font-serif text-3xl md:text-5xl font-bold text-main mb-3">
+        How many are dining?
+      </h2>
+
+      <p class="text-muted font-sans mb-10">We'll adjust ingredient quantities for you</p>
+
+      <!-- Selector -->
+      <div class="flex items-center justify-center gap-6 mb-12">
+        <button (click)="decrease()"
+          class="w-14 h-14 rounded-2xl bg-card hover:border-[hsl(var(--terracotta)/0.2)] border-2 border-border flex items-center justify-center text-main font-sans text-2xl font-medium warm-shadow hover:bg-secondary transition-all cursor-pointer hover:scale-105 hover:drop-shadow-lg">
+          −
+        </button>
+
+        <div class="flex flex-col items-center">
+          <span class="font-serif text-6xl md:text-7xl font-bold text-main">
+            {{ servings }}
+          </span>
+
+          <span class="text-sm text-muted mt-2 font-sans">
+            {{ servings === 1 ? 'person' : 'people' }}
           </span>
         </div>
 
-        <h2 class="font-serif text-3xl md:text-5xl font-bold text-main mb-3">
-          How many are dining?
-        </h2>
+        <button (click)="increase()"
+          class="w-14 h-14 rounded-2xl bg-card hover:border-[hsl(var(--terracotta)/0.2)] border-2 border-border flex items-center justify-center text-main font-sans text-2xl font-medium warm-shadow hover:bg-secondary transition-all cursor-pointer hover:scale-105 hover:drop-shadow-lg">
+          +
+        </button>
+      </div>
 
-        <p class="text-muted font-sans mb-10">We'll adjust ingredient quantities for you</p>
+      <!-- Presets -->
+      <div class="grid grid-col grid-cols-2 sm:grid-cols-5 gap-2 mb-10">
+        @for (n of presets; track n) {
+        <button (click)="setServings(n)"
+          class="hover:border-[hsl(var(--terracotta)/0.2)] hover:scale-105 border-2 border-border px-5 py-2.5 rounded-full text-sm font-medium font-sans transition-all  cursor-pointer hero-pill hover:drop-shadow-lg text-nowrap"
+          [class.bg-primary]="servings === n" [class.text-primary-foreground]="servings === n"
+          [class.bg-secondary]="servings !== n" [class.text-main]="servings !== n">
+          {{ n }} {{ n === 1 ? 'person' : 'people' }}
+        </button>
+        }
+      </div>
 
-        <!-- Selector -->
-        <div class="flex items-center justify-center gap-6 mb-12">
-          <button
-            (click)="decrease()"
-            class="w-14 h-14 rounded-2xl bg-card hover:border-[hsl(var(--terracotta)/0.2)] border-2 border-border flex items-center justify-center text-main font-sans text-2xl font-medium warm-shadow hover:bg-secondary transition-all cursor-pointer hover:scale-105 hover:drop-shadow-lg"
-          >
-            −
-          </button>
-
-          <div class="flex flex-col items-center">
-            <span class="font-serif text-6xl md:text-7xl font-bold text-main">
-              {{ servings }}
-            </span>
-
-            <span class="text-sm text-muted mt-2 font-sans">
-              {{ servings === 1 ? 'person' : 'people' }}
-            </span>
-          </div>
-
-          <button
-            (click)="increase()"
-            class="w-14 h-14 rounded-2xl bg-card hover:border-[hsl(var(--terracotta)/0.2)] border-2 border-border flex items-center justify-center text-main font-sans text-2xl font-medium warm-shadow hover:bg-secondary transition-all cursor-pointer hover:scale-105 hover:drop-shadow-lg"
-          >
-            +
-          </button>
+      <!-- Price -->
+      <div class="bg-card rounded-2xl p-5 mb-8 warm-shadow">
+        <div class="flex items-center justify-between font-sans mb-3">
+          <span class="text-sm text-muted">
+            {{ recipe.length }} ingredients
+          </span>
+          <span class="font-semibold text-main">Est. {{ totalPrice | currency:'EGP' }}</span>
         </div>
 
-        <!-- Presets -->
-        <div class="grid grid-col grid-cols-2 sm:grid-cols-5 gap-2 mb-10">
-          @for (n of presets; track n) {
-            <button
-              (click)="setServings(n)"
-              class="hover:border-[hsl(var(--terracotta)/0.2)] hover:scale-105 border-2 border-border px-5 py-2.5 rounded-full text-sm font-medium font-sans transition-all  cursor-pointer hero-pill hover:drop-shadow-lg text-nowrap"
-              [class.bg-primary]="servings === n"
-              [class.text-primary-foreground]="servings === n"
-              [class.bg-secondary]="servings !== n"
-              [class.text-main]="servings !== n"
-            >
-              {{ n }} {{ n === 1 ? 'person' : 'people' }}
-            </button>
-          }
-        </div>
-
-        <!-- Price -->
-        <div class="bg-card rounded-2xl p-5 mb-8 warm-shadow">
-          <div class="flex items-center justify-between font-sans mb-3">
-            <span class="text-sm text-muted">
-              {{ recipe().length }} ingredients
-            </span>
-            <span class="font-semibold text-main">Est. {{ totalPrice | currency:'EGP' }}</span>
-          </div>
-
-          <!-- Ingredient list -->
-          <ul class="space-y-2 text-left">
-            @for (ingredient of recipe(); track $index) {
-              <li class="flex items-center gap-2 text-sm font-sans">
-                @if (ingredient.found) {
-                  <span class="w-2 h-2 rounded-full bg-green-500 shrink-0"></span>
-                  <span class="text-main">{{ ingredient.product?.title }}</span>
-                  <span class="text-muted text-xs">× {{ scaledQty(ingredient) }} {{ ingredient.product?.unit }}</span>
-                  <span class="text-muted ml-auto">{{ ((ingredient.product?.price ?? 0) * scaledQty(ingredient)) | currency:'EGP' }}</span>
-                } @else {
-                  <span class="w-2 h-2 rounded-full bg-border shrink-0"></span>
-                  <span class="text-muted line-through">{{ ingredient.title }}</span>
-                  <span class="text-muted ml-auto text-xs">not available</span>
-                }
-              </li>
+        <!-- Ingredient list -->
+        <ul class="space-y-2 text-left">
+          @for (ingredient of recipe; track $index) {
+          <li class="flex items-center gap-2 text-sm font-sans">
+            @if (ingredient.found) {
+            <span class="w-2 h-2 rounded-full bg-green-500 shrink-0"></span>
+            <span class="text-main">{{ ingredient.product?.title }}</span>
+            <span class="text-muted text-xs">× {{ scaledQty(ingredient) }} {{ ingredient.product?.unit }}</span>
+            <span class="text-muted ml-auto">{{ ((ingredient.product?.price ?? 0) * scaledQty(ingredient)) |
+              currency:'EGP' }}</span>
+            } @else {
+            <span class="w-2 h-2 rounded-full bg-border shrink-0"></span>
+            <span class="text-muted line-through">{{ ingredient.title }}</span>
+            <span class="text-muted ml-auto text-xs">not available</span>
             }
-          </ul>
-        </div>
+          </li>
+          }
+        </ul>
+      </div>
 
-        <!-- Actions -->
-        <div class="flex gap-3">
-          <button
-            (click)="back()"
-            class="cursor-pointer flex-1 py-3.5 rounded-2xl border-2 border-border font-sans font-medium text-main bg-card warm-shadow hover:bg-secondary hover:scale-105 hover:drop-shadow-lg transition-all"
-          >
-            Back
-          </button>
+      <!-- Actions -->
+      <div class="flex gap-3">
+        <button (click)="back()"
+          class="cursor-pointer flex-1 py-3.5 rounded-2xl border-2 border-border font-sans font-medium text-main bg-card warm-shadow hover:bg-secondary hover:scale-105 hover:drop-shadow-lg transition-all">
+          Back
+        </button>
 
-          <button
-            (click)="continue()"
-            class="cursor-pointer flex-1 py-3.5 rounded-2xl btn-accent font-sans"
-          >
-            Continue →
-          </button>
-        </div>
+        <button (click)="continue()" class="cursor-pointer flex-1 py-3.5 rounded-2xl btn-accent font-sans">
+          Continue →
+        </button>
+      </div>
       }
 
     </div>
