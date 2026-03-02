@@ -33,6 +33,8 @@ export class Signup {
           console.log(res)
           //save token in local storage
           localStorage.setItem('token',res.accessToken)
+          localStorage.setItem('role',res.data.role)
+          console.log(res.data.role)
           //decode token to get user data
           this.auth.getUserData()
           this.isLoading.set(false)

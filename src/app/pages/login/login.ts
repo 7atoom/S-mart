@@ -35,6 +35,8 @@ export class Login {
           this.successMsg = res.message
           //save token in local storage
           localStorage.setItem('token',res.accessToken)
+          localStorage.setItem('role',res.data.role)
+          console.log(res.data.role)
           //decode token to get user data
           this.auth.getUserData()
           //navigate to home page
