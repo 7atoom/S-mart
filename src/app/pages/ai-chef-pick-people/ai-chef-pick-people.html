@@ -78,8 +78,7 @@
             <span class="text-sm text-muted">
               {{ recipe().length }} ingredients
             </span>
-            <span class="font-semibold text-main">Est. {{ totalPrice | currency:'EGP' }}</span>
-          </div>
+            <span class="font-semibold text-main">Est. EGP {{ totalPrice | number:'1.2-2' }}</span>          </div>
 
           <!-- Ingredient list -->
           <ul class="space-y-2 text-left">
@@ -89,7 +88,7 @@
                   <span class="w-2 h-2 rounded-full bg-green-500 shrink-0"></span>
                   <span class="text-main">{{ ingredient.product?.title }}</span>
                   <span class="text-muted text-xs">× {{ scaledQty(ingredient) }} {{ ingredient.product?.unit }}</span>
-                  <span class="text-muted ml-auto">{{ ((ingredient.product?.price ?? 0) * scaledQty(ingredient)) | currency:'EGP' }}</span>
+                  <span class="text-muted ml-auto">EGP {{ ((ingredient.product?.price ?? 0) * scaledQty(ingredient)) | number:'1.2-2' }}</span>
                 } @else {
                   <span class="w-2 h-2 rounded-full bg-border shrink-0"></span>
                   <span class="text-muted line-through">{{ ingredient.title }}</span>
