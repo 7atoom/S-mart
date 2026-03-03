@@ -1,9 +1,9 @@
-import { computed, inject, Injectable, OnDestroy, signal } from '@angular/core';
-import { CartItem } from '../../utils/CartItem';
-import { Product } from '../../utils/Product';
-import { HttpClient } from '@angular/common/http';
-import { Subject } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
+import {computed, inject, Injectable, OnDestroy, signal} from '@angular/core';
+import {CartItem} from '../../utils/CartItem';
+import {Product} from '../../utils/Product';
+import {HttpClient} from '@angular/common/http';
+import {Subject} from 'rxjs';
+import {debounceTime} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -56,10 +56,16 @@ export class CartService implements OnDestroy {
 
   // ── Helpers ─────────────────────────────────────────────────────────────────
 
+  private isAuthenticated(): boolean {
+    if (typeof window === 'undefined') return false;
+    const token = localStorage.getItem('token');
+    return !!token;
+  }
+
   private authHeaders() {
     const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
     return {
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...(token ? {Authorization: `Bearer ${token}`} : {}),
     };
   }
 
@@ -91,8 +97,14 @@ export class CartService implements OnDestroy {
   // ── API ─────────────────────────────────────────────────────────────────────
 
   getCart() {
+    // Guest mode: only use localStorage, skip API call
+    if (!this.isAuthenticated()) {
+      this.loadCart();
+      return;
+    }
+
     this.isLoading.set(true);
-    this.httpClient.get<any>(`${this.baseUrl}`, { headers: this.authHeaders() }).subscribe({
+    this.httpClient.get<any>(`${this.baseUrl}`, {headers: this.authHeaders()}).subscribe({
       next: (res) => {
         const rawItems = Array.isArray(res) ? res : (res?.cart ?? res?.items ?? res?.data ?? []);
 
@@ -109,7 +121,8 @@ export class CartService implements OnDestroy {
               }
             });
           }
-        } catch { }
+        } catch {
+        }
 
         const flattenedItems: CartItem[] = (Array.isArray(rawItems) ? rawItems : []).map((item: any) => {
           if (item.product) {
@@ -142,12 +155,6 @@ export class CartService implements OnDestroy {
     });
   }
 
-  /**
-   * Add one unit of a product.
-   * • UI updates INSTANTLY on every click (optimistic).
-   * • HTTP POST is debounced — fires once after 600 ms of inactivity,
-   *   sending the accumulated quantity so rapid clicks don't spam the server.
-   */
   addItem(product: Product) {
     const productId = product._id;
 
@@ -157,7 +164,7 @@ export class CartService implements OnDestroy {
     if (existing) {
       this.cartItems.set(previous.map(i =>
         (i.productId === productId || i._id === productId)
-          ? { ...i, quantity: i.quantity + 1 }
+          ? {...i, quantity: i.quantity + 1}
           : i
       ));
     } else {
@@ -175,19 +182,23 @@ export class CartService implements OnDestroy {
     }
     this.saveCart();
 
+    // Guest mode: only use localStorage, skip API call
+    if (!this.isAuthenticated()) {
+      return;
+    }
+
     // Debounced HTTP POST — one request per product after 600 ms of silence
     if (!this.addDebounceMap.has(productId)) {
       const subject = new Subject<{ product: Product; snapshot: CartItem[] }>();
-      subject.pipe(debounceTime(600)).subscribe(({ product: p, snapshot }) => {
-        // Read the *current* quantity at debounce-fire time (includes all rapid clicks)
+      subject.pipe(debounceTime(600)).subscribe(({product: p, snapshot}) => {
         const currentItems = this.cartItems();
         const currentItem = currentItems.find(i => i.productId === p._id || i._id === p._id);
         const qty = currentItem ? currentItem.quantity : 1;
 
         this.httpClient.post(
           `${this.baseUrl}`,
-          { productId: p._id, quantity: qty },
-          { headers: this.authHeaders() }
+          {productId: p._id, quantity: qty},
+          {headers: this.authHeaders()}
         ).subscribe({
           next: () => this.getCart(),
           error: (err) => {
@@ -202,7 +213,7 @@ export class CartService implements OnDestroy {
     }
 
     // Pass pre-click snapshot for rollback if the eventual request fails
-    this.addDebounceMap.get(productId)!.next({ product, snapshot: previous });
+    this.addDebounceMap.get(productId)!.next({product, snapshot: previous});
   }
 
   addItems(items: CartItem[]) {
@@ -222,39 +233,42 @@ export class CartService implements OnDestroy {
     this.cartItems.set(optimistic);
     this.saveCart();
 
-    let remaining = items.length;
-    let hasFailed = false;
+    // Guest mode: only use localStorage, skip API call
+    if (!this.isAuthenticated()) {
+      this.isLoading.set(false);
+      return;
+    }
 
-    items.forEach(item => {
-      const payload = { productId: item._id, quantity: item.quantity };
-      this.httpClient.post(`${this.baseUrl}`, payload, { headers: this.authHeaders() }).subscribe({
-        next: () => {
-          remaining--;
-          if (remaining === 0) {
-            this.getCart();
-            this.isLoading.set(false);
-          }
-        },
-        error: (err) => {
-          console.error('Failed to add item to cart (bulk):', err);
-          if (!hasFailed) {
-            hasFailed = true;
-            this.cartItems.set(previous);
-            this.saveCart();
-            this.isError.set(true);
-            this.isLoading.set(false);
-          }
-        }
-      });
+    // Send requests sequentially to avoid server document conflicts
+    this.addItemsSequentially(items, 0, previous);
+  }
+
+  private addItemsSequentially(items: CartItem[], index: number, rollbackSnapshot: CartItem[]) {
+    if (index >= items.length) {
+      // All items added successfully
+      this.getCart();
+      this.isLoading.set(false);
+      return;
+    }
+
+    const item = items[index];
+    const payload = {productId: item._id, quantity: item.quantity};
+
+    this.httpClient.post(`${this.baseUrl}`, payload, {headers: this.authHeaders()}).subscribe({
+      next: () => {
+        // Continue with the next item
+        this.addItemsSequentially(items, index + 1, rollbackSnapshot);
+      },
+      error: (err) => {
+        console.error('Failed to add item to cart (bulk):', err);
+        this.cartItems.set(rollbackSnapshot);
+        this.saveCart();
+        this.isError.set(true);
+        this.isLoading.set(false);
+      }
     });
   }
 
-  /**
-   * Set the quantity of a cart item.
-   * • UI updates INSTANTLY on every change (optimistic).
-   * • HTTP PATCH/DELETE is debounced — fires once after 600 ms of inactivity,
-   *   always sending the latest quantity so rapid +/- taps collapse into one call.
-   */
   updateQuantity(productId: string, quantity: number) {
     const previous = this.cartItems();
 
@@ -264,21 +278,26 @@ export class CartService implements OnDestroy {
     } else {
       this.cartItems.set(previous.map(i =>
         (i.productId === productId || i._id === productId)
-          ? { ...i, quantity }
+          ? {...i, quantity}
           : i
       ));
     }
     this.saveCart();
 
+    // Guest mode: only use localStorage, skip API call
+    if (!this.isAuthenticated()) {
+      return;
+    }
+
     // Debounced HTTP call — one request per product after 600 ms of silence
     if (!this.updateDebounceMap.has(productId)) {
       const subject = new Subject<{ quantity: number; snapshot: CartItem[] }>();
-      subject.pipe(debounceTime(600)).subscribe(({ quantity: qty, snapshot }) => {
+      subject.pipe(debounceTime(600)).subscribe(({quantity: qty, snapshot}) => {
         if (qty <= 0) {
           // Item should be removed
           this.httpClient.delete(
             `${this.baseUrl}/${productId}`,
-            { headers: this.authHeaders() }
+            {headers: this.authHeaders()}
           ).subscribe({
             next: () => this.getCart(),
             error: (err) => {
@@ -296,8 +315,8 @@ export class CartService implements OnDestroy {
 
           this.httpClient.patch<any>(
             `${this.baseUrl}/${productId}`,
-            { quantity: latestQty },
-            { headers: this.authHeaders() }
+            {quantity: latestQty},
+            {headers: this.authHeaders()}
           ).subscribe({
             next: () => this.getCart(),
             error: (err) => {
@@ -312,7 +331,7 @@ export class CartService implements OnDestroy {
       this.updateDebounceMap.set(productId, subject);
     }
 
-    this.updateDebounceMap.get(productId)!.next({ quantity, snapshot: previous });
+    this.updateDebounceMap.get(productId)!.next({quantity, snapshot: previous});
   }
 
   removeItem(productId: string) {
@@ -320,7 +339,12 @@ export class CartService implements OnDestroy {
     this.cartItems.set(previous.filter(i => i.productId !== productId && i._id !== productId));
     this.saveCart();
 
-    this.httpClient.delete(`${this.baseUrl}/${productId}`, { headers: this.authHeaders() }).subscribe({
+    // Guest mode: only use localStorage, skip API call
+    if (!this.isAuthenticated()) {
+      return;
+    }
+
+    this.httpClient.delete(`${this.baseUrl}/${productId}`, {headers: this.authHeaders()}).subscribe({
       next: () => this.getCart(),
       error: (err) => {
         console.error('Failed to remove item from cart:', err);
@@ -343,8 +367,13 @@ export class CartService implements OnDestroy {
       localStorage.removeItem('smart-cart');
     }
 
+    // Guest mode: only use localStorage, skip API call
+    if (!this.isAuthenticated()) {
+      return;
+    }
+
     this.isLoading.set(true);
-    this.httpClient.delete(`${this.baseUrl}/clear`, { headers: this.authHeaders() }).subscribe({
+    this.httpClient.delete(`${this.baseUrl}/clear`, {headers: this.authHeaders()}).subscribe({
       next: () => {
         this.isLoading.set(false);
       },
@@ -354,5 +383,26 @@ export class CartService implements OnDestroy {
         this.isLoading.set(false);
       }
     });
+  }
+
+  clearLocalCart() {
+    this.cartItems.set([]);
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('smart-cart');
+    }
+  }
+
+  syncCartAfterLogin() {
+    if (!this.isAuthenticated()) return;
+
+    const localItems = this.cartItems();
+
+    // If there are local items, sync them to server
+    if (localItems.length > 0) {
+      this.addItemsSequentially(localItems, 0, []);
+    } else {
+      // No local items, just fetch the server cart
+      this.getCart();
+    }
   }
 }

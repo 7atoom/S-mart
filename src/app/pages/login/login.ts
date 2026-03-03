@@ -1,8 +1,8 @@
 import { Component, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { Auth } from '../../core/services/auth.service';
-import { finalize } from 'rxjs';
+import { CartService } from '../../core/services/cart.service';
 
 @Component({
   selector: 'app-login',
@@ -14,14 +14,40 @@ import { finalize } from 'rxjs';
 export class Login {
   private readonly auth = inject(Auth)
   private readonly router = inject(Router)
+  private readonly cartService = inject(CartService)
   isLoading = signal(false)
-  errormsg :string = ""
+  showPassword = signal(false)
+  errors :string = ""
   successMsg: string=""
 
   loginForm :FormGroup= new FormGroup({
     email: new FormControl(null, [Validators.required, Validators.email]),
-    password: new FormControl(null, [Validators.required]) //, Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/)
+    password: new FormControl(null, [
+      Validators.required,
+      Validators.minLength(8),
+      Validators.maxLength(20),
+      this.uppercaseValidator,
+      this.lowercaseValidator,
+      this.numberValidator
+    ])
   })
+
+  // Custom validators
+  uppercaseValidator(control: AbstractControl): ValidationErrors | null {
+    return /[A-Z]/.test(control.value) ? null : { uppercase: true };
+  }
+
+  lowercaseValidator(control: AbstractControl): ValidationErrors | null {
+    return /[a-z]/.test(control.value) ? null : { lowercase: true };
+  }
+
+  numberValidator(control: AbstractControl): ValidationErrors | null {
+    return /[0-9]/.test(control.value) ? null : { number: true };
+  }
+
+  togglePasswordVisibility() {
+    this.showPassword.set(!this.showPassword());
+  }
   onSubmit() {
     if(this.loginForm.valid){
       console.log(this.loginForm.value)
@@ -31,7 +57,7 @@ export class Login {
         next:(res)=>{
           this.isLoading.set(false)
           console.log(res)
-          this.errormsg = ""
+          this.errors = ""
           this.successMsg = res.message
           //save token in local storage
           localStorage.setItem('token',res.accessToken)
@@ -39,6 +65,8 @@ export class Login {
           console.log(res.data.role)
           //decode token to get user data
           this.auth.getUserData()
+          // Sync guest cart to server after login
+          this.cartService.syncCartAfterLogin()
           //navigate to home page
           setTimeout(()=>{
             this.router.navigate(['/shop'])
@@ -47,7 +75,7 @@ export class Login {
         },
         error:(err)=>{
           console.log(err)
-          this.errormsg = err.error.error
+          this.errors = err.error.error
           this.isLoading.set(false)
         }
     })

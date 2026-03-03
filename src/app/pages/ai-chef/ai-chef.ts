@@ -2,6 +2,7 @@ import {Component, inject, signal,} from '@angular/core';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import {RecipeIngredient} from '../../utils/AiChefRecipe';
+import {Auth} from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-ai-chef',
@@ -11,6 +12,7 @@ import {RecipeIngredient} from '../../utils/AiChefRecipe';
 })
 export class AiChef {
   router = inject(Router);
+  authService = inject(Auth);
 
   recipe = signal<RecipeIngredient[]>([]);
   isLoading = signal(false);
@@ -19,6 +21,10 @@ export class AiChef {
   suggestedMeals: string[] = ['steak','Biryani','Sushi','Pasta','Ful medames','Salad','Dessert'];
   cook(){
     console.log(this.searchControl.value);
+    if(!this.authService.isAuthenticated()){
+      this.router.navigate(['/login']);
+      return;
+    }
     if(this.searchControl.valid){
       this.router.navigate(['aiChef',this.searchControl.value]);
     }

@@ -1,18 +1,24 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  effect,
+  inject,
+  signal,
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AiChefService } from '../../core/services/ai-chef.service';
 import { RecipeIngredient } from '../../utils/AiChefRecipe';
-import {CurrencyPipe} from '@angular/common';
+import {DecimalPipe} from '@angular/common';
+import { LottieComponent, AnimationOptions } from 'ngx-lottie';
+import { rxResource } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-ai-chef-pick-people',
   templateUrl: './ai-chef-pick-people.html',
   styleUrl: './ai-chef-pick-people.css',
-  imports: [
-    CurrencyPipe
-  ]
+  imports: [LottieComponent, DecimalPipe],
 })
-export class AiChefPickPeople implements OnInit {
+export class AiChefPickPeople {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private aiChefService = inject(AiChefService);
@@ -21,33 +27,57 @@ export class AiChefPickPeople implements OnInit {
   presets = [1, 2, 4, 6, 8];
 
   dishName = signal('');
-  recipe = signal<RecipeIngredient[]>([]);
-  isLoading = signal(false);
-  isError = signal(false);
 
-  ngOnInit(): void {
+  lottieOptions: AnimationOptions = {
+    path: '/loader/loader.json',
+  };
+
+  private readonly MESSAGES = [
+    'Analyzing ingredients...',
+    'Consulting the chef...',
+    'Plating your recipe...',
+  ];
+
+  private storytellingIndex = signal(0);
+  storytellingText = computed(() => this.MESSAGES[this.storytellingIndex()]);
+
+  recipeResource = rxResource({
+    params: () => (this.dishName() ? { dish: this.dishName() } : undefined),
+    stream: ({ params }) => this.aiChefService.generateRecipe(params.dish),
+  });
+
+  constructor() {
+    // 1. Set dishName from the route param, which triggers the resource
     const dish = this.route.snapshot.paramMap.get('selectedRecipe') || '';
     this.dishName.set(dish);
-    this.loadRecipe(dish);
-  }
 
-  loadRecipe(dish: string) {
-    this.isLoading.set(true);
-    this.isError.set(false);
-    this.aiChefService.generateRecipe(dish).subscribe({
-      next: (res) => {
-        this.recipe.set(res.recipe);
-        this.isLoading.set(false);
-      },
-      error: () => {
-        this.isError.set(true);
-        this.isLoading.set(false);
-      },
+    // 2. Cycle storytelling messages while loading; clear on done/error
+    let timer: ReturnType<typeof setInterval> | null = null;
+
+    effect(() => {
+      if (this.recipeResource.isLoading()) {
+        // Reset index and start the cycling interval
+        this.storytellingIndex.set(0);
+        timer = setInterval(() => {
+          this.storytellingIndex.update((i) =>
+            Math.min(i + 1, this.MESSAGES.length - 1)
+          );
+        }, 2000);
+      } else {
+        if (timer) {
+          clearInterval(timer);
+          timer = null;
+        }
+      }
     });
   }
 
+  get recipe(): RecipeIngredient[] {
+    return this.recipeResource.value()?.recipe ?? [];
+  }
+
   get foundIngredients(): RecipeIngredient[] {
-    return this.recipe().filter(i => i.found);
+    return this.recipe.filter((i) => i.found);
   }
 
   scaledQty(ingredient: RecipeIngredient): number {
@@ -84,7 +114,11 @@ export class AiChefPickPeople implements OnInit {
   continue() {
     this.router.navigate(['aiChef', this.dishName(), 'cart'], {
       queryParams: { servings: this.servings },
-      state: { recipe: this.recipe(), servings: this.servings },
+      state: { recipe: this.recipe, servings: this.servings },
     });
+  }
+
+  retry() {
+    this.recipeResource.reload();
   }
 }

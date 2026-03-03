@@ -1,6 +1,3 @@
-/* =====================================================
-   Full-screen Lottie overlay
-   ===================================================== */
 .lottie-overlay {
     position: fixed;
     inset: 0;
@@ -33,9 +30,8 @@
     }
 }
 
-/* =====================================================
-   Storytelling text beneath the animation
-   ===================================================== */
+/*Storytelling text beneath the animation*/
+
 .storytelling-text {
     font-family: var(--font-serif, Georgia, serif);
     font-size: 1.5rem;
