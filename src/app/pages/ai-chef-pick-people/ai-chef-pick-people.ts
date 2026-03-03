@@ -8,7 +8,7 @@ import {
 import { ActivatedRoute, Router } from '@angular/router';
 import { AiChefService } from '../../core/services/ai-chef.service';
 import { RecipeIngredient } from '../../utils/AiChefRecipe';
-import { CurrencyPipe } from '@angular/common';
+import {DecimalPipe} from '@angular/common';
 import { LottieComponent, AnimationOptions } from 'ngx-lottie';
 import { rxResource } from '@angular/core/rxjs-interop';
 
@@ -16,7 +16,7 @@ import { rxResource } from '@angular/core/rxjs-interop';
   selector: 'app-ai-chef-pick-people',
   templateUrl: './ai-chef-pick-people.html',
   styleUrl: './ai-chef-pick-people.css',
-  imports: [CurrencyPipe, LottieComponent],
+  imports: [LottieComponent, DecimalPipe],
 })
 export class AiChefPickPeople {
   private route = inject(ActivatedRoute);
@@ -26,20 +26,12 @@ export class AiChefPickPeople {
   servings = 1;
   presets = [1, 2, 4, 6, 8];
 
-  /** Populated from the route param — acts as the "isFetching" trigger.
-   *  resource() only fires when dishName() is non-empty (truthy). */
   dishName = signal('');
 
-  // ---------------------------------------------------------------
-  // Lottie options
-  // ---------------------------------------------------------------
   lottieOptions: AnimationOptions = {
     path: '/loader/loader.json',
   };
 
-  // ---------------------------------------------------------------
-  // Storytelling timer
-  // ---------------------------------------------------------------
   private readonly MESSAGES = [
     'Analyzing ingredients...',
     'Consulting the chef...',
@@ -49,17 +41,11 @@ export class AiChefPickPeople {
   private storytellingIndex = signal(0);
   storytellingText = computed(() => this.MESSAGES[this.storytellingIndex()]);
 
-  // ---------------------------------------------------------------
-  // rxResource() — only fires when dishName() is non-empty
-  // ---------------------------------------------------------------
   recipeResource = rxResource({
     params: () => (this.dishName() ? { dish: this.dishName() } : undefined),
     stream: ({ params }) => this.aiChefService.generateRecipe(params.dish),
   });
 
-  // ---------------------------------------------------------------
-  // Effects
-  // ---------------------------------------------------------------
   constructor() {
     // 1. Set dishName from the route param, which triggers the resource
     const dish = this.route.snapshot.paramMap.get('selectedRecipe') || '';
@@ -86,9 +72,6 @@ export class AiChefPickPeople {
     });
   }
 
-  // ---------------------------------------------------------------
-  // Convenience getters (delegate to resource value)
-  // ---------------------------------------------------------------
   get recipe(): RecipeIngredient[] {
     return this.recipeResource.value()?.recipe ?? [];
   }
@@ -135,7 +118,6 @@ export class AiChefPickPeople {
     });
   }
 
-  /** Retry after an error */
   retry() {
     this.recipeResource.reload();
   }

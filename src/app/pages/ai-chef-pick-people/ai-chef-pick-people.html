@@ -2,14 +2,14 @@
   <div class="flex flex-col items-center justify-center min-h-[70vh] px-6">
     <div class="text-center max-w-lg w-full">
 
-      <!-- ===================== LOADING STATE ===================== -->
+      <!-- LOADING STATE -->
       @if (recipeResource.isLoading()) {
       <div class="lottie-overlay">
         <ng-lottie [options]="lottieOptions" width="400px" height="400px" />
         <p class="storytelling-text">{{ storytellingText() }}</p>
       </div>
 
-      <!-- ===================== ERROR STATE ===================== -->
+      <!--  ERROR STATE  -->
       } @else if (recipeResource.error()) {
       <div class="flex flex-col items-center gap-4 py-16">
         <span class="text-5xl">😕</span>
@@ -19,7 +19,7 @@
         </button>
       </div>
 
-      <!-- ===================== SUCCESS STATE ===================== -->
+      <!-- SUCCESS STATE -->
       } @else if (recipeResource.value()) {
       <!-- Recipe name -->
       <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cream-dark mb-8 warm-shadow">
@@ -76,7 +76,7 @@
           <span class="text-sm text-muted">
             {{ recipe.length }} ingredients
           </span>
-          <span class="font-semibold text-main">Est. {{ totalPrice | currency:'EGP' }}</span>
+          <span class="font-semibold text-main">Est. EGP {{ totalPrice | number: '1.0-0' }}</span>
         </div>
 
         <!-- Ingredient list -->
@@ -87,8 +87,8 @@
             <span class="w-2 h-2 rounded-full bg-green-500 shrink-0"></span>
             <span class="text-main">{{ ingredient.product?.title }}</span>
             <span class="text-muted text-xs">× {{ scaledQty(ingredient) }} {{ ingredient.product?.unit }}</span>
-            <span class="text-muted ml-auto">{{ ((ingredient.product?.price ?? 0) * scaledQty(ingredient)) |
-              currency:'EGP' }}</span>
+            <span class="text-muted ml-auto">EGP {{ ((ingredient.product?.price ?? 0) * scaledQty(ingredient)) |
+              number: '1.0-0'}}</span>
             } @else {
             <span class="w-2 h-2 rounded-full bg-border shrink-0"></span>
             <span class="text-muted line-through">{{ ingredient.title }}</span>

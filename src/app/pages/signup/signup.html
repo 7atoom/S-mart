@@ -104,23 +104,52 @@
           >
             Password
           </label>
-          <input
-            type="password"
-            id="password"
-          formControlName="password"
-            name="password"
-            placeholder="At least 8 characters"
-            class="flex w-full border px-3 py-2 text-base h-12 rounded-full bg-[hsl(var(--secondary))] border-[hsl(var(--border))] text-[hsl(var(--foreground))] placeholder:text-[hsl(var(--muted-foreground))] focus:outline-none focus:ring-2 focus:ring-[hsl(var(--ring))] focus:ring-offset-2 focus:border-[hsl(var(--primary))]"
-          />
-          @if(registerForm.get('password')?.errors && registerForm.get('password')?.touched){
-            <div class="errors-msgs-container">
-              @if(registerForm.get("password")?.getError("required")){
-                <p class="text-sm text-red-500"> password is required</p>
+          <div class="relative">
+            <input
+              [type]="showPassword() ? 'text' : 'password'"
+              id="password"
+              formControlName="password"
+              name="password"
+              placeholder="At least 8 characters"
+              class="flex w-full border px-3 py-2 pr-10 text-base h-12 rounded-full bg-[hsl(var(--secondary))] border-[hsl(var(--border))] text-[hsl(var(--foreground))] placeholder:text-[hsl(var(--muted-foreground))] focus:outline-none focus:ring-2 focus:ring-[hsl(var(--ring))] focus:ring-offset-2 focus:border-[hsl(var(--primary))]"
+            />
+            <button
+              type="button"
+              (click)="togglePasswordVisibility()"
+              class="absolute right-3 top-1/2 -translate-y-1/2 text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))] transition-colors"
+            >
+              @if(showPassword()) {
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
+                  <line x1="1" y1="1" x2="23" y2="23"/>
+                </svg>
+              } @else {
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                  <circle cx="12" cy="12" r="3"/>
+                </svg>
               }
-              @else if(registerForm.get('password')?.getError("pattern")){
-                <p class="text-xs text-red-500 leading-tight">
-                  Password must be at least 8 characters with letters, numbers & symbols.
-              </p>
+            </button>
+          </div>
+          @if(registerForm.get('password')?.errors && registerForm.get('password')?.touched){
+            <div class="errors-msgs-container space-y-1">
+              @if(registerForm.get("password")?.getError("required")){
+                <p class="text-sm text-red-500">Password is required</p>
+              }
+              @if(registerForm.get('password')?.getError("minlength")){
+                <p class="text-sm text-red-500">Password must be at least 8 characters</p>
+              }
+              @if(registerForm.get('password')?.getError("maxlength")){
+                <p class="text-sm text-red-500">Password must be at most 20 characters</p>
+              }
+              @if(registerForm.get('password')?.getError("uppercase")){
+                <p class="text-sm text-red-500">Password must contain at least one uppercase letter</p>
+              }
+              @if(registerForm.get('password')?.getError("lowercase")){
+                <p class="text-sm text-red-500">Password must contain at least one lowercase letter</p>
+              }
+              @if(registerForm.get('password')?.getError("number")){
+                <p class="text-sm text-red-500">Password must contain at least one number</p>
               }
             </div>
           }
@@ -153,8 +182,8 @@
             <span>Create Account</span>
           }
         </button>
-        @if(errormsg){
-          <p class="w-full flex justify-center items-center bg-red-400 border-2 border-red-600 text-white h-12 rounded-full">{{errormsg}} </p>
+        @if(errors){
+          <p class="w-full flex justify-center items-center bg-red-400 border-2 border-red-600 text-white h-12 rounded-full">{{errors}} </p>
         }
         @else if(successMsg){
           <p class="w-full flex justify-center items-center bg-green-500 text-white h-12 rounded-full">{{successMsg}} </p>
