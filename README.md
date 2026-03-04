@@ -127,6 +127,27 @@ npm run build
 
 The build artifacts will be stored in the `dist/` directory.
 
+### Deploy to Vercel
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/yourusername/s-mart)
+
+This project is ready for deployment on Vercel:
+
+```bash
+# Install Vercel CLI
+npm install -g vercel
+
+# Deploy to preview
+vercel
+
+# Deploy to production
+vercel --prod
+```
+
+For detailed deployment instructions, see [DEPLOYMENT.md](DEPLOYMENT.md).
+
+**Note:** All configuration is complete. Your project is deployment-ready!
+
 ---
 
 ## 📁 Project Structure

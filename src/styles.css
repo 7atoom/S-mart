@@ -263,15 +263,13 @@
     transform: scale(1.02);
 
   }
-  /* ramdan gradient */
+  /* ramadan gradient */
 
   .ramadan-gradient {
     position: relative;
     overflow: hidden;
   }
 
-  .ramadan-gradient::before {
-    content: "";
   .ramadan-gradient::before {
     content: "";
     position: absolute;
@@ -289,7 +287,6 @@
     position: relative;
     z-index: 1;
   }
+}
 
 
-}
-}
