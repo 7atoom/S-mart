@@ -1,13 +1,17 @@
 import {Component, inject, OnInit, signal} from '@angular/core';
-import { DecimalPipe } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CartService } from '../../core/services/cart.service';
 import { RecipeIngredient } from '../../utils/AiChefRecipe';
 import {CartIngredient} from '../../utils/CartIngredient';
+import { Recipe } from '../../utils/Recipe';
+import { RecipeHeader } from './components/recipe-header/recipe-header';
+import { SummaryLine } from './components/summary-line/summary-line';
+import { IngredientsList } from './components/ingredients-list/ingredients-list';
+import { BottomBar } from './components/bottom-bar/bottom-bar';
 
 @Component({
   selector: 'app-ai-chef-pick-cart',
-  imports: [DecimalPipe],
+  imports: [RecipeHeader, SummaryLine, IngredientsList, BottomBar],
   templateUrl: './ai-chef-pick-cart.html',
   styleUrl: './ai-chef-pick-cart.css',
 })
@@ -15,7 +19,7 @@ export class AiChefPickCart implements OnInit {
   meal = '';
   servings = 1;
 
-  recipe = {
+  recipe: Recipe = {
     title: '',
     description: 'Perfectly Ful Medames with a Lemon compound butter of fresh herbs.',
     time: '30 mins',
@@ -83,9 +87,7 @@ export class AiChefPickCart implements OnInit {
     );
   }
 
-  backToServings(): void {
-    this.router.navigate(['aiChef', this.meal]);
-  }
+
 
   weCookIt(): void {
     this.router.navigate(['cart']);

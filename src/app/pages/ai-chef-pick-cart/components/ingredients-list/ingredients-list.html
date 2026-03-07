@@ -1,0 +1,56 @@
+<div class="space-y-3 mb-40">
+  @for (item of ingredients; track item.productId) {
+    <button
+      type="button"
+      (click)="onToggleItem(item)"
+      class="w-full flex items-center gap-4 p-4 rounded-2xl border-l-4 cart-item warm-shadow text-left cursor-pointer transition-all"
+      [class.cart-item--selected]="item.selected"
+      [class.cart-item--unselected]="!item.selected"
+    >
+      <div
+        class="w-12 h-12 rounded-xl overflow-hidden shrink-0 cart-item-icon"
+        [class.cart-item-icon--selected]="item.selected"
+        [class.cart-item-icon--unselected]="!item.selected"
+      >
+        <img [src]="item.image" [alt]="item.name" class="w-full h-full object-cover" />
+      </div>
+      <div class="flex-1 min-w-0">
+        <h4 class="font-sans font-medium text-sm"
+          [class.text-main]="item.selected"
+          [class.text-muted]="!item.selected">
+          {{ item.name }}
+        </h4>
+        <p class="text-xs text-muted font-sans">
+          {{ getScaledQty(item) }} x @if (item.quantityInGram) { ({{ item.quantityInGram }}g) }
+        </p>
+      </div>
+      <span class="font-sans font-medium text-sm"
+        [class.text-main]="item.selected"
+        [class.text-muted]="!item.selected">
+        {{ (item.price * getScaledQty(item)) | number : '1.2-2' }} EGP
+      </span>
+      <div
+        class="w-6 h-6 rounded-full flex items-center justify-center shrink-0 cart-item-check"
+        [class.cart-item-check--selected]="item.selected"
+        [class.cart-item-check--unselected]="!item.selected"
+      >
+        @if (item.selected) {
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="w-3.5 h-3.5 text-primary-foreground"
+          >
+            <path d="M20 6 9 17l-5-5"></path>
+          </svg>
+        }
+      </div>
+    </button>
+  }
+</div>

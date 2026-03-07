@@ -1,0 +1,71 @@
+<div
+  class="fixed bottom-0 left-0 right-0 bg-background/95 backdrop-blur-xl border-t border-border p-4 z-40"
+>
+  <div class="max-w-3xl mx-auto">
+    <div class="flex items-center justify-between mb-3">
+      <div>
+        <p class="text-sm text-muted font-sans">
+          {{ itemCount }} selected · {{ servings }} people
+        </p>
+        <p class="font-semibold text-lg text-main font-sans">
+          {{ totalPrice | number : '1.2-2' }} EGP
+        </p>
+      </div>
+    </div>
+    <div class="flex flex-col sm:flex-row gap-3">
+      <button
+        (click)="onWeCookIt()"
+        class="flex-1 flex items-center justify-center gap-2 py-3.5 rounded-2xl bg-gradient-gold text-main font-sans font-medium hover:opacity-90 hover:scale-104 hover:drop-shadow-lg transition-all warm-shadow cursor-pointer"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="w-4 h-4"
+        >
+          <path
+            d="M17 21a1 1 0 0 0 1-1v-5.35c0-.457.316-.844.727-1.041a4 4 0 0 0-2.134-7.589 5 5 0 0 0-9.186 0 4 4 0 0 0-2.134 7.588c.411.198.727.585.727 1.041V20a1 1 0 0 0 1 1Z"
+          ></path>
+          <path d="M6 17h12"></path>
+        </svg>
+        We Cook It For You
+      </button>
+      <button
+        (click)="onAddToCart()"
+        [disabled]="isAddingToCart"
+        class="cursor-pointer flex-1 flex items-center justify-center gap-2 py-3.5 rounded-2xl btn-accent font-sans font-medium hover:bg-terracotta-light transition-colors warm-shadow hover:drop-shadow-lg disabled:opacity-60 disabled:cursor-not-allowed"
+      >
+        @if (isAddingToCart) {
+          <div class="w-4 h-4 rounded-full border-2 border-primary-foreground border-t-transparent animate-spin"></div>
+          Adding...
+        } @else {
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="w-4 h-4"
+          >
+            <circle cx="8" cy="21" r="1"></circle>
+            <circle cx="19" cy="21" r="1"></circle>
+            <path
+              d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"
+            ></path>
+          </svg>
+          Add to Cart
+        }
+      </button>
+    </div>
+  </div>
+</div>
