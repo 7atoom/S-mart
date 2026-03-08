@@ -16,13 +16,9 @@ export class CartService implements OnDestroy {
   isLoading = signal<boolean>(false);
   isError = signal<boolean>(false);
 
-  /** One debounce Subject per productId — for addItem */
   private addDebounceMap = new Map<string, Subject<{ product: Product; snapshot: CartItem[] }>>();
 
-  /** One debounce Subject per productId — for updateQuantity */
   private updateDebounceMap = new Map<string, Subject<{ quantity: number; snapshot: CartItem[] }>>();
-
-  // ── Computed ────────────────────────────────────────────────────────────────
 
   items = computed(() => {
     const items = this.cartItems();
@@ -43,7 +39,6 @@ export class CartService implements OnDestroy {
 
   deliveryFee = 4.99;
 
-  // ── Lifecycle ───────────────────────────────────────────────────────────────
 
   constructor() {
     this.loadCart();
@@ -53,8 +48,6 @@ export class CartService implements OnDestroy {
     this.addDebounceMap.forEach(s => s.complete());
     this.updateDebounceMap.forEach(s => s.complete());
   }
-
-  // ── Helpers ─────────────────────────────────────────────────────────────────
 
   private isAuthenticated(): boolean {
     if (typeof window === 'undefined') return false;
@@ -94,56 +87,142 @@ export class CartService implements OnDestroy {
     }
   }
 
-  // ── API ─────────────────────────────────────────────────────────────────────
+  private matchesProductId(item: CartItem, productId: string): boolean {
+    return item.productId === productId || item._id === productId;
+  }
+
+  private extractCartItemsFromResponse(res: any): any[] {
+    if (Array.isArray(res)) return res;
+    return res?.cart ?? res?.items ?? res?.data ?? [];
+  }
+
+  private getRecipeGroupMap(): Record<string, string | undefined> {
+    const groupMap: Record<string, string | undefined> = {};
+
+    if (typeof window === 'undefined') return groupMap;
+
+    try {
+      const saved = localStorage.getItem('smart-cart');
+      if (!saved) return groupMap;
+
+      const parsed: CartItem[] = JSON.parse(saved);
+      parsed.forEach(item => {
+        if (item.recipeGroup) {
+          groupMap[item._id] = item.recipeGroup;
+          groupMap[item.productId] = item.recipeGroup;
+        }
+      });
+    } catch (error) {
+      console.error('Error reading recipe groups:', error);
+    }
+
+    return groupMap;
+  }
+
+  private transformCartItem(rawItem: any, recipeGroupMap: Record<string, string | undefined>): CartItem {
+    if (!rawItem.product) return rawItem;
+
+    const id = rawItem.product._id;
+    return {
+      _id: id,
+      productId: id,
+      name: rawItem.product.title || rawItem.product.name,
+      title: rawItem.product.title,
+      price: rawItem.product.price,
+      image: rawItem.product.image,
+      weight: rawItem.product.unit || rawItem.product.weight || '',
+      quantity: rawItem.quantity,
+      category: rawItem.product.category,
+      recipeGroup: recipeGroupMap[id],
+    };
+  }
+
+  private updateQuantityOptimistically(productId: string, quantity: number, previous: CartItem[]): void {
+    if (quantity <= 0) {
+      this.cartItems.set(previous.filter(i => !this.matchesProductId(i, productId)));
+    } else {
+      this.cartItems.set(previous.map(i =>
+        this.matchesProductId(i, productId) ? {...i, quantity} : i
+      ));
+    }
+    this.saveCart();
+  }
+
+  private removeItemFromServer(productId: string, snapshot: CartItem[]): void {
+    this.httpClient.delete(
+      `${this.baseUrl}/${productId}`,
+      {headers: this.authHeaders()}
+    ).subscribe({
+      next: () => this.getCart(),
+      error: (err) => {
+        console.error('Failed to remove item:', err);
+        this.rollbackToSnapshot(snapshot);
+      }
+    });
+  }
+
+  private updateQuantityOnServer(productId: string, quantity: number, snapshot: CartItem[]): void {
+    // Read the *latest* quantity from the signal (captures all intermediate changes)
+    const currentItems = this.cartItems();
+    const currentItem = currentItems.find(i => this.matchesProductId(i, productId));
+    const latestQty = currentItem ? currentItem.quantity : quantity;
+
+    this.httpClient.patch<any>(
+      `${this.baseUrl}/${productId}`,
+      {quantity: latestQty},
+      {headers: this.authHeaders()}
+    ).subscribe({
+      next: () => this.getCart(),
+      error: (err) => {
+        console.error('Failed to update item quantity:', err);
+        this.rollbackToSnapshot(snapshot);
+      }
+    });
+  }
+
+  private rollbackToSnapshot(snapshot: CartItem[]): void {
+    this.cartItems.set(snapshot);
+    this.saveCart();
+    this.isError.set(true);
+  }
+
+  private getOrCreateUpdateDebouncer(productId: string): Subject<{ quantity: number; snapshot: CartItem[] }> {
+    if (!this.updateDebounceMap.has(productId)) {
+      const subject = new Subject<{ quantity: number; snapshot: CartItem[] }>();
+
+      subject.pipe(debounceTime(600)).subscribe(({quantity, snapshot}) => {
+        if (quantity <= 0) {
+          this.removeItemFromServer(productId, snapshot);
+        } else {
+          this.updateQuantityOnServer(productId, quantity, snapshot);
+        }
+      });
+
+      this.updateDebounceMap.set(productId, subject);
+    }
+
+    return this.updateDebounceMap.get(productId)!;
+  }
 
   getCart() {
-    // Guest mode: only use localStorage, skip API call
+    // Guest mode: use localStorage only
     if (!this.isAuthenticated()) {
       this.loadCart();
       return;
     }
 
     this.isLoading.set(true);
+
     this.httpClient.get<any>(`${this.baseUrl}`, {headers: this.authHeaders()}).subscribe({
       next: (res) => {
-        const rawItems = Array.isArray(res) ? res : (res?.cart ?? res?.items ?? res?.data ?? []);
+        const rawItems = this.extractCartItemsFromResponse(res);
+        const recipeGroupMap = this.getRecipeGroupMap();
 
-        // Restore recipeGroup from localStorage so groups survive server sync
-        let localGroupMap: Record<string, string | undefined> = {};
-        try {
-          const saved = localStorage.getItem('smart-cart');
-          if (saved) {
-            const parsed: CartItem[] = JSON.parse(saved);
-            parsed.forEach(item => {
-              if (item.recipeGroup) {
-                localGroupMap[item._id] = item.recipeGroup;
-                localGroupMap[item.productId] = item.recipeGroup;
-              }
-            });
-          }
-        } catch {
-        }
+        const cartItems: CartItem[] = rawItems.map(item =>
+          this.transformCartItem(item, recipeGroupMap)
+        );
 
-        const flattenedItems: CartItem[] = (Array.isArray(rawItems) ? rawItems : []).map((item: any) => {
-          if (item.product) {
-            const id = item.product._id;
-            return {
-              _id: id,
-              productId: id,
-              name: item.product.title || item.product.name,
-              title: item.product.title,
-              price: item.product.price,
-              image: item.product.image,
-              weight: item.product.unit || item.product.weight || '',
-              quantity: item.quantity,
-              category: item.product.category,
-              recipeGroup: localGroupMap[id],
-            };
-          }
-          return item;
-        });
-
-        this.cartItems.set(flattenedItems);
+        this.cartItems.set(cartItems);
         this.saveCart();
         this.isLoading.set(false);
       },
@@ -160,10 +239,11 @@ export class CartService implements OnDestroy {
 
     // Optimistic UI — instant feedback on every click
     const previous = this.cartItems();
-    const existing = previous.find(i => i.productId === productId || i._id === productId);
+    const existing = previous.find(i => this.matchesProductId(i, productId));
+
     if (existing) {
       this.cartItems.set(previous.map(i =>
-        (i.productId === productId || i._id === productId)
+        this.matchesProductId(i, productId)
           ? {...i, quantity: i.quantity + 1}
           : i
       ));
@@ -187,12 +267,11 @@ export class CartService implements OnDestroy {
       return;
     }
 
-    // Debounced HTTP POST — one request per product after 600 ms of silence
     if (!this.addDebounceMap.has(productId)) {
       const subject = new Subject<{ product: Product; snapshot: CartItem[] }>();
       subject.pipe(debounceTime(600)).subscribe(({product: p, snapshot}) => {
         const currentItems = this.cartItems();
-        const currentItem = currentItems.find(i => i.productId === p._id || i._id === p._id);
+        const currentItem = currentItems.find(i => this.matchesProductId(i, p._id));
         const qty = currentItem ? currentItem.quantity : 1;
 
         this.httpClient.post(
@@ -212,7 +291,6 @@ export class CartService implements OnDestroy {
       this.addDebounceMap.set(productId, subject);
     }
 
-    // Pass pre-click snapshot for rollback if the eventual request fails
     this.addDebounceMap.get(productId)!.next({product, snapshot: previous});
   }
 
@@ -222,30 +300,29 @@ export class CartService implements OnDestroy {
 
     const previous = this.cartItems();
     const optimistic = [...previous];
+
     items.forEach(newItem => {
-      const existing = optimistic.find(i => i._id === newItem._id || i.productId === newItem._id);
+      const existing = optimistic.find(i => this.matchesProductId(i, newItem._id));
       if (existing) {
         existing.quantity += newItem.quantity;
       } else {
         optimistic.push(newItem);
       }
     });
+
     this.cartItems.set(optimistic);
     this.saveCart();
 
-    // Guest mode: only use localStorage, skip API call
     if (!this.isAuthenticated()) {
       this.isLoading.set(false);
       return;
     }
 
-    // Send requests sequentially to avoid server document conflicts
     this.addItemsSequentially(items, 0, previous);
   }
 
   private addItemsSequentially(items: CartItem[], index: number, rollbackSnapshot: CartItem[]) {
     if (index >= items.length) {
-      // All items added successfully
       this.getCart();
       this.isLoading.set(false);
       return;
@@ -256,7 +333,6 @@ export class CartService implements OnDestroy {
 
     this.httpClient.post(`${this.baseUrl}`, payload, {headers: this.authHeaders()}).subscribe({
       next: () => {
-        // Continue with the next item
         this.addItemsSequentially(items, index + 1, rollbackSnapshot);
       },
       error: (err) => {
@@ -272,71 +348,22 @@ export class CartService implements OnDestroy {
   updateQuantity(productId: string, quantity: number) {
     const previous = this.cartItems();
 
-    // Optimistic UI — instant on every call
-    if (quantity <= 0) {
-      this.cartItems.set(previous.filter(i => i.productId !== productId && i._id !== productId));
-    } else {
-      this.cartItems.set(previous.map(i =>
-        (i.productId === productId || i._id === productId)
-          ? {...i, quantity}
-          : i
-      ));
-    }
-    this.saveCart();
+    // Step 1: Optimistic UI update (instant feedback)
+    this.updateQuantityOptimistically(productId, quantity, previous);
 
-    // Guest mode: only use localStorage, skip API call
+    // Step 2: Guest mode - skip server sync
     if (!this.isAuthenticated()) {
       return;
     }
 
-    // Debounced HTTP call — one request per product after 600 ms of silence
-    if (!this.updateDebounceMap.has(productId)) {
-      const subject = new Subject<{ quantity: number; snapshot: CartItem[] }>();
-      subject.pipe(debounceTime(600)).subscribe(({quantity: qty, snapshot}) => {
-        if (qty <= 0) {
-          // Item should be removed
-          this.httpClient.delete(
-            `${this.baseUrl}/${productId}`,
-            {headers: this.authHeaders()}
-          ).subscribe({
-            next: () => this.getCart(),
-            error: (err) => {
-              console.error('Failed to remove item:', err);
-              this.cartItems.set(snapshot);
-              this.saveCart();
-              this.isError.set(true);
-            }
-          });
-        } else {
-          // Read the *latest* quantity from the signal (captures all intermediate changes)
-          const currentItems = this.cartItems();
-          const currentItem = currentItems.find(i => i.productId === productId || i._id === productId);
-          const latestQty = currentItem ? currentItem.quantity : qty;
-
-          this.httpClient.patch<any>(
-            `${this.baseUrl}/${productId}`,
-            {quantity: latestQty},
-            {headers: this.authHeaders()}
-          ).subscribe({
-            next: () => this.getCart(),
-            error: (err) => {
-              console.error('Failed to update item quantity:', err);
-              this.cartItems.set(snapshot);
-              this.saveCart();
-              this.isError.set(true);
-            }
-          });
-        }
-      });
-      this.updateDebounceMap.set(productId, subject);
-    }
-
-    this.updateDebounceMap.get(productId)!.next({quantity, snapshot: previous});
+    // Step 3: Debounced server sync (waits 600ms after last change)
+    const debouncer = this.getOrCreateUpdateDebouncer(productId);
+    debouncer.next({quantity, snapshot: previous});
   }
 
   removeItem(productId: string) {
     const previous = this.cartItems();
-    this.cartItems.set(previous.filter(i => i.productId !== productId && i._id !== productId));
+    this.cartItems.set(previous.filter(i => !this.matchesProductId(i, productId)));
     this.saveCart();
 
     // Guest mode: only use localStorage, skip API call
@@ -344,21 +371,13 @@ export class CartService implements OnDestroy {
       return;
     }
 
-    this.httpClient.delete(`${this.baseUrl}/${productId}`, {headers: this.authHeaders()}).subscribe({
-      next: () => this.getCart(),
-      error: (err) => {
-        console.error('Failed to remove item from cart:', err);
-        this.cartItems.set(previous);
-        this.saveCart();
-        this.isError.set(true);
-      }
-    });
+    this.removeItemFromServer(productId, previous);
   }
 
   getCartItem(productId: string): CartItem | undefined {
     const items = this.cartItems();
     if (!Array.isArray(items)) return undefined;
-    return items.find(item => item.productId === productId || item._id === productId);
+    return items.find(item => this.matchesProductId(item, productId));
   }
 
   clearCart() {

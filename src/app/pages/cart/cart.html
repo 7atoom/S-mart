@@ -1,4 +1,4 @@
-<script src="../../core/services/ai-chef.service.ts"></script>@if (cartItemsCount() === 0) {
+@if (cartItemsCount() === 0) {
   <div class="min-h-screen pt-20 pb-24 flex flex-col items-center justify-center px-6">
     <div class="text-center">
       <div
@@ -49,8 +49,10 @@
                 <!-- Group header -->
                 <div class="flex items-center gap-2 mb-3 pb-3 border-b border-[hsl(var(--border))]">
                   <span class="text-lg">🍳</span>
-                  <h3 class="font-serif font-semibold text-[hsl(var(--foreground))] text-sm capitalize">{{ entry[0] }}</h3>
-                  <span class="text-xs text-[hsl(var(--muted-foreground))] font-sans ml-auto">{{ entry[1].length }} items</span>
+                  <h3
+                    class="font-serif font-semibold text-[hsl(var(--foreground))] text-sm capitalize">{{ entry[0] }}</h3>
+                  <span class="text-xs text-[hsl(var(--muted-foreground))] font-sans ml-auto">{{ entry[1].length }}
+                    items</span>
                 </div>
                 <!-- Group items -->
                 <div class="divide-y divide-[hsl(var(--border)/0.5)]">
@@ -72,7 +74,9 @@
                   <div class="flex items-center gap-2 mb-3 pb-3 border-b border-[hsl(var(--border))]">
                     <span class="text-lg">🛒</span>
                     <h3 class="font-serif font-semibold text-[hsl(var(--foreground))] text-sm">Other Items</h3>
-                    <span class="text-xs text-[hsl(var(--muted-foreground))] font-sans ml-auto">{{ regularItems().length }} items</span>
+                    <span
+                      class="text-xs text-[hsl(var(--muted-foreground))] font-sans ml-auto">{{ regularItems().length }}
+                      items</span>
                   </div>
                 }
                 <div class="divide-y divide-[hsl(var(--border)/0.5)]">
@@ -88,7 +92,8 @@
             }
 
             <!-- AI suggestion -->
-            <div class="rounded-2xl bg-[hsl(var(--cream-dark))] p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center gap-3 mt-4">
+            <div
+              class="rounded-2xl bg-[hsl(var(--cream-dark))] p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center gap-3 mt-4">
               <div
                 class="w-8 h-8 rounded-full bg-gradient-gold flex items-center justify-center shrink-0"
               >
