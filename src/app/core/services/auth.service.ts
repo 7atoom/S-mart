@@ -3,6 +3,7 @@ import {inject, Injectable} from '@angular/core';
 import { Observable } from 'rxjs';
 import { jwtDecode } from "jwt-decode";
 import {CartService} from './cart.service';
+import {AiChefService} from './ai-chef.service';
 
 
 @Injectable({
@@ -11,6 +12,7 @@ import {CartService} from './cart.service';
 export class Auth {
   cartService = inject(CartService);
   httpClient = inject(HttpClient);
+  aiChefService = inject(AiChefService);
   sendLoginForm(data:object) : Observable<any>{
     return this.httpClient.post("https://s-mart-api.vercel.app/api/auth/login", data)
   }
@@ -44,5 +46,6 @@ export class Auth {
     this.cartService.clearLocalCart();
     localStorage.removeItem('token');
     localStorage.removeItem('role');
+    this.aiChefService.clearCache();
   }
 }
