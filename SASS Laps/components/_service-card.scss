@@ -1,0 +1,43 @@
+@use '../abstracts/mixins' as *;
+@use '../abstracts/variables' as *;
+
+.service-card {
+  background-color: $color-surface;
+  border-radius: $radius-lg;
+  padding: 2rem;
+  border: 1px solid $color-border;
+  position: relative;
+  transition: transform $transition-base, box-shadow $transition-base,
+    border-color $transition-base;
+
+  h2 {
+    font-size: 1.25rem;
+    margin-bottom: 0.75rem;
+  }
+
+  p {
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  &:hover {
+    transform: translateY(-6px);
+    border-color: transparent;
+    @include card-shadow;
+  }
+
+  &:focus-within {
+    @include focus-ring;
+  }
+
+  .icon {
+    width: 56px;
+    height: 56px;
+    border-radius: $radius-full;
+    background-color: $color-icon-ring;
+    display: grid;
+    place-items: center;
+    font-size: 1.5rem;
+    margin-bottom: 1.25rem;
+  }
+}

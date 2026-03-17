@@ -1,0 +1,12 @@
+{
+  "name": "sass-laps",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "sass main.scss style.css",
+    "watch": "sass --watch main.scss:style.css"
+  },
+  "devDependencies": {
+    "sass": "^1.98.0"
+  }
+}

@@ -1,0 +1,30 @@
+@use "../abstracts/mixins" as *;
+@use "../abstracts/variables" as *;
+
+.hero {
+  padding-block: $section-padding-block;
+
+  h1 {
+    font-size: clamp(2.25rem, 4vw, 3rem);
+    line-height: 1.15;
+    max-width: 32rem;
+    margin-bottom: 1rem;
+  }
+
+  .subtitle {
+    font-size: 1.1rem;
+    max-width: 36rem;
+    margin-bottom: 2.5rem;
+  }
+}
+
+.services-grid {
+  @include responsive-grid(260px);
+}
+
+.app {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

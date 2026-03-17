@@ -8,8 +8,20 @@
 
 # Node
 /node_modules
+node_modules/
 npm-debug.log
 yarn-error.log
+# Node modules and dependency files
+/package-lock.json
+/yarn.lock
+
+# OS generated files
+.DS_Store
+*/.DS_Store
+**/.DS_Store
+
+# Environment files
+/.env
 
 # IDEs and editors
 .idea/
